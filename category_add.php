@@ -45,17 +45,16 @@ if(isset($_REQUEST['btnsubmit']))
 		setcookie("sql_error", urlencode($e->getMessage()),time()+3600,"/");
 	}
 
-
-	// if($Resp)
-	// {
-	// 	setcookie("msg", "data",time()+3600,"/");
-	// 	header("location:category.php");
-	// }
-	// else
-	// {
-	// 	setcookie("msg", "fail",time()+3600,"/");
-	// 	header("location:category.php");
-	// }
+	if($Resp)
+	{
+		setcookie("msg", "data",time()+3600,"/");
+		header("location:category.php");
+	}
+	else
+	{
+		setcookie("msg", "fail",time()+3600,"/");
+		header("location:category.php");
+	}
 }
 
 if(isset($_REQUEST['btnupdate']))

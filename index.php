@@ -12,20 +12,20 @@ if(isset($_REQUEST["login"])){
 			$pa = $_REQUEST["password"];
 			
      
-			$qr = $obj->con1->prepare("select id,userid,password,name,designation from admin where userid=? and binary(password) =?");
+			$qr = $obj->con1->prepare("select id,password,username from admin where username=? and binary(password) =?");
 			$qr->bind_param("ss",$ui,$pa);
 			$qr->execute();
 			$result = $qr->get_result();
 			$qr->close();
 			$row=mysqli_fetch_array($result);
 			
-			if($row["userid"]==$ui)
+			if($row["username"]==$ui)
 			{
         $_SESSION["userlogin"]="true";
 				$_SESSION["id"]=$row["id"];
-        $_SESSION["userid"]=$ui;
+        // $_SESSION["userid"]=$ui;
         $_SESSION["username"]=$row["name"];
-        $_SESSION["designation"]=$row["designation"];
+        // $_SESSION["designation"]=$row["designation"];
 				header("location:home.php");
 			}
 			else
@@ -154,7 +154,7 @@ if(isset($_REQUEST["login"])){
               <div class="app-brand justify-content-center">
                 <a href="index.html" class="app-brand-link gap-2">
                   <span class="app-brand-logo demo">
-                   <img src="assets/img/kapot_100.png">
+                   <img src="assets/img/logo.png">
                   </span>
                  <!--  <span class="app-brand-text demo text-body fw-bolder">MyKapot</span> -->
                 </a>

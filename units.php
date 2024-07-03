@@ -188,9 +188,9 @@ eraseCookie("excelmsg")
                         <td><?php echo $i?></td>
                         <td><?php echo $res["unit_name"]?></td>
                         <td><?php echo $res["abbriviation"]?></td>
-                        <?php if($res["status"]=='enable'){	?>
+                        <?php if($res["status"]=='Enable'){	?>
                         <td style="color:green"><?php echo $res["status"]?></td>
-                        <?php } else if($res["status"]=='disable'){	?>
+                        <?php } else if($res["status"]=='Disable'){	?>
                         <td style="color:red"><?php echo $res["status"]?></td>
                         <?php } ?>
 

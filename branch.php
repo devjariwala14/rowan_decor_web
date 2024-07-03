@@ -167,9 +167,9 @@ if (isset($_COOKIE["excelmsg"])) {
                             <td><?php echo $i ?></td>
                             <td><?php echo $city["branch_name"] ?></td>
                             <td><?php echo $city["head_office"] ?></td>
-                            <?php if ($city["status"] == 'enable') { ?>
+                            <?php if ($city["status"] == 'Enable') { ?>
                                 <td style="color:green"><?php echo $city["status"] ?></td>
-                            <?php } else if ($city["status"] == 'disable') { ?>
+                            <?php } else if ($city["status"] == 'Disable') { ?>
                                     <td style="color:red"><?php echo $city["status"] ?></td>
                             <?php } ?>
 

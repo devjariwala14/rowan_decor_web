@@ -137,13 +137,14 @@ if(isset($_REQUEST['btnupdate']))
 							<label class="form-check-label" for="inlineRadio1">Disable</label>
 						</div>
 					</div>
-					<button type="submit"  name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
-                        class="btn btn-success <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
+					<button type="submit"
+                        name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
+                        class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
-                    <button type="button" class="btn btn-danger"
+                    <button type="button" class="btn btn-secondary"
                         onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
-                     Close</button>
+                        Close</button>
 
 			</form>
 		</div>

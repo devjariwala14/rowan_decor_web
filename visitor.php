@@ -198,8 +198,8 @@ eraseCookie("excelmsg")
                                     class="bx bx-edit-alt me-1"></i> </a>
                             <a
                                 href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["full_name"]) ?>');"><i
-                                    class="bx bx-trash me-1"></i> </a>
-                            <a href="javascript:viewdata('<?php echo $res["id"]?>');">View</a>
+                                    class="bx bx-trash me-1"style="color:red"></i> </a>
+                            <a href="javascript:viewdata('<?php echo $res["id"]?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
                         </td>
                     </tr>
                     <?php

@@ -9,7 +9,7 @@ $stmt_slist->close();
 if (isset($_COOKIE['edit_id'])) {
 	$mode = 'edit';
 	$editId = $_COOKIE['edit_id'];
-	$stmt = $obj->con1->prepare("select * from city where city_id=?");
+	$stmt = $obj->con1->prepare("select * from city WHERE srno=?");
 	$stmt->bind_param('i', $editId);
 	$stmt->execute();
 	$data = $stmt->get_result()->fetch_assoc();
@@ -19,7 +19,7 @@ if (isset($_COOKIE['edit_id'])) {
 if (isset($_COOKIE['view_id'])) {
 	$mode = 'view';
 	$viewId = $_COOKIE['view_id'];
-	$stmt = $obj->con1->prepare("select * from city where city_id=?");
+	$stmt = $obj->con1->prepare("select * from city WHERE srno=?");
 	$stmt->bind_param('i', $viewId);
 	$stmt->execute();
 	$data = $stmt->get_result()->fetch_assoc();
@@ -39,7 +39,7 @@ if(isset($_REQUEST['btnsubmit']))
 
 
 		// SELECT c1.*, s1.name as 'state_name' FROM `city` c1 , `state` s1 WHERE c1.state_id=s1.id AND c1.status='Enable'
-		$stmt = $obj->con1->prepare("INSERT INTO `city`(`ctnm`,`state`,`status`) VALUES (?,?,?)");
+		$stmt = $obj->con1->prepare("INSERT INTO `city`(`ctnm`,`state_id`,`status`) VALUES (?,?,?)");
 		$stmt->bind_param("sis",$ctnm,$state_id,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
@@ -67,15 +67,15 @@ if(isset($_REQUEST['btnsubmit']))
 
 if(isset($_REQUEST['btnupdate']))
 {
+	$e_id=$_COOKIE['edit_id'];
 	$state_id = $_REQUEST['state'];
 	$ctnm = $_REQUEST['ctnm'];
 	$status = $_REQUEST['status'];
-	$id=$_REQUEST['ttId'];
-	$action='updated';
+	
 	try
 	{
-		$stmt = $obj->con1->prepare("update city set ctnm=?, state=?, status=?,action=? where city_id=?");
-		$stmt->bind_param("sissi", $ctnm,$state_id,$status,$action,$id);
+		$stmt = $obj->con1->prepare("UPDATE `city` SET ctnm=?, state_id=?, status=? WHERE srno=?");
+		$stmt->bind_param("sissi", $ctnm,$state_id,$status,$action,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -113,12 +113,20 @@ if(isset($_REQUEST['btnupdate']))
 					<div class="row g-2">
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">State</label>
-							<select name="state" id="state" class="form-control" required>
+							<select name="state" id="state" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
 								<option value="">Select State</option>
-								<?php   
-								while($state=mysqli_fetch_array($res)){
-									?>
-									<option value="<?php echo $state["state_id"] ?>"><?php echo $state["state_name"] ?></option>
+								<?php
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `state` WHERE `status`= 'Enable'");
+                                        $stmt_list->execute();
+                                        $result = $stmt_list->get_result();
+                                        $stmt_list->close();
+                                        $i=1;
+                                        while($state=mysqli_fetch_array($result))
+                                        {
+                                    ?>
+									<option value="<?php echo $state["id"]?>"
+                                    <?php echo isset($mode) && $data['state_id'] == $state["id"] ? 'selected' : '' ?>>
+                                    <?php echo $state["name"]?></option>
 									<?php
 								}
 								?>
@@ -128,27 +136,30 @@ if(isset($_REQUEST['btnupdate']))
 
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">City Name</label>
-							<input type="text" class="form-control" name="ctnm" id="ctnm" required />
+							<input type="text" class="form-control" name="ctnm" id="ctnm" value="<?php echo (isset($mode)) ? $data['ctnm'] : '' ?>"
+                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
 					</div>
 
 					<div class="mb-3">
 						<label class="form-label d-block" for="basic-default-fullname">Status</label>
 						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="enable" value="enable" required checked>
+							<input class="form-check-input" type="radio" name="status" id="Enable" value="Enable" <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
 							<label class="form-check-label" for="inlineRadio1">Enable</label>
 						</div>
 						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="disable" value="disable" required>
+							<input class="form-check-input" type="radio" name="status" id="Disable" value="Disable" <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
 							<label class="form-check-label" for="inlineRadio1">Disable</label>
 						</div>
 					</div>
-					<button type="submit" name="btnsubmit" id="btnsubmit" class="btn btn-primary">Save</button>
-					<button type="submit" name="btnupdate" id="btnupdate" class="btn btn-primary " hidden>Update</button>
-					<!-- <button type="reset" name="btncancel" id="btncancel" class="btn btn-secondary" onclick="window.location.reload()">Cancel</button> -->
-					<button type="button" class="btn btn-secondary" name="btncancel" id="btncancel"
-					onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
-				Close</button>
+					<button type="submit"
+                        name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
+                        class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
+                        <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
+                    </button>
+                    <button type="button" class="btn btn-secondary"
+                        onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
+                        Close</button>
 
 			</form>
 		</div>

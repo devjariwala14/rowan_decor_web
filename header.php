@@ -63,6 +63,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="assets/vendor/css/pages/card-analytics.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <!-- data tables -->
     <link rel="stylesheet" type="text/css" href="assets/vendor/DataTables/datatables.css">

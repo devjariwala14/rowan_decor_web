@@ -177,9 +177,9 @@ if (isset($_COOKIE["excelmsg"])) {
                                         class="bx bx-edit-alt me-1"></i> </a>
                                 <a
                                     href="javascript:deletedata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["name"]) ?>');"><i
-                                        class="bx bx-trash me-1"></i> </a>
+                                        class="bx bx-trash me-1" style="color:red"></i> </a>
                                 <a
-                                    href="javascript:viewdata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["name"]) ?>','<?php echo $city["status"] ?>');">View</a>
+                                    href="javascript:viewdata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["name"]) ?>','<?php echo $city["status"] ?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
                             </td>
                         </tr>
                         <?php

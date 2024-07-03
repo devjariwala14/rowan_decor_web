@@ -3,7 +3,7 @@ include "header.php";
 // delete data
 if (isset($_REQUEST["btndelete"])) {
     try {
-        $stmt_del = $obj->con1->prepare("delete from branch where id='" . $_REQUEST["id"] . "'");
+        $stmt_del = $obj->con1->prepare("delete from branch where id='" . $_REQUEST["n_id"] . "'");
         $Resp = $stmt_del->execute();
         if (!$Resp) {
             if (strtok($obj->con1->error, ':') == "Cannot delete or update a parent row") {
@@ -136,7 +136,7 @@ if (isset($_COOKIE["excelmsg"])) {
 <div class="card mb-4">
     <div class="row ms-2 me-3">
         <div class="col-md-6" style="margin:1%">
-            <a class="btn btn-primary" href="branch_add.php" style="margin-right:15px;"><i class="bx bx-plus"></i> Add
+            <a class="btn btn-primary"href="#" onclick="javascript:adddata()" style="margin-right:15px;"><i class="bx bx-plus"></i> Add
                 Branch</a>
 
         </div>
@@ -219,8 +219,8 @@ if (isset($_COOKIE["excelmsg"])) {
     }
     function deletedata(id, name) {
         $('#backDropModal').modal('toggle');
-        $('#u_id').val(id);
-        $('#label_del').html('Are you sure you want to DELETE unit - ' + atob(name) + ' ?');
+        $('#n_id').val(id);
+        $('#label_del').html('Are you sure you want to DELETE branch - ' + atob(name) + ' ?');
     }
 </script>
 <?php

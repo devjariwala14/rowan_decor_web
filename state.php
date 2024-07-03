@@ -136,7 +136,7 @@ if (isset($_COOKIE["excelmsg"])) {
 <div class="card mb-4">
   <div class="row ms-2 me-3">
     <div class="col-md-6" style="margin:1%">
-      <a class="btn btn-primary" href="state_add.php" style="margin-right:15px;"><i class="bx bx-plus"></i> Add
+      <a class="btn btn-primary" href="#" onclick="javascript:adddata()" style="margin-right:15px;"><i class="bx bx-plus"></i> Add
         State</a>
 
     </div>

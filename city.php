@@ -130,7 +130,7 @@ if (isset($_COOKIE["excelmsg"])) {
 
   <div class="row ms-2 me-3">
     <div class="col-md-6" style="margin:1%">
-      <a class="btn btn-primary" href="city_add.php" style="margin-right:15px;">Add City</a>
+      <a class="btn btn-primary"href="#" onclick="javascript:adddata()" style="margin-right:15px;">Add City</a>
 
     </div>
     <div class="table-responsive text-nowrap">

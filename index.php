@@ -24,7 +24,7 @@ if(isset($_REQUEST["login"])){
         $_SESSION["userlogin"]="true";
 				$_SESSION["id"]=$row["id"];
         // $_SESSION["userid"]=$ui;
-        $_SESSION["username"]=$row["name"];
+        $_SESSION["username"]=$row["username"];
         // $_SESSION["designation"]=$row["designation"];
 				header("location:home.php");
 			}

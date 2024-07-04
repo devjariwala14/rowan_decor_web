@@ -113,11 +113,11 @@ if(isset($_REQUEST['btnupdate']))
             </div>
             <div class="card-body">
                 <form method="post">
-                   
+
                     <div class="row g-2">
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" 
+                            <input type="text" class="form-control" name="username" id="username"
                                 value="<?php echo (isset($mode)) ? $data['username'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
@@ -130,18 +130,23 @@ if(isset($_REQUEST['btnupdate']))
                     </div>
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Type</label>
-                        <select name="type" id="type" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-                        <option value="">Choose Type</option>
-                                <option value="user"
-                                    <?php echo isset($mode) && $data['type'] == "user" ? "selected" : "" ?>>User
-                                </option>
-                                <option value="sales person"
-                                    <?php echo isset($mode) && $data['type'] == "sales person" ? "selected" : "" ?>>Sales Person
-                                </option>
-                                <option value="labourers"
-                                    <?php echo isset($mode) && $data['type'] == "labourers" ? "selected" : "" ?>>Labourers
-                                </option>
-                                
+                        <select name="type" id="type" class="form-control"
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <option value="">Choose Type</option>
+                            <option value="admin"
+                                <?php echo isset($mode) && $data['type'] == "admin" ? "selected" : "" ?>>Admin
+                            </option>
+                            <option value="user"
+                                <?php echo isset($mode) && $data['type'] == "user" ? "selected" : "" ?>>User
+                            </option>
+                            <option value="sales person"
+                                <?php echo isset($mode) && $data['type'] == "sales person" ? "selected" : "" ?>>Sales
+                                Person
+                            </option>
+                            <option value="labourers"
+                                <?php echo isset($mode) && $data['type'] == "labourers" ? "selected" : "" ?>>Labourers
+                            </option>
+
                         </select>
                     </div>
                     <div class="col mb-3">
@@ -158,21 +163,25 @@ if(isset($_REQUEST['btnupdate']))
                     </div>
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Contact</label>
-                        <input type="text" class="form-control" name="contact" id="contact" maxlength="10" pattern="[6789][0-9]{9}"
-                            value="<?php echo (isset($mode)) ? $data['contact'] : '' ?>"
+                        <input type="text" class="form-control" name="contact" id="contact" maxlength="10"
+                            pattern="[6789][0-9]{9}" value="<?php echo (isset($mode)) ? $data['contact'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                     </div>
                     <div class="mb-3">
-						<label class="form-label d-block" for="basic-default-fullname">Status</label>
-						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="enable" value="Enable" <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
-							<label class="form-check-label" for="inlineRadio1">Enable</label>
-						</div>
-						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="Disable" value="disable" <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-							<label class="form-check-label" for="inlineRadio1">Disable</label>
-						</div>
-					</div>
+                        <label class="form-label d-block" for="basic-default-fullname">Status</label>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="status" id="enable" value="Enable"
+                                <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
+                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                        </div>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="status" id="Disable" value="disable"
+                                <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <label class="form-check-label" for="inlineRadio1">Disable</label>
+                        </div>
+                    </div>
                     <button type="submit"
                         name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
                         class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">

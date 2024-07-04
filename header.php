@@ -13,7 +13,7 @@ if (!isset($_SESSION["userlogin"])) {
   }
 
 
-$adminmenu = array("architech.php","customer_reg.php", "post.php", "send_notification.php", "privacy_policy.php", "terms.php", "customer_address.php", "assign_module.php", "page.php", "designation.php", "users.php", "holiday.php", "info.php", "config.php", "mail_settings.php", "priority.php");
+$adminmenu = array( "branch.php","architect.php","category.php","units.php","visitor.php","user.php","inquiry.php","info.php","config.php","priority.php","mail_settings.php","privacy_policy.php","terms.php");
 $location = array("state.php", "city.php", "zone.php", "area.php");
 $delivery = array("deliveryboy_reg.php", "delivery_settings.php", "collection_time.php");
 $coupon = array("coupon.php", "coupon_counter.php");
@@ -350,9 +350,9 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <div data-i18n="course">User</div>
                   </a>
                 </li>
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "holiday.php" ? "active" : "" ?>">
-                  <a href="holiday.php" class="menu-link">
-                    <div data-i18n="course">Holiday</div>
+                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "inquiry.php" ? "active" : "" ?>">
+                  <a href="inquiry.php" class="menu-link">
+                    <div data-i18n="course">Inquiry</div>
                   </a>
                 </li>
                 <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "info.php" ? "active" : "" ?>">
@@ -602,7 +602,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
                     data-bs-auto-close="outside">
                     <i class="bx bx-bell bx-sm"></i>
-                    <span class="badge bg-danger rounded-pill badge-notifications" id="noti_count"></span>
+                    <!-- <span class="badge bg-danger rounded-pill badge-notifications" id="noti_count"></span> -->
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end py-0">
                     <li class="dropdown-menu-header border-bottom" id="notif_header" style="display:none">
@@ -634,7 +634,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <li>
                       <a class="dropdown-item" href="editProfile.php">
                         <i class="bx bx-user me-2"></i>
-                        <span class="align-middle"><?php echo ucfirst($_SESSION["username"]) ?></span>
+                        <span class="align-middle"><?php echo $_SESSION["username"] ?></span>
                       </a>
                     </li>
 

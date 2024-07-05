@@ -177,7 +177,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php 
-                        $stmt_list = $obj->con1->prepare("SELECT * FROM `company`");
+                        $stmt_list = $obj->con1->prepare("SELECT c1.*, ct1.ctnm as ctnm,s1.name as stnm  FROM `company` c1,`state` s1 , `city` ct1 WHERE c1.city_id=ct1.srno and c1.state_id=s1.id");
                         $stmt_list->execute();
                         $result = $stmt_list->get_result();
                         
@@ -190,8 +190,8 @@ eraseCookie("excelmsg")
                     <tr>
                         <td><?php echo $i?></td>
                         <td><?php echo $res["company_name"]?></td>
-                        <td><?php echo $res["state_name"]?></td>
-                        <td><?php echo $res["city_name"]?></td>
+                        <td><?php echo $res["stnm"]?></td>
+                        <td><?php echo $res["ctnm"]?></td>
                         <td><?php echo $res["phone"]?></td>
                         <td><?php echo $res["email"]?></td>
                         <td><?php echo $res["website"]?></td>    

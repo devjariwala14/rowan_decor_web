@@ -13,7 +13,7 @@ if (!isset($_SESSION["userlogin"])) {
   }
 
 
-$adminmenu = array( "branch.php","architect.php","category.php","units.php","visitor.php","user.php","inquiry.php","info.php","config.php","priority.php","mail_settings.php","privacy_policy.php","terms.php");
+$adminmenu = array( "branch.php","architect.php","category.php","units.php","visitor.php","user.php","inquiry.php","company.php","info.php","config.php","priority.php","mail_settings.php","privacy_policy.php","terms.php");
 $location = array("state.php", "city.php", "zone.php", "area.php");
 $delivery = array("deliveryboy_reg.php", "delivery_settings.php", "collection_time.php");
 $coupon = array("coupon.php", "coupon_counter.php");
@@ -355,9 +355,9 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <div data-i18n="course">Inquiry</div>
                   </a>
                 </li>
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "info.php" ? "active" : "" ?>">
-                  <a href="info.php" class="menu-link">
-                    <div data-i18n="course">Info</div>
+                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "comapny.php" ? "active" : "" ?>">
+                  <a href="company.php" class="menu-link">
+                    <div data-i18n="course">Company</div>
                   </a>
                 </li>
                 <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "config.php" ? "active" : "" ?>">

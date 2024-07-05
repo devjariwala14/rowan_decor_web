@@ -126,84 +126,113 @@ if(isset($_REQUEST['btnupdate']))
 			<div class="card-body">
 				<form method="post" >
 
-					<div class="row g-2">
+					
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Company Name</label>
 							<input type="text" class="form-control" name="company_name" id="company_name" value="<?php echo (isset($mode)) ? $data['company_name'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
-						</div>
-
-                        <div class="row g-2">
+                       
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">address</label>
 							<input type="text" class="form-control" name="address" id="address" value="<?php echo (isset($mode)) ? $data['address'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
-						</div>
-
-                        <div class="row g-2">
+						
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Crossing</label>
 							<input type="text" class="form-control" name="crossing" id="crossing" value="<?php echo (isset($mode)) ? $data['crossing'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
-						</div>
 
-                        <div class="row g-2">
+                        <div class="row g-2 mt-3">
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Country Name</label>
 							<input type="text" class="form-control" name="country_name" id="country_name" value="<?php echo (isset($mode)) ? $data['country_name'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
 
-                        <div class="col mb-3">
+                        
+						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">State</label>
-							<input type="text" class="form-control" name="state_name" id="state_name"  value="<?php echo (isset($mode)) ? $data['state_name'] : '' ?>"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+							<select name="state_name" id="state_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+								<option value="">Select State</option>
+								<?php
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `state` WHERE `status`= 'Enable'");
+                                        $stmt_list->execute();
+                                        $result = $stmt_list->get_result();
+                                        $stmt_list->close();
+                                        $i=1;
+                                        while($state=mysqli_fetch_array($result))
+                                        {
+                                    ?>
+									<option value="<?php echo $state["id"]?>"
+                                    <?php echo isset($mode) && $data['state_id'] == $state["id"] ? 'selected' : '' ?>>
+                                    <?php echo $state["name"]?></option>
+									<?php
+								}
+								?>
+							</select>
+							<input type="hidden" name="ttId" id="ttId">
 						</div>
+
 					</div>
 
-                    <div class="row g-2">
-						<div class="col mb-3">
+                    <div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">City</label>
-							<input type="text" class="form-control" name="city_name" id="city_name" value="<?php echo (isset($mode)) ? $data['city_name'] : '' ?>"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+							<select name="city_name" id="city_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+								<option value="">Select City</option>
+								<?php
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `city` WHERE `status`= 'Enable'");
+                                        $stmt_list->execute();
+                                        $result = $stmt_list->get_result();
+                                        $stmt_list->close();
+                                        $i=1;
+                                        while($city=mysqli_fetch_array($result))
+                                        {
+                                    ?>
+									<option value="<?php echo $city["srno"]?>" <?php echo isset($mode) && $data[' '] == $city["srno"] ? 'selected' : '' ?>>
+                                    <?php echo $city["ctnm"]?></option>
+									<?php
+								}
+								?>
+							</select>
+							<input type="hidden" name="ttId" id="ttId">
 						</div>
 
-                        <div class="row g-2">
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Postal Code</label>
 							<input type="text" class="form-control" name="postal_code" id="postal_code" value="<?php echo (isset($mode)) ? $data['postal_code'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
+						</div>
 
-                        <div class="row g-2">
+                        
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Contact</label>
 							<input type="text" class="form-control" name="phone" id="phone" value="<?php echo (isset($mode)) ? $data['phone'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
 
-                        <div class="row g-2">
+                        
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Email</label>
 							<input type="text" class="form-control" name="email" id="email" value="<?php echo (isset($mode)) ? $data['email'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
 
-                        <div class="row g-2">
+                       
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Website</label>
 							<input type="text" class="form-control" name="website" id="website" value="<?php echo (isset($mode)) ? $data['website'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
 
-                        <div class="row g-2">
+                       
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Tax No. 1</label>
 							<input type="text" class="form-control" name="tax_num1" id="tax_num1" value="<?php echo (isset($mode)) ? $data['tax_num1'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
 
-                        <div class="row g-2">
+                        
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">Tax No. 2</label>
 							<input type="text" class="form-control" name="tax_num2" id="tax_num2" value="<?php echo (isset($mode)) ? $data['tax_num2'] : '' ?>"
@@ -211,14 +240,15 @@ if(isset($_REQUEST['btnupdate']))
 						</div>
 
 
-					
-					<button type="submit"  name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
-                        class="btn btn-success <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
+						<button type="submit"
+                        name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
+                        class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
-                    <button type="button" class="btn btn-danger"
+                    <button type="button" class="btn btn-secondary"
                         onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
-                     Close</button>
+                        Close</button>
+
 
 			</form>
 		</div>

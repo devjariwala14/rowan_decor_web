@@ -356,8 +356,8 @@ $page_name = basename($_SERVER['PHP_SELF']);
                   </a>
                 </li>
 
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "comapny.php" ? "active" : "" ?>">
-                  <a href="comapny.php" class="menu-link">
+                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "company.php" ? "active" : "" ?>">
+                  <a href="company.php" class="menu-link">
                     <div data-i18n="course">Company</div>
                   </a>
                 </li>
@@ -399,10 +399,33 @@ $page_name = basename($_SERVER['PHP_SELF']);
               </ul>
             </li>
 
+            <li
+              class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), $adminmenu) ? "active open" : "" ?> ">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bxs-cog"></i>
+                <div data-i18n="Form Elements">Location Controls</div>
+              </a>
+
+              <ul class="menu-sub">
+
+                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "state.php" ? "active" : "" ?>">
+                  <a href="state.php" class="menu-link">
+                    <div data-i18n="course">State</div>
+                  </a>
+                </li>
+
+                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "city.php" ? "active" : "" ?>">
+                  <a href="city.php" class="menu-link">
+                    <div data-i18n="course">City</div>
+                  </a>
+                </li>
+
+
 
           </ul>
         </aside>
         <!-- / Menu -->
+
 
         <!-- Layout container -->
         <div class="layout-page">

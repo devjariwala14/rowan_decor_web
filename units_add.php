@@ -120,7 +120,7 @@ if(isset($_REQUEST['btnupdate']))
 					<div class="mb-3">
 						<label class="form-label d-block" for="basic-default-fullname">Status</label>
 						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="enable" value="Enable" <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
+							<input class="form-check-input" type="radio" name="status" id="Enable" value="Enable" <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
 							<label class="form-check-label" for="inlineRadio1">Enable</label>
 						</div>
 						<div class="form-check form-check-inline mt-3">
@@ -133,7 +133,7 @@ if(isset($_REQUEST['btnupdate']))
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
                     <button type="button" class="btn btn-secondary"
-                        onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
+                        onclick="javascript:go_back()">
                      Close</button>
 
 			</form>

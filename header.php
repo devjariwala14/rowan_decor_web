@@ -402,7 +402,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
             <li
               class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), $adminmenu) ? "active open" : "" ?> ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class='bx bx-current-location'></i>
+              <i class='menu-icon bx bx-current-location'></i>
                 <div data-i18n="Form Elements">Location Controls</div>
               </a>
 

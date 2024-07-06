@@ -161,7 +161,7 @@ if(isset($_REQUEST['btnupdate']))
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
                     <button type="button" class="btn btn-secondary"
-                        onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
+                        onclick="javascript:go_back()">
                         Close</button>
                 </form>
             </div>
@@ -173,7 +173,7 @@ if(isset($_REQUEST['btnupdate']))
 function go_back() {
     eraseCookie("edit_id");
     eraseCookie("view_id");
-    window.location = "branchz.php";
+    window.location = "branch.php";
 }
 </script>
 <?php

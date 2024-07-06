@@ -30,7 +30,7 @@ if(isset($_REQUEST['btnsubmit']))
     $address = $_REQUEST['address'];
     $crossing = $_REQUEST['crossing'];
     $country_name = $_REQUEST['country_name'];
-    $state = $_REQUEST['state_name'];
+    $state = $_REQUEST['state_id'];
 	$city = $_REQUEST['city_name'];
     $postal_code = $_REQUEST['postal_code'];
     $phone = $_REQUEST['phone'];
@@ -43,9 +43,9 @@ if(isset($_REQUEST['btnsubmit']))
 		//echo "INSERT INTO `city`(`city_name`,`state_id`,`status`) VALUES ('".$city_name."', '".$state_name."', '".$status."')";
 
 
-		echo "INSERT into company(`id`, `company_name`, `address`, `crossing`, `country_name`, `state_name`, `city_name`, `postal_code`, `phone`, `email`, `website`, `tax_num1`, `tax_num2`) VALUES ('".$company_name."','".$address."','".$crossing."','".$country_name."','".$state."','".$city."','".$postal_code."','".$phone."','".$email."','".$website."','".$tax1."','".$tax2."','".$company_name."')";
+		//echo "INSERT into company(`id`, `company_name`, `address`, `crossing`, `country_name`, `state_name`, `city_name`, `postal_code`, `phone`, `email`, `website`, `tax_num1`, `tax_num2`) VALUES ('".$company_name."','".$address."','".$crossing."','".$country_name."','".$state."','".$city."','".$postal_code."','".$phone."','".$email."','".$website."','".$tax1."','".$tax2."','".$company_name."')";
 
-		$stmt = $obj->con1->prepare("INSERT INTO `company`(`company_name`,`address`,`crossing`,`country_name`,`state_name`,`city_name`,`postal_code`,`phone`,`email`,`website`,`tax_num1`,`tax_num2`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt = $obj->con1->prepare("INSERT INTO `company`(`company_name`,`address`,`crossing`,`country_name`,`state_id`,`city_id`,`postal_code`,`phone`,`email`,`website`,`tax_num1`,`tax_num2`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 		$stmt->bind_param("ssssssssssss",$company_name,$address,$crossing,$country_name,$state,$city,$postal_code,$phone,$email,$website,$tax1,$tax2);
 		$Resp=$stmt->execute();
 		if(!$Resp)
@@ -77,7 +77,7 @@ if(isset($_REQUEST['btnupdate']))
     $address = $_REQUEST['address'];
     $crossing = $_REQUEST['crossing'];
     $country_name = $_REQUEST['country_name'];
-    $state = $_REQUEST['state_name'];
+    $state = $_REQUEST['state_id'];
 	$city = $_REQUEST['city_name'];
     $postal_code = $_REQUEST['postal_code'];
     $phone = $_REQUEST['phone'];
@@ -89,9 +89,9 @@ if(isset($_REQUEST['btnupdate']))
 	
 	try
 	{
-         echo"UPDATE units SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE company SET `company_name`=?, `state_name`=?, `city_name`=?, `phone`=?, `email`=?, `website`=? where id=?");
-		$stmt->bind_param("ssssssi",$company_name,$state,$city,$phone,$email,$website,$e_id);
+         //echo"UPDATE units SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
+		$stmt = $obj->con1->prepare("UPDATE company SET `company_name`=?, `address`=?, `crossing`=?, `country_name`=?, `state_id`=?, `city_id`=?, `postal_code`=?, `phone`=?, `email`=?, `website`=?, `tax_num1`=?, `tax_num2`=? where id=?");
+		$stmt->bind_param("ssssssssssssi",$company_name,$address,$crossing,$country_name,$state,$city,$postel_code,$phone,$email,$website,$tax1,$tax2,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -102,6 +102,7 @@ if(isset($_REQUEST['btnupdate']))
 	catch(\Exception  $e) {
 		setcookie("sql_error", urlencode($e->getMessage()),time()+3600,"/");
 	}
+
 
 
 	if($Resp)
@@ -152,7 +153,7 @@ if(isset($_REQUEST['btnupdate']))
                         
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">State</label>
-							<select onchange="fillcity(this.value)" name="state_name" id="state_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+							<select onchange="fillcity(this.value)" name="state_id" id="state_id" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
 								<option value="">Select State</option>
 								<?php
                                         $stmt_list = $obj->con1->prepare("SELECT * FROM `state` WHERE `status`= 'Enable'");
@@ -269,7 +270,7 @@ if(isset($_REQUEST['btnupdate']))
 		const xhttp = new XMLHttpRequest();
 		xhttp.open("GET","getcities.php?sid="+stid);
 		xhttp.send();
-		xhhtp.onload= function(){
+		xhttp.onload= function(){
 			document.getElementById("city_name").innerHTML = xhttp.responseText;
 		}
 	}
@@ -278,7 +279,7 @@ if(isset($_REQUEST['btnupdate']))
 	// 	const xhttp = new XMLHttpRequest();
 	// 	xhttp.open("GET","getstate.php?cntrid="+cntrid);
 	// 	xhttp.send();
-	// 	xhhtp.onload= function(){
+	// 	xhttp.onload= function(){
 	// 		var data = xhttp.responseText.split("@@@");
 	// 		document.getElementById("state").innerHTML = xhttp.responseText;
 	// 		document.getElementById("country_code").value = "+" + data[1];

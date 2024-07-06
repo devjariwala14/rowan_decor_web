@@ -355,9 +355,15 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <div data-i18n="course">Inquiry</div>
                   </a>
                 </li>
+
                 <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "comapny.php" ? "active" : "" ?>">
-                  <a href="company.php" class="menu-link">
+                  <a href="comapny.php" class="menu-link">
                     <div data-i18n="course">Company</div>
+                  </a>
+                </li>
+               <!-- <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "info.php" ? "active" : "" ?>">
+                  <a href="info.php" class="menu-link">
+                    <div data-i18n="course">Info</div>
                   </a>
                 </li>
                 <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "config.php" ? "active" : "" ?>">
@@ -388,175 +394,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
                   <a href="terms.php" class="menu-link">
                     <div data-i18n="course">Terms & Conditions</div>
                   </a>
-                </li>
-
-              </ul>
-            </li>
-
-            <li
-              class="menu-item  <?php echo in_array(basename($_SERVER["PHP_SELF"]), $location) ? "active open" : "" ?> ">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-current-location"></i>
-                <div data-i18n="Form Elements">Location Settings</div>
-              </a>
-              <ul class="menu-sub">
-
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "state.php" ? "active" : "" ?>">
-                  <a href="state.php" class="menu-link">
-                    <div data-i18n="course">State Master</div>
-                  </a>
-                </li>
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "city.php" ? "active" : "" ?>">
-                  <a href="city.php" class="menu-link">
-                    <div data-i18n="course">City Master</div>
-                  </a>
-                </li>
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "zone.php" ? "active" : "" ?>">
-                  <a href="zone.php" class="menu-link">
-                    <div data-i18n="course">Zone Master</div>
-                  </a>
-                </li>
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "area.php" ? "active" : "" ?>">
-                  <a href="area.php" class="menu-link">
-                    <div data-i18n="course">Area Master</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li
-              class="menu-item  <?php echo in_array(basename($_SERVER["PHP_SELF"]), $delivery) ? "active open" : "" ?> ">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-package"></i>
-                <div data-i18n="Form Elements">Delivery Settings</div>
-              </a>
-              <ul class="menu-sub">
-
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "deliveryboy_reg.php" ? "active" : "" ?>">
-                  <a href="deliveryboy_reg.php" class="menu-link">
-                    <div data-i18n="course">Delivery Boy Registration</div>
-                  </a>
-                </li>
-
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "delivery_settings.php" ? "active" : "" ?>">
-                  <a href="delivery_settings.php" class="menu-link">
-                    <div data-i18n="course">Delivery Master</div>
-                  </a>
-                </li>
-
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "collection_time.php" ? "active" : "" ?>">
-                  <a href="collection_time.php" class="menu-link">
-                    <div data-i18n="course">Collection Time</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li
-              class="menu-item  <?php echo in_array(basename($_SERVER["PHP_SELF"]), $coupon) ? "active open" : "" ?> ">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-coupon"></i>
-                <div data-i18n="Form Elements">Coupon Settings</div>
-              </a>
-              <ul class="menu-sub">
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "coupon.php" ? "active" : "" ?>">
-                  <a href="coupon.php" class="menu-link">
-                    <div data-i18n="course">Coupon Master</div>
-                  </a>
-                </li>
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "coupon_counter.php" ? "active" : "" ?>">
-                  <a href="coupon_counter.php" class="menu-link">
-                    <div data-i18n="course">Coupon Counter</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="menu-item  <?php echo in_array(basename($_SERVER["PHP_SELF"]), $mail) ? "active open" : "" ?> ">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-envelope"></i>
-                <div data-i18n="Form Elements">Mail Settings</div>
-              </a>
-              <ul class="menu-sub">
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "mail_type.php" ? "active" : "" ?>">
-                  <a href="mail_type.php" class="menu-link">
-                    <div data-i18n="course">Mail Type</div>
-                  </a>
-                </li>
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "mail_type_tariff.php" ? "active" : "" ?>">
-                  <a href="mail_type_tariff.php" class="menu-link">
-                    <div data-i18n="course">Mail Type Tariff</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-
-            <li
-              class="menu-item  <?php echo in_array(basename($_SERVER["PHP_SELF"]), $review_feedback) ? "active open" : "" ?> ">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-star"></i>
-                <div data-i18n="Form Elements">Review/Feedback</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "post_review.php" ? "active" : "" ?>">
-                  <a href="post_review.php" class="menu-link">
-                    <div data-i18n="course">Post Review</div>
-                  </a>
-                </li>
-                <!-- <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "customer_feedback.php" ? "active" : "" ?>">
-                      <a href="customer_feedback.php" class="menu-link">
-                      <div data-i18n="course">Customer Feedback</div>
-                      </a>
-                    </li> -->
-
-
-              </ul>
-            </li>
-
-
-            <li
-              class="menu-item  <?php echo in_array(basename($_SERVER["PHP_SELF"]), $reportmenu) ? "active open" : "" ?> ">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-report"></i>
-                <div data-i18n="Form Elements">Reports</div>
-              </a>
-              <ul class="menu-sub">
-
-
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "customer_report.php" ? "active" : "" ?>">
-                  <a href="customer_report.php" class="menu-link">
-                    <div data-i18n="course">Post Job Report</div>
-                  </a>
-                </li>
-
-                <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "cust_report.php" ? "active" : "" ?>">
-                  <a href="cust_report.php" class="menu-link">
-                    <div data-i18n="course">Customer Report</div>
-                  </a>
-                </li>
-
-                <li
-                  class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == "delivery_boy_report.php" ? "active" : "" ?>">
-                  <a href="delivery_boy_report.php" class="menu-link">
-                    <div data-i18n="course">Delivery Boy Report</div>
-                  </a>
-                </li>
-
-
-
+                </li> -->
 
               </ul>
             </li>

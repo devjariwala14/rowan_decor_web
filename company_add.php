@@ -152,7 +152,7 @@ if(isset($_REQUEST['btnupdate']))
                         
 						<div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">State</label>
-							<select name="state_name" id="state_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+							<select onchange="fillcity(this.value)" name="state_name" id="state_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
 								<option value="">Select State</option>
 								<?php
                                         $stmt_list = $obj->con1->prepare("SELECT * FROM `state` WHERE `status`= 'Enable'");
@@ -177,24 +177,26 @@ if(isset($_REQUEST['btnupdate']))
 
                     <div class="col mb-3">
 							<label class="form-label" for="basic-default-fullname">City</label>
-							<select name="city_name" id="city_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-								<option value="">Select City</option>
+							<select  name="city_name" id="city_name" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+								
 								<?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `city` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `city` WHERE `status`= 'Enable' and `state_id` = ?");
+										$stmt_list->bind_param("i", $data["state_id"]);
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();
                                         $i=1;
                                         while($city=mysqli_fetch_array($result))
                                         {
-                                    ?>
-									<option value="<?php echo $city["srno"]?>" <?php echo isset($mode) && $data[' '] == $city["srno"] ? 'selected' : '' ?>>
+                                    ?>	
+									<option value="<?php echo $city["srno"]?>" 
+									<?php echo isset($mode) && $data['city_id'] == $city["srno"] ? 'selected' : '' ?>>
                                     <?php echo $city["ctnm"]?></option>
 									<?php
 								}
 								?>
 							</select>
-							<input type="hidden" name="ttId" id="ttId">
+							
 						</div>
 
 						<div class="col mb-3">
@@ -262,6 +264,26 @@ if(isset($_REQUEST['btnupdate']))
     eraseCookie("view_id");
 		window.location = "company.php";
 	}
+
+	function fillcity(stid){
+		const xhttp = new XMLHttpRequest();
+		xhttp.open("GET","getcities.php?sid="+stid);
+		xhttp.send();
+		xhhtp.onload= function(){
+			document.getElementById("city_name").innerHTML = xhttp.responseText;
+		}
+	}
+
+	// function fillState(cntrid){
+	// 	const xhttp = new XMLHttpRequest();
+	// 	xhttp.open("GET","getstate.php?cntrid="+cntrid);
+	// 	xhttp.send();
+	// 	xhhtp.onload= function(){
+	// 		var data = xhttp.responseText.split("@@@");
+	// 		document.getElementById("state").innerHTML = xhttp.responseText;
+	// 		document.getElementById("country_code").value = "+" + data[1];
+	// 	}
+	// }
 </script>
 <?php
 include "footer.php";

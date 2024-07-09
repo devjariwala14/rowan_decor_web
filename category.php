@@ -148,6 +148,7 @@ if (isset($_COOKIE["excelmsg"])) {
                     <tr>
                         <th>Srno</th>
                         <th>Category Name</th>
+                        <th>Measurable</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -166,6 +167,7 @@ if (isset($_COOKIE["excelmsg"])) {
                         <tr>
                             <td><?php echo $i ?></td>
                             <td><?php echo $category["name"] ?></td>
+                            <td><?php echo $category["measurable"] ?></td>
                             <?php if ($category["status"] == 'Enable') { ?>
                                 <td style="color:green"><?php echo $category["status"] ?></td>
                             <?php } else if ($category["status"] == 'Disable') { ?>

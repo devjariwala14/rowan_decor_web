@@ -60,7 +60,7 @@ if (isset($_COOKIE["msg"])) {
             </button>
         </div>
         <script type="text/javascript">eraseCookie("msg")</script>
-        <?php   
+        <?php
         }
     if ($_COOKIE['msg'] == "fail") {
         ?>
@@ -136,7 +136,8 @@ if (isset($_COOKIE["excelmsg"])) {
 <div class="card mb-4">
     <div class="row ms-2 me-3">
         <div class="col-md-6" style="margin:1%">
-            <a class="btn btn-primary" href="#" onclick="javascript:adddata()"s style="margin-right:15px;"><i class="bx bx-plus"></i> Add
+            <a class="btn btn-primary" href="#" onclick="javascript:adddata()" s style="margin-right:15px;"><i
+                    class="bx bx-plus"></i> Add
                 Category</a>
 
         </div>
@@ -159,27 +160,28 @@ if (isset($_COOKIE["excelmsg"])) {
 
                     $stmt_list->close();
                     $i = 1;
-                    while ($city = mysqli_fetch_array($result)) {
+                    while ($category = mysqli_fetch_array($result)) {
                         ?>
 
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td><?php echo $city["name"] ?></td>
-                            <?php if ($city["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $city["status"] ?></td>
-                            <?php } else if ($city["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $city["status"] ?></td>
+                            <td><?php echo $category["name"] ?></td>
+                            <?php if ($category["status"] == 'Enable') { ?>
+                                <td style="color:green"><?php echo $category["status"] ?></td>
+                            <?php } else if ($category["status"] == 'Disable') { ?>
+                                    <td style="color:red"><?php echo $category["status"] ?></td>
                             <?php } ?>
 
                             <td>
                                 <a
-                                    href="javascript:editdata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["name"]) ?>','<?php echo $city["status"] ?>');"><i
+                                    href="javascript:editdata('<?php echo $category["id"] ?>','<?php echo base64_encode($category["name"]) ?>','<?php echo $category["status"] ?>');"><i
                                         class="bx bx-edit-alt me-1"></i> </a>
                                 <a
-                                    href="javascript:deletedata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["name"]) ?>');"><i
+                                    href="javascript:deletedata('<?php echo $category["id"] ?>','<?php echo base64_encode($category["name"]) ?>');"><i
                                         class="bx bx-trash me-1" style="color:red"></i> </a>
                                 <a
-                                    href="javascript:viewdata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["name"]) ?>','<?php echo $city["status"] ?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
+                                    href="javascript:viewdata('<?php echo $category["id"] ?>','<?php echo base64_encode($category["name"]) ?>','<?php echo $category["status"] ?>');"><i
+                                        class="fa-regular fa-eye" style="color:green"></i></a>
                             </td>
                         </tr>
                         <?php

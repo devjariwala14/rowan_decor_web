@@ -32,7 +32,7 @@ if (isset($_REQUEST['btnsubmit'])) {
 
 	try {
 		$stmt = $obj->con1->prepare("INSERT INTO `category`(`name`,`measurable`,`status`) VALUES (?,?,?)");
-		$stmt->bind_param("ss", $name, $measurable, $status);
+		$stmt->bind_param("sss", $name, $measurable, $status);
 		$Resp = $stmt->execute();
 		if (!$Resp) {
 			throw new Exception("Problem in adding! " . strtok($obj->con1->error, '('));
@@ -60,7 +60,7 @@ if (isset($_REQUEST['btnupdate'])) {
 	try {
 		// echo"UPDATE category SET `category`=$category, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
 		$stmt = $obj->con1->prepare("UPDATE category SET `name`=?,`measurable`=?, `status`=? where id=?");
-		$stmt->bind_param("ssi", $name, $measurable, $status, $e_id);
+		$stmt->bind_param("sssi", $name, $measurable, $status, $e_id);
 		$Resp = $stmt->execute();
 		if (!$Resp) {
 			throw new Exception("Problem in updating! " . strtok($obj->con1->error, '('));

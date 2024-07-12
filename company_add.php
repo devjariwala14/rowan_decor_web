@@ -38,6 +38,7 @@ if(isset($_REQUEST['btnsubmit']))
     $website = $_REQUEST['website'];
     $tax1 = $_REQUEST['tax_num1'];
     $tax2 = $_REQUEST['tax_num2'];
+	$status = $_REQUEST['status'];
 	try
 	{
 		//echo "INSERT INTO `city`(`city_name`,`state_id`,`status`) VALUES ('".$city_name."', '".$state_name."', '".$status."')";
@@ -45,8 +46,8 @@ if(isset($_REQUEST['btnsubmit']))
 
 		//echo "INSERT into company(`id`, `company_name`, `address`, `crossing`, `country_name`, `state_name`, `city_name`, `postal_code`, `phone`, `email`, `website`, `tax_num1`, `tax_num2`) VALUES ('".$company_name."','".$address."','".$crossing."','".$country_name."','".$state."','".$city."','".$postal_code."','".$phone."','".$email."','".$website."','".$tax1."','".$tax2."','".$company_name."')";
 
-		$stmt = $obj->con1->prepare("INSERT INTO `company`(`company_name`,`address`,`crossing`,`country_name`,`state_id`,`city_id`,`postal_code`,`phone`,`email`,`website`,`tax_num1`,`tax_num2`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("ssssssssssss",$company_name,$address,$crossing,$country_name,$state,$city,$postal_code,$phone,$email,$website,$tax1,$tax2);
+		$stmt = $obj->con1->prepare("INSERT INTO `company`(`company_name`,`address`,`crossing`,`country_name`,`state_id`,`city_id`,`postal_code`,`phone`,`email`,`website`,`tax_num1`,`tax_num2`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("sssssssssssss",$company_name,$address,$crossing,$country_name,$state,$city,$postal_code,$phone,$email,$website,$tax1,$tax2,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -85,13 +86,14 @@ if(isset($_REQUEST['btnupdate']))
     $website = $_REQUEST['website'];
     $tax1 = $_REQUEST['tax_num1'];
     $tax2 = $_REQUEST['tax_num2'];
+	$status = $_REQUEST['status'];
 	$e_id=$_COOKIE['edit_id'];
 	
 	try
 	{
          //echo"UPDATE units SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE company SET `company_name`=?, `address`=?, `crossing`=?, `country_name`=?, `state_id`=?, `city_id`=?, `postal_code`=?, `phone`=?, `email`=?, `website`=?, `tax_num1`=?, `tax_num2`=? where id=?");
-		$stmt->bind_param("ssssssssssssi",$company_name,$address,$crossing,$country_name,$state,$city,$postel_code,$phone,$email,$website,$tax1,$tax2,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE company SET `company_name`=?, `address`=?, `crossing`=?, `country_name`=?, `state_id`=?, `city_id`=?, `postal_code`=?, `phone`=?, `email`=?, `website`=?, `tax_num1`=?, `tax_num2`=?,`status`=? where id=?");
+		$stmt->bind_param("sssssssssssssi",$company_name,$address,$crossing,$country_name,$state,$city,$postel_code,$phone,$email,$website,$tax1,$tax2,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -241,7 +243,26 @@ if(isset($_REQUEST['btnupdate']))
 							<input type="text" class="form-control" name="tax_num2" id="tax_num2" value="<?php echo (isset($mode)) ? $data['tax_num2'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
 						</div>
-
+						<div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label d-block" for="basic-default-fullname">Status</label>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="status" id="Enable"
+                                        value="Enable"
+                                        <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required
+                                        checked>
+                                    <label class="form-check-label" for="inlineRadio1">Enable</label>
+                                </div>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="status" id="Disable"
+                                        value="Disable"
+                                        <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                                    <label class="form-check-label" for="inlineRadio1">Disable</label>
+                                </div>
+                            </div>
+                        </div>
 
 						<button type="submit"
                         name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"

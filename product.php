@@ -168,6 +168,7 @@ eraseCookie("excelmsg")
                         <th>Sr.no</th>
                         <th>Product Name</th>
                         <th>Category</th>
+                        <th>Company</th>
                         <th>Price</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -175,7 +176,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php 
-                        $stmt_list = $obj->con1->prepare("SELECT p1.*, c1.name as cname FROM product p1 JOIN category c1 ON p1.category_id = c1.id");
+                        $stmt_list = $obj->con1->prepare("SELECT p1.*, c1.name as cname,co1.company_name FROM product p1 JOIN category c1 ON p1.category_id = c1.id JOIN company co1 ON p1.company_id = co1.id");
                         $stmt_list->execute();
                         $result = $stmt_list->get_result();
                         $stmt_list->close();
@@ -188,6 +189,7 @@ eraseCookie("excelmsg")
                         <td><?php echo $i?></td>
                         <td><?php echo $res["name"]?></td>
                         <td><?php echo $res["cname"]?></td>
+                        <td><?php echo $res["company_name"]?></td>
                         <td><?php echo $res["price"]?></td>
                         <?php if($res["status"]=='Enable'){	?>
                         <td style="color:green"><?php echo $res["status"]?></td>

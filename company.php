@@ -170,8 +170,7 @@ eraseCookie("excelmsg")
                         <th>State</th>
                         <th>City</th>
                         <th>Contact no.</th>
-                        <th>Email</th>
-                        <th>Website</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -193,8 +192,11 @@ eraseCookie("excelmsg")
                         <td><?php echo $res["stnm"]?></td>
                         <td><?php echo $res["ctnm"]?></td>
                         <td><?php echo $res["phone"]?></td>
-                        <td><?php echo $res["email"]?></td>
-                        <td><?php echo $res["website"]?></td>    
+                        <?php if ($res["status"] == 'Enable') { ?>
+                                <td style="color:green"><?php echo $res["status"] ?></td>
+                            <?php } else if ($res["status"] == 'Disable') { ?>
+                                    <td style="color:red"><?php echo $res["status"] ?></td>
+                            <?php } ?>   
                         
 
                         <td>

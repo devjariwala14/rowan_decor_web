@@ -28,13 +28,14 @@ if(isset($_REQUEST['btnsubmit']))
 {
 	$name = $_REQUEST['name'];
     $category = $_REQUEST['category'];
+    $company = $_REQUEST['company'];
     $price = $_REQUEST['price'];
 	$status = $_REQUEST['status'];
 
 	try
 	{
-		$stmt = $obj->con1->prepare("INSERT INTO `product`(`name`,`category_id`,`price`,`status`) VALUES (?,?,?,?)");
-		$stmt->bind_param("siss",$name,$category,$price,$status);
+		$stmt = $obj->con1->prepare("INSERT INTO `product`(`name`,`category_id`,`company_id`,`price`,`status`) VALUES (?,?,?,?,?)");
+		$stmt->bind_param("siiss",$name,$category,$company,$price,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -64,14 +65,15 @@ if(isset($_REQUEST['btnupdate']))
 	$e_id=$_COOKIE['edit_id'];
     $name = $_REQUEST['name'];
     $category = $_REQUEST['category'];
+    $company = $_REQUEST['company'];
     $price = $_REQUEST['price'];
 	$status = $_REQUEST['status'];
 	
 	try
 	{
         // echo"UPDATE units SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE `product` SET `name`=?,`category_id`=?,`price`=?,`status`=? WHERE id=?");
-		$stmt->bind_param("sissi",$name,$category,$price,$status,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE `product` SET `name`=?,`category_id`=?,company_id=?,`price`=?,`status`=? WHERE id=?");
+		$stmt->bind_param("siissi",$name,$category,$company,$price,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -135,7 +137,29 @@ if(isset($_REQUEST['btnupdate']))
                         </select>
                         <input type="hidden" name="ttId" id="ttId">
                     </div>
-
+                    <div class="col mb-3">
+                        <label class="form-label" for="basic-default-fullname">Company</label>
+                        <select name="company" id="company" class="form-control"
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <option value="">Select Company</option>
+                            <?php
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `company` WHERE `status`= 'Enable'");
+                                        $stmt_list->execute();
+                                        $result = $stmt_list->get_result();
+                                        $stmt_list->close();
+                                        $i=1;
+                                        while($product=mysqli_fetch_array($result))
+                                        {
+                                    ?>
+                            <option value="<?php echo $product["id"]?>"
+                                <?php echo isset($mode) && $data['company_id'] == $product["id"] ? 'selected' : '' ?>>
+                                <?php echo $product["company_name"]?></option>
+                            <?php
+								}
+								?>
+                        </select>
+                        <input type="hidden" name="ttId" id="ttId">
+                    </div>
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Price</label>
                         <input type="text" class="form-control" name="price" id="price" onkeypress="return event.charCode >= 48 && event.charCode <= 57"

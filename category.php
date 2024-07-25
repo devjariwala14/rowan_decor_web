@@ -167,7 +167,12 @@ if (isset($_COOKIE["excelmsg"])) {
                         <tr>
                             <td><?php echo $i ?></td>
                             <td><?php echo $category["name"] ?></td>
-                            <td><?php echo $category["measurable"] ?></td>
+                            <?php if ($category["measurable"] == 'Y') { ?>
+                                <td style="color:green"><?php echo $category["measurable"] ?></td>
+                            <?php } else if ($category["measurable"] == 'N') { ?>
+                                    <td style="color:red"><?php echo $category["measurable"] ?></td>
+                            <?php } ?>
+
                             <?php if ($category["status"] == 'Enable') { ?>
                                 <td style="color:green"><?php echo $category["status"] ?></td>
                             <?php } else if ($category["status"] == 'Disable') { ?>

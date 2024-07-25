@@ -33,11 +33,11 @@ if(isset($_REQUEST['btnsubmit']))
     $place = $_REQUEST['place'];
     $vis_person = $_REQUEST['v_per'];
     $remark = $_REQUEST['remark'];
-	
+	$status = $_REQUEST['status'];
 	try
 	{
-		$stmt = $obj->con1->prepare("INSERT INTO `visitor`(`full_name`,`mobile_no`,`whatsapp_no`,`ref_name`,`place`,`visiting_person`,`remark`) VALUES (?,?,?,?,?,?,?)");
-		$stmt->bind_param("sssssss",$visitor_name, $mobile,$whatsapp ,$ref_name,$place, $vis_person, $remark );
+		$stmt = $obj->con1->prepare("INSERT INTO `visitor`(`full_name`,`mobile_no`,`whatsapp_no`,`ref_name`,`place`,`visiting_person`,`remark`,`status`) VALUES (?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("ssssssss",$visitor_name, $mobile,$whatsapp ,$ref_name,$place, $vis_person, $remark,$status );
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -72,13 +72,13 @@ if(isset($_REQUEST['btnupdate']))
     $place = $_REQUEST['place'];
     $vis_person = $_REQUEST['v_per'];
     $remark = $_REQUEST['remark'];
-	
+	$status = $_REQUEST['status'];
 	
 	try
 	{
         // echo"UPDATE visitor SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE visitor SET`full_name`=?,`mobile_no`=?,`whatsapp_no`=?,`ref_name`=?,`place`=?,`visiting_person`=?,`remark`=? where id=?");
-		$stmt->bind_param("sssssssi",$visitor_name, $mobile, $whatsapp ,$ref_name,$place, $vis_person, $remark,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE visitor SET`full_name`=?,`mobile_no`=?,`whatsapp_no`=?,`ref_name`=?,`place`=?,`visiting_person`=?,`remark`=? ,`status`=? where id=?");
+		$stmt->bind_param("ssssssssi",$visitor_name, $mobile, $whatsapp ,$ref_name,$place, $vis_person, $remark,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -170,7 +170,21 @@ if(isset($_REQUEST['btnupdate']))
                         <textarea class="form-control" name="remark" id="remark" required
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>><?php echo (isset($mode)) ? $data['remark'] : '' ?></textarea>
                     </div>
-
+                    <div class="mb-3">
+                        <label class="form-label d-block" for="basic-default-fullname">Status</label>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="status" id="Enable" value="Enable"
+                                <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
+                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                        </div>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="status" id="Disable" value="Disable"
+                                <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <label class="form-check-label" for="inlineRadio1">Disable</label>
+                        </div>
+                    </div>
 
                     <button type="submit"
                         name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"

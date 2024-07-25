@@ -171,6 +171,7 @@ eraseCookie("excelmsg")
                         <th>Refrence Name</th>
                         <th>Place</th>
                         <th>Visiting Person</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -193,6 +194,11 @@ eraseCookie("excelmsg")
                         <td><?php echo $res["ref_name"]?></td>
                         <td><?php echo $res["place"]?></td>
                         <td><?php echo $res["visiting_person"]?></td>
+                        <?php if ($res["status"] == 'Enable') { ?>
+                                <td style="color:green"><?php echo $res["status"] ?></td>
+                            <?php } else if ($res["status"] == 'Disable') { ?>
+                                    <td style="color:red"><?php echo $res["status"] ?></td>
+                            <?php } ?>  
                         <td>
                             <a href="javascript:editdata('<?php echo $res["id"]?>');"><i
                                     class="bx bx-edit-alt me-1"></i> </a>

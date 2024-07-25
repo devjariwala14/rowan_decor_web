@@ -13,7 +13,7 @@ if (!isset($_SESSION["userlogin"])) {
   }
 
 
-$adminmenu = array( "branch.php","branch_add.php","architect.php","architect_add.php","category.php","category_add.php","units.php","units_add.php","visitor.php","visitor_add.php","user.php","user_add.php","inquiry.php","inquiry_add.php","company.php","company_add.php","product.php","product_add.php","rooms.php","rooms_add.php","objects.php","object_add.php");
+$adminmenu = array( "branch.php","branch_add.php","architect.php","architect_add.php","category.php","category_add.php","units.php","units_add.php","visitor.php","visitor_add.php","user.php","user_add.php","inquiry.php","inquiry_add.php","company.php","company_add.php","product.php","product_add.php","rooms.php","rooms_add.php","objects.php","objects_add.php");
 $location = array("state.php","state_add.php", "city.php","city_add.php", "zone.php", "area.php");
 $delivery = array("deliveryboy_reg.php", "delivery_settings.php", "collection_time.php");
 $coupon = array("coupon.php", "coupon_counter.php");
@@ -58,19 +58,18 @@ $page_name = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
 
-    <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css" />
     <link rel="stylesheet" href="assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
-    <link rel="stylesheet" href="assets/vendor/css/pages/card-analytics.css" />
+    <!-- <link rel="stylesheet" href="assets/vendor/css/pages/card-analytics.css" /> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <!-- data tables -->
     <link rel="stylesheet" type="text/css" href="assets/vendor/DataTables/datatables.css">
 
-    <link rel="stylesheet" href="assets/vendor/libs/quill/typography.css" />
+    <!-- <link rel="stylesheet" href="assets/vendor/libs/quill/typography.css" />
     <link rel="stylesheet" href="assets/vendor/libs/quill/katex.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/quill/editor.css" />
+    <link rel="stylesheet" href="assets/vendor/libs/quill/editor.css" /> -->
 
     <!-- Row Group CSS -->
     <!-- <link rel="stylesheet" href="assets/vendor/datatables-rowgroup-bs5/rowgroup.bootstrap5.css"> -->
@@ -120,7 +119,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
         document.getElementById("dashboard_frm").submit();
     }
 
-    $(function() {
+   /* $(function() {
         setInterval("get_notification()", 10000);
 
     });
@@ -153,7 +152,8 @@ $page_name = basename($_SERVER['PHP_SELF']);
                 }
 
 
-                /*}
+                }
+                //this else was commented
                 else
                 {     
                     $('#noti_count').removeClass('badge-notifications');
@@ -162,13 +162,14 @@ $page_name = basename($_SERVER['PHP_SELF']);
                      $('#notification_list').hide();
                      $('#notif_header').hide();
                      
-                }*/
+                }
             }
 
         });
     }
 
     function removeNotification(id, typ) {
+
 
         $.ajax({
             async: true,
@@ -268,6 +269,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
 
         });
     }
+    */
     </script>
 
 </head>

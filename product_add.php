@@ -29,13 +29,14 @@ if(isset($_REQUEST['btnsubmit']))
 	$name = $_REQUEST['name'];
     $category = $_REQUEST['category'];
     $company = $_REQUEST['company'];
+    $unit = $_REQUEST['unit'];
     $price = $_REQUEST['price'];
 	$status = $_REQUEST['status'];
 
 	try
 	{
-		$stmt = $obj->con1->prepare("INSERT INTO `product`(`name`,`category_id`,`company_id`,`price`,`status`) VALUES (?,?,?,?,?)");
-		$stmt->bind_param("siiss",$name,$category,$company,$price,$status);
+		$stmt = $obj->con1->prepare("INSERT INTO `product`(`name`,`category_id`,`company_id`,`unit_id`,`price`,`status`) VALUES (?,?,?,?,?,?)");
+		$stmt->bind_param("siiiss",$name,$category,$company,$unit,$price,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -66,14 +67,15 @@ if(isset($_REQUEST['btnupdate']))
     $name = $_REQUEST['name'];
     $category = $_REQUEST['category'];
     $company = $_REQUEST['company'];
+    $unit = $_REQUEST['unit'];
     $price = $_REQUEST['price'];
 	$status = $_REQUEST['status'];
 	
 	try
 	{
         // echo"UPDATE units SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE `product` SET `name`=?,`category_id`=?,company_id=?,`price`=?,`status`=? WHERE id=?");
-		$stmt->bind_param("siissi",$name,$category,$company,$price,$status,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE `product` SET `name`=?,`category_id`=?,`company_id`=?,`unit_id`=?,`price`=?,`status`=? WHERE id=?");
+		$stmt->bind_param("siiissi",$name,$category,$company,$unit,$price,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -154,6 +156,29 @@ if(isset($_REQUEST['btnupdate']))
                             <option value="<?php echo $product["id"]?>"
                                 <?php echo isset($mode) && $data['company_id'] == $product["id"] ? 'selected' : '' ?>>
                                 <?php echo $product["company_name"]?></option>
+                            <?php
+								}
+								?>
+                        </select>
+                        <input type="hidden" name="ttId" id="ttId">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label" for="basic-default-fullname">Units</label>
+                        <select name="unit" id="unit" class="form-control"
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <option value="">Select Unit</option>
+                            <?php
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `units` WHERE `status`= 'Enable'");
+                                        $stmt_list->execute();
+                                        $result = $stmt_list->get_result();
+                                        $stmt_list->close();
+                                        $i=1;
+                                        while($product=mysqli_fetch_array($result))
+                                        {
+                                    ?>
+                            <option value="<?php echo $product["id"]?>"
+                                <?php echo isset($mode) && $data['unit_id'] == $product["id"] ? 'selected' : '' ?>>
+                                <?php echo $product["unit_name"]?></option>
                             <?php
 								}
 								?>

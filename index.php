@@ -31,7 +31,7 @@ if(isset($_REQUEST["login"])){
 			else
 			{
         setcookie("login", "wrong_pass",time()+3600,"/");
-				header("location:index.php?msg=Incorect UserId/Password");	
+				header("location:index.php");	
 			}
 			
 	

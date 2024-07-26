@@ -28,16 +28,12 @@ if(isset($_REQUEST['btnsubmit']))
 {
 	$company_name = $_REQUEST['company_name'];
     $address = $_REQUEST['address'];
-    $crossing = $_REQUEST['crossing'];
-    $country_name = $_REQUEST['country_name'];
     $state = $_REQUEST['state_id'];
 	$city = $_REQUEST['city_name'];
     $postal_code = $_REQUEST['postal_code'];
     $phone = $_REQUEST['phone'];
     $email = $_REQUEST['email'];
     $website = $_REQUEST['website'];
-    $tax1 = $_REQUEST['tax_num1'];
-    $tax2 = $_REQUEST['tax_num2'];
 	$status = $_REQUEST['status'];
 	try
 	{
@@ -46,8 +42,8 @@ if(isset($_REQUEST['btnsubmit']))
 
 		//echo "INSERT into company(`id`, `company_name`, `address`, `crossing`, `country_name`, `state_name`, `city_name`, `postal_code`, `phone`, `email`, `website`, `tax_num1`, `tax_num2`) VALUES ('".$company_name."','".$address."','".$crossing."','".$country_name."','".$state."','".$city."','".$postal_code."','".$phone."','".$email."','".$website."','".$tax1."','".$tax2."','".$company_name."')";
 
-		$stmt = $obj->con1->prepare("INSERT INTO `company`(`company_name`,`address`,`crossing`,`country_name`,`state_id`,`city_id`,`postal_code`,`phone`,`email`,`website`,`tax_num1`,`tax_num2`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("sssssssssssss",$company_name,$address,$crossing,$country_name,$state,$city,$postal_code,$phone,$email,$website,$tax1,$tax2,$status);
+		$stmt = $obj->con1->prepare("INSERT INTO `company`(`company_name`,`address`,`state_id`,`city_id`,`postal_code`,`phone`,`email`,`website`,`status`) VALUES (?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("ssiisssss",$company_name,$address,$state,$city,$postal_code,$phone,$email,$website,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -76,24 +72,20 @@ if(isset($_REQUEST['btnupdate']))
 {
 	$company_name = $_REQUEST['company_name'];
     $address = $_REQUEST['address'];
-    $crossing = $_REQUEST['crossing'];
-    $country_name = $_REQUEST['country_name'];
     $state = $_REQUEST['state_id'];
 	$city = $_REQUEST['city_name'];
     $postal_code = $_REQUEST['postal_code'];
     $phone = $_REQUEST['phone'];
     $email = $_REQUEST['email'];
     $website = $_REQUEST['website'];
-    $tax1 = $_REQUEST['tax_num1'];
-    $tax2 = $_REQUEST['tax_num2'];
 	$status = $_REQUEST['status'];
 	$e_id=$_COOKIE['edit_id'];
 	
 	try
 	{
          //echo"UPDATE units SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE company SET `company_name`=?, `address`=?, `crossing`=?, `country_name`=?, `state_id`=?, `city_id`=?, `postal_code`=?, `phone`=?, `email`=?, `website`=?, `tax_num1`=?, `tax_num2`=?,`status`=? where id=?");
-		$stmt->bind_param("sssssssssssssi",$company_name,$address,$crossing,$country_name,$state,$city,$postel_code,$phone,$email,$website,$tax1,$tax2,$status,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE company SET `company_name`=?, `address`=?, `state_id`=?, `city_id`=?, `postal_code`=?, `phone`=?, `email`=?, `website`=?,`status`=? where id=?");
+		$stmt->bind_param("ssiisssssi",$company_name,$address,$state,$city,$postel_code,$phone,$email,$website,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{

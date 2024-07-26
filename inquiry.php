@@ -147,10 +147,10 @@ if (isset($_COOKIE["excelmsg"])) {
                 <thead>
                     <tr>
                         <th>Srno</th>
-                        <th>Visitor ID</th>
+                        <th>Visitor</th>
                         <th>Inquired For</th>
                         <th>Attended By</th>
-                        <th>Architect Id</th>
+                        <th>Architect</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>

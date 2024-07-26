@@ -5,7 +5,7 @@ include "header.php";
 if (isset($_COOKIE['edit_id'])) {
 	$mode = 'edit';
 	$editId = $_COOKIE['edit_id'];
-	$stmt = $obj->con1->prepare("select * from architect where id=?");
+	$stmt = $obj->con1->prepare("SELECT * FROM `inquiry` WHERE id=?");
 	$stmt->bind_param('i', $editId);
 	$stmt->execute();
 	$data = $stmt->get_result()->fetch_assoc();
@@ -15,7 +15,7 @@ if (isset($_COOKIE['edit_id'])) {
 if (isset($_COOKIE['view_id'])) {
 	$mode = 'view';
 	$viewId = $_COOKIE['view_id'];
-	$stmt = $obj->con1->prepare("select * from architect where id=?");
+	$stmt = $obj->con1->prepare("SELECT * FROM `inquiry` WHERE id=?");
 	$stmt->bind_param('i', $viewId);
 	$stmt->execute();
 	$data = $stmt->get_result()->fetch_assoc();
@@ -142,7 +142,7 @@ if(isset($_REQUEST['btnupdate']))
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Inquired For</label>
                         <input type="text" class="form-control" name="inq_for" id="inq_for"
-                            value="<?php echo (isset($mode)) ? $data['inquiry_for'] : '' ?>"
+                            value="<?php echo (isset($mode)) ? $data['inquired_for'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                     </div>
                     <div class="col mb-3">
@@ -177,31 +177,41 @@ if(isset($_REQUEST['btnupdate']))
                     <div>
                         <label for="address" class="form-label">Address</label>
                         <textarea class="form-control" id="address" name="address" rows="2"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required><?php echo (isset($mode)) ? $data['address'] : '' ?></textarea>
+                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>
+                            required><?php echo (isset($mode)) ? $data['address'] : '' ?></textarea>
                     </div>
-					<div>
+                    <div>
                         <label for="suggestions" class="form-label">Suggestions</label>
                         <textarea class="form-control" id="suggestions" name="suggestions" rows="2"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required><?php echo (isset($mode)) ? $data['suggestions'] : '' ?></textarea>
+                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>
+                            required><?php echo (isset($mode)) ? $data['suggestions'] : '' ?></textarea>
                     </div>
-					<div class="col mb-3">
-                        <label for="date" class="col-md-2 col-form-label">Start Date</label>
-                          <input class="form-control" type="date" name="sdate" id="sdate" value="<?php echo (isset($mode)) ? $data['date'] : '' ?>"
-						  <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
-                      </div>
-                    <div class="mb-3">
-                        <label class="form-label d-block" for="basic-default-fullname">Status</label>
-                        <div class="form-check form-check-inline mt-3">
-                            <input class="form-check-input" type="radio" name="status" id="Enable" value="Enable"
-                                <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
-                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
-                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="date" class="col-md-2 col-form-label">Start Date</label>
+                            <input class="form-control" type="date" name="sdate" id="sdate"
+                                value="<?php echo (isset($mode)) ? $data['start_date'] : '' ?>"
+                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
-                        <div class="form-check form-check-inline mt-3">
-                            <input class="form-check-input" type="radio" name="status" id="Disable" value="Disable"
-                                <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
-                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-                            <label class="form-check-label" for="inlineRadio1">Disable</label>
+                        <div class="col-6 mb-3 mt-2">
+                            <div class="mb-3">
+                                <label class="form-label d-block" for="basic-default-fullname">Status</label>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="status" id="Enable"
+                                        value="Enable"
+                                        <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required
+                                        checked>
+                                    <label class="form-check-label" for="inlineRadio1">Enable</label>
+                                </div>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="status" id="Disable"
+                                        value="Disable"
+                                        <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                                    <label class="form-check-label" for="inlineRadio1">Disable</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <button type="submit"

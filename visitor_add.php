@@ -31,13 +31,12 @@ if(isset($_REQUEST['btnsubmit']))
     $whatsapp = $_REQUEST['whatsapp'];
     $ref_name = $_REQUEST['ref_name'];
     $place = $_REQUEST['place'];
-    $vis_person = $_REQUEST['v_per'];
     $remark = $_REQUEST['remark'];
 	$status = $_REQUEST['status'];
 	try
 	{
-		$stmt = $obj->con1->prepare("INSERT INTO `visitor`(`full_name`,`mobile_no`,`whatsapp_no`,`ref_name`,`place`,`visiting_person`,`remark`,`status`) VALUES (?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("ssssssss",$visitor_name, $mobile,$whatsapp ,$ref_name,$place, $vis_person, $remark,$status );
+		$stmt = $obj->con1->prepare("INSERT INTO `visitor`(`full_name`,`mobile_no`,`whatsapp_no`,`ref_name`,`place`,`remark`,`status`) VALUES (?,?,?,?,?,?,?)");
+		$stmt->bind_param("sssssss",$visitor_name, $mobile,$whatsapp ,$ref_name,$place,$remark,$status );
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -70,15 +69,14 @@ if(isset($_REQUEST['btnupdate']))
     $whatsapp = $_REQUEST['whatsapp'];
     $ref_name = $_REQUEST['ref_name'];
     $place = $_REQUEST['place'];
-    $vis_person = $_REQUEST['v_per'];
     $remark = $_REQUEST['remark'];
 	$status = $_REQUEST['status'];
 	
 	try
 	{
         // echo"UPDATE visitor SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE visitor SET`full_name`=?,`mobile_no`=?,`whatsapp_no`=?,`ref_name`=?,`place`=?,`visiting_person`=?,`remark`=? ,`status`=? where id=?");
-		$stmt->bind_param("ssssssssi",$visitor_name, $mobile, $whatsapp ,$ref_name,$place, $vis_person, $remark,$status,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE visitor SET`full_name`=?,`mobile_no`=?,`whatsapp_no`=?,`ref_name`=?,`place`=?,`remark`=? ,`status`=? where id=?");
+		$stmt->bind_param("sssssssi",$visitor_name, $mobile, $whatsapp ,$ref_name,$place, $remark,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -152,7 +150,7 @@ if(isset($_REQUEST['btnupdate']))
                                 
                         </select>
                     </div>
-                    <div class="col mb-3">
+                    <!-- <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Visiting Person</label>
                         <select name="v_per" id="v_per" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                         <option value="">Choose Person</option>
@@ -164,7 +162,7 @@ if(isset($_REQUEST['btnupdate']))
                                 </option>
                                 
                         </select>
-                    </div>
+                    </div> -->
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Remark</label>
                         <textarea class="form-control" name="remark" id="remark" required

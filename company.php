@@ -25,7 +25,7 @@ if (isset($_REQUEST["btndelete"])) {
 
 ?>
 
-<h4 class="fw-bold py-3 mb-4">Company</h4>
+<h4 class="fw-bold py-3 mb-4">Company Master</h4>
 
 <?php 
 if(isset($_COOKIE["msg"]) )

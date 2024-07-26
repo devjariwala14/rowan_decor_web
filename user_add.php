@@ -155,18 +155,20 @@ if(isset($_REQUEST['btnupdate']))
                             value="<?php echo (isset($mode)) ? $data['name'] : '' ?>"
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                     </div>
-                    <div class="col mb-3">
-                        <label class="form-label" for="basic-default-fullname">Email</label>
-                        <input type="text" class="form-control" name="email" id="email"
-                            value="<?php echo (isset($mode)) ? $data['email'] : '' ?>"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+                    <div class="row g-2">
+                        <div class="col mb-3">
+                            <label class="form-label" for="basic-default-fullname">Email</label>
+                            <input type="text" class="form-control" name="email" id="email"
+                                value="<?php echo (isset($mode)) ? $data['email'] : '' ?>"
+                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+                        </div>
+                        <div class="col mb-3">
+                            <label class="form-label" for="basic-default-fullname">Contact</label>
+                            <input type="text" class="form-control" name="contact" id="contact"  onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" value="<?php echo (isset($mode)) ? $data['contact'] : '' ?>"
+                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+                        </div>
                     </div>
-                    <div class="col mb-3">
-                        <label class="form-label" for="basic-default-fullname">Contact</label>
-                        <input type="text" class="form-control" name="contact" id="contact" maxlength="10"
-                            pattern="[6789][0-9]{9}" value="<?php echo (isset($mode)) ? $data['contact'] : '' ?>"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
-                    </div>
+
                     <div class="mb-3">
                         <label class="form-label d-block" for="basic-default-fullname">Status</label>
                         <div class="form-check form-check-inline mt-3">
@@ -187,8 +189,7 @@ if(isset($_REQUEST['btnupdate']))
                         class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
-                    <button type="button" class="btn btn-secondary"
-                        onclick="javascript:go_back()">
+                    <button type="button" class="btn btn-secondary" onclick="javascript:go_back()">
                         Close</button>
 
                 </form>

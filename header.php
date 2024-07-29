@@ -366,6 +366,11 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <div data-i18n="course">Objects</div>
                 </a>
             </li>
+            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product_sel', 'product_selection_details.php']) ? 'active' : '' ?>">
+                <a href="product_sel.php" class="menu-link">
+                    <div data-i18n="course">Product Selection</div>
+                </a>
+            </li>
         </ul>
     </li>
 

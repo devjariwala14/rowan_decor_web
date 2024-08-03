@@ -37,21 +37,21 @@ if(isset($_REQUEST['btnsubmit']))
     $room_name = $_REQUEST['room_name'];
     $object = $_REQUEST['object'];
     $measurement_details = $_REQUEST['measurement_details'];
-    $catalog_notes = $_REQUEST['catalog_notes'];
+    $catalogue_notes = $_REQUEST['catalogue_notes'];
     $status = $_REQUEST['status'];
     $rowan_img = $_FILES['rowan_img']['name'];
 	$rowan_img = str_replace(' ', '_', $rowan_img);
 	$rowan_img_path = $_FILES['rowan_img']['tmp_name'];
-    $catalog_img = $_FILES['catalog_img']['name'];
-	$catalog_img = str_replace(' ', '_', $catalog_img);
-	$catalog_img_path = $_FILES['catalog_img']['tmp_name'];
+    $catalogue_img = $_FILES['catalogue_img']['name'];
+	$catalogue_img = str_replace(' ', '_', $catalogue_img);
+	$catalogue_img_path = $_FILES['catalogue_img']['tmp_name'];
     $customer_img = $_FILES['customer_img']['name'];
 	$customer_img = str_replace(' ', '_', $customer_img);
 	$customer_img_path = $_FILES['customer_img']['tmp_name']; 	
 	
-    $rowan_image = "images/rowan_image/";
-    $catalog_image = "images/catalog_image/";
-    $customer_image = "images/customer_image/";
+    $rowan_image = "rowan_image/";
+    $catalogue_image = "catalogue_image/";
+    $customer_image = "customer_image/";
 
     function getUniqueFileName($directory, $fileName) {
         if (file_exists($directory . $fileName)) {
@@ -69,15 +69,15 @@ if(isset($_REQUEST['btnsubmit']))
         }
     }
     $PicFileName1 = getUniqueFileName($rowan_image, $rowan_img );
-    $PicFileName2 = getUniqueFileName($catalog_image, $catalog_img);
+    $PicFileName2 = getUniqueFileName($catalogue_image, $catalogue_img);
     $PicFileName3 = getUniqueFileName($customer_image, $customer_img);
 
 	try
 	{
-        // echo "INSERT INTO `product_selection_details`(`selection_id`=".$selection_id.",`base_product_id`=".$base_product_id.",`customer_product_name`=".$customer_product_name.",`rd_description`=".$rd_description.",`sell_amount`=".$sell_amount.",`unit`=".$unit.",`total_amount`=".$total_amount.",`unit_of_measure`=".$unit_of_measure.",`room_name`=".$room_name.",`object`=".$object.",`measurement_details`=".$measurement_details.",`catalog_notes`=".$catalog_notes.",`rowan_image`=".$PicFileName1 .",`catalog_image`=".$PicFileName2.",`customer_image`=".$PicFileName3.",`status`=".$status.")";
+        // echo "INSERT INTO `product_selection_details`(`selection_id`=".$selection_id.",`base_product_id`=".$base_product_id.",`customer_product_name`=".$customer_product_name.",`rd_description`=".$rd_description.",`sell_amount`=".$sell_amount.",`unit`=".$unit.",`total_amount`=".$total_amount.",`unit_of_measure`=".$unit_of_measure.",`room_name`=".$room_name.",`object`=".$object.",`measurement_details`=".$measurement_details.",`catalogue_notes`=".$catalogue_notes.",`rowan_image`=".$PicFileName1 .",`catalogue_image`=".$PicFileName2.",`customer_image`=".$PicFileName3.",`status`=".$status.")";
 
-		$stmt = $obj->con1->prepare("INSERT INTO `product_selection_details`(`selection_id`,`base_product_id`,`customer_product_name`,`rd_description`,`sell_amount`,`unit`,`total_amount`,`unit_of_measure`,`room_name`,`object`,`measurement_details`,`catalog_notes`,`rowan_image`,`catalog_image`,`customer_image`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("iisssdssssssssss",$selection_id,$base_product_id,$customer_product_name,$rd_description,$sell_amount,$unit,$total_amount,$unit_of_measure,$room_name,$object,$measurement_details,$catalog_notes,$PicFileName1 ,$PicFileName2 ,$PicFileName3 ,$status);
+		$stmt = $obj->con1->prepare("INSERT INTO `product_selection_details`(`selection_id`,`base_product_id`,`customer_product_name`,`rd_description`,`sell_amount`,`unit`,`total_amount`,`unit_of_measure`,`room_name`,`object`,`measurement_details`,`catalogue_notes`,`rowan_image`,`catalogue_image`,`customer_image`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("iisssdssssssssss",$selection_id,$base_product_id,$customer_product_name,$rd_description,$sell_amount,$unit,$total_amount,$unit_of_measure,$room_name,$object,$measurement_details,$catalogue_notes,$PicFileName1 ,$PicFileName2 ,$PicFileName3 ,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -93,7 +93,7 @@ if(isset($_REQUEST['btnsubmit']))
 	if($Resp)
 	{
         move_uploaded_file($rowan_img_path,  $rowan_image . $PicFileName1);
-        move_uploaded_file($catalog_img_path, $catalog_image . $PicFileName2);
+        move_uploaded_file($catalogue_img_path, $catalogue_image . $PicFileName2);
         move_uploaded_file($customer_img_path, $customer_image. $PicFileName3);
 		setcookie("msg", "data",time()+3600,"/");
 		header("location:product_selection_details.php");
@@ -119,16 +119,16 @@ if (isset($_REQUEST['btnupdate'])) {
     $room_name = $_REQUEST['room_name'];
     $object = $_REQUEST['object'];
     $measurement_details = $_REQUEST['measurement_details'];
-    $catalog_notes = $_REQUEST['catalog_notes'];
+    $catalogue_notes = $_REQUEST['catalogue_notes'];
     $status = $_REQUEST['status'];
 
     // Image directories
-    $rowan_image_dir = "images/rowan_image/";
-    $catalog_image_dir = "images/catalog_image/";
-    $customer_image_dir = "images/customer_image/";
+    $rowan_image_dir = "rowan_image/";
+    $catalogue_image_dir = "catalogue_image/";
+    $customer_image_dir = "customer_image/";
 
     // Retrieve current images from database
-    $stmt_get = $obj->con1->prepare("SELECT rowan_image, catalog_image, customer_image FROM `product_selection_details` WHERE id=?");
+    $stmt_get = $obj->con1->prepare("SELECT rowan_image, catalogue_image, customer_image FROM `product_selection_details` WHERE id=?");
     $stmt_get->bind_param("i", $e_id);
     $stmt_get->execute();
     $result = $stmt_get->get_result();
@@ -167,19 +167,19 @@ if (isset($_REQUEST['btnupdate'])) {
         }
     }
 
-    // Catalog Image Handling
-    $catalog_img = $_FILES['catalog_img']['name'];
-    $catalog_img = str_replace(' ', '_', $catalog_img);
-    $catalog_img_tmp = $_FILES['catalog_img']['tmp_name'];
-    $catalog_img_final = $current_images['catalog_image'];
+    // catalogue Image Handling
+    $catalogue_img = $_FILES['catalogue_img']['name'];
+    $catalogue_img = str_replace(' ', '_', $catalogue_img);
+    $catalogue_img_tmp = $_FILES['catalogue_img']['tmp_name'];
+    $catalogue_img_final = $current_images['catalogue_image'];
 
-    if ($catalog_img != "") {
-        $catalog_img_final = getUniqueFilename($catalog_image_dir, $catalog_img);
-        move_uploaded_file($catalog_img_tmp, $catalog_image_dir . $catalog_img_final);
+    if ($catalogue_img != "") {
+        $catalogue_img_final = getUniqueFilename($catalogue_image_dir, $catalogue_img);
+        move_uploaded_file($catalogue_img_tmp, $catalogue_image_dir . $catalogue_img_final);
         
         // Delete old image if it exists
-        if (file_exists($catalog_image_dir . $current_images['catalog_image'])) {
-            unlink($catalog_image_dir . $current_images['catalog_image']);
+        if (file_exists($catalogue_image_dir . $current_images['catalogue_image'])) {
+            unlink($catalogue_image_dir . $current_images['catalogue_image']);
         }
     }
 
@@ -201,8 +201,8 @@ if (isset($_REQUEST['btnupdate'])) {
 
     // Database Update
     try {
-        $stmt = $obj->con1->prepare("UPDATE `product_selection_details` SET `selection_id`=?,`base_product_id`=?,`customer_product_name`=?,`rd_description`=?,`sell_amount`=?,`unit`=?,`total_amount`=?,`unit_of_measure`=?,`room_name`=?,`object`=?,`measurement_details`=?,`catalog_notes`=?,`rowan_image`=?,`catalog_image`=?,`customer_image`=?,`status`=? WHERE id=?");
-        $stmt->bind_param("iisssdssssssssssi", $selection_id, $base_product_id, $customer_product_name, $rd_description, $sell_amount, $unit, $total_amount, $unit_of_measure, $room_name, $object, $measurement_details, $catalog_notes, $rowan_img_final, $catalog_img_final, $customer_img_final, $status, $e_id);
+        $stmt = $obj->con1->prepare("UPDATE `product_selection_details` SET `selection_id`=?,`base_product_id`=?,`customer_product_name`=?,`rd_description`=?,`sell_amount`=?,`unit`=?,`total_amount`=?,`unit_of_measure`=?,`room_name`=?,`object`=?,`measurement_details`=?,`catalogue_notes`=?,`rowan_image`=?,`catalogue_image`=?,`customer_image`=?,`status`=? WHERE id=?");
+        $stmt->bind_param("iisssdssssssssssi", $selection_id, $base_product_id, $customer_product_name, $rd_description, $sell_amount, $unit, $total_amount, $unit_of_measure, $room_name, $object, $measurement_details, $catalogue_notes, $rowan_img_final, $catalogue_img_final, $customer_img_final, $status, $e_id);
         $Resp = $stmt->execute();
         if (!$Resp) {
             throw new Exception("Problem in updating! " . strtok($obj->con1->error, '('));
@@ -286,12 +286,15 @@ if (isset($_REQUEST['btnupdate'])) {
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Sell Amount</label>
                             <input type="text" class="form-control" name="sell_amount" id="sell_amount"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
                                 value="<?php echo (isset($mode)) ? $data['sell_amount'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Unit</label>
+                            
                             <input type="text" class="form-control" name="unit" id="unit"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
                                 value="<?php echo (isset($mode)) ? $data['unit'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
@@ -300,12 +303,14 @@ if (isset($_REQUEST['btnupdate'])) {
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Total Amount</label>
                             <input type="text" class="form-control" name="total_amount" id="total_amount"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
                                 value="<?php echo (isset($mode)) ? $data['total_amount'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Unit Of Measure</label>
                             <input type="text" class="form-control" name="unit_of_measure" id="unit_of_measure"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" 
                                 value="<?php echo (isset($mode)) ? $data['unit_of_measure'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
@@ -366,27 +371,27 @@ if (isset($_REQUEST['btnupdate'])) {
                         </div>
 
                         <div class="col mb-3">
-                            <label class="form-label" for="basic-default-fullname">Catalog Notes</label>
-                            <textarea class="form-control" name="catalog_notes" id="catalog_notes" required
-                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>><?php echo (isset($mode)) ? $data['catalog_notes'] : '' ?></textarea>
+                            <label class="form-label" for="basic-default-fullname">catalogue Notes</label>
+                            <textarea class="form-control" name="catalogue_notes" id="catalogue_notes" required
+                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>><?php echo (isset($mode)) ? $data['catalogue_notes'] : '' ?></textarea>
                         </div>
                     </div>
-                    <!-- Catalog Image -->
+                    <!-- catalogue Image -->
                     <div class="mb-3">
-                        <label for="catalog_img" class="form-label">Catalog Image</label>
-                        <input class="form-control" type="file" id="catalog_img" name="catalog_img"
-                            onchange="readURL(this, 'PreviewCatalogImage')"
+                        <label for="catalogue_img" class="form-label">catalogue Image</label>
+                        <input class="form-control" type="file" id="catalogue_img" name="catalogue_img"
+                            onchange="readURL(this, 'PreviewcatalogueImage')"
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : ''; ?> />
 
                         <label class="font-bold text-primary"
-                            style="display:<?php echo isset($data['catalog_image']) || $mode == 'view' ? 'block' : 'none'; ?>">Preview</label>
-                        <img src="<?php echo isset($data['catalog_image']) ? 'images/catalog_image/' . $data['catalog_image'] : ''; ?>"
-                            id="PreviewCatalogImage" height="300" width="400"
-                            style="display:<?php echo isset($data['catalog_image']) ? 'block' : 'none'; ?>"
+                            style="display:<?php echo isset($data['catalogue_image']) || isset($mode) && $mode == 'view' ? 'block' : 'none'; ?>">Preview</label>
+                        <img src="<?php echo isset($data['catalogue_image']) ? 'catalogue_image/' . $data['catalogue_image'] : ''; ?>"
+                            id="PreviewcatalogueImage" height="300" width="400"
+                            style="display:<?php echo isset($data['catalogue_image']) ? 'block' : 'none'; ?>"
                             class="object-cover shadow rounded mt-3 mb-3">
-                        <div id="imgdiv-catalog" style="color:red"></div>
-                        <input type="hidden" name="old_img_catalog" id="old_img_catalog"
-                            value="<?php echo (isset($mode) && $mode == 'edit') ? $data['catalog_image'] : ''; ?>" />
+                        <div id="imgdiv-catalogue" style="color:red"></div>
+                        <input type="hidden" name="old_img_catalogue" id="old_img_catalogue"
+                            value="<?php echo (isset($mode) && $mode == 'edit') ? $data['catalogue_image'] : ''; ?>" />
                     </div>
 
                     <!-- Rowan Image -->
@@ -397,8 +402,8 @@ if (isset($_REQUEST['btnupdate'])) {
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : ''; ?> />
 
                         <label class="font-bold text-primary"
-                            style="display:<?php echo isset($data['rowan_image']) || $mode == 'view' ? 'block' : 'none'; ?>">Preview</label>
-                        <img src="<?php echo isset($data['rowan_image']) ? 'images/rowan_image/' . $data['rowan_image'] : ''; ?>"
+                            style="display:<?php echo isset($data['rowan_image']) || isset($mode) && $mode == 'view' ? 'block' : 'none'; ?>">Preview</label>
+                        <img src="<?php echo isset($data['rowan_image']) ? 'rowan_image/' . $data['rowan_image'] : ''; ?>"
                             id="PreviewRowanImage" height="300" width="400"
                             style="display:<?php echo isset($data['rowan_image']) ? 'block' : 'none'; ?>"
                             class="object-cover shadow rounded mt-3 mb-3">
@@ -415,8 +420,8 @@ if (isset($_REQUEST['btnupdate'])) {
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : ''; ?> />
 
                         <label class="font-bold text-primary"
-                            style="display:<?php echo isset($data['customer_image']) || $mode == 'view' ? 'block' : 'none'; ?>">Preview</label>
-                        <img src="<?php echo isset($data['customer_image']) ? 'images/customer_image/' . $data['customer_image'] : ''; ?>"
+                            style="display:<?php echo isset($data['customer_image']) || isset($mode) && $mode == 'view' ? 'block' : 'none'; ?>">Preview</label>
+                        <img src="<?php echo isset($data['customer_image']) ? 'customer_image/' . $data['customer_image'] : ''; ?>"
                             id="PreviewCustomerImage" height="300" width="400"
                             style="display:<?php echo isset($data['customer_image']) ? 'block' : 'none'; ?>"
                             class="object-cover shadow rounded mt-3 mb-3">

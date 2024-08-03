@@ -210,7 +210,7 @@ if (isset($_COOKIE["excelmsg"])) {
     function adddata() {
         eraseCookie("edit_id");
         eraseCookie("view_id");
-        window.location = "product_sel.php";
+        window.location = "add_product_sel.php";
     }
 
     function editdata(id) {
@@ -222,7 +222,7 @@ if (isset($_COOKIE["excelmsg"])) {
     function viewdata(id) {
         eraseCookie("edit_id");
         createCookie("view_id", id, 1);
-        window.location = "product_selection_details";
+        window.location = "product_selection_details.php";
     }
 
     function deletedata(id, name) {

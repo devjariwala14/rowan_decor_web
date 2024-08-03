@@ -178,7 +178,7 @@ if(isset($_REQUEST['btnupdate']))
                             <label class="form-check-label" for="inlineRadio1">Enable</label>
                         </div>
                         <div class="form-check form-check-inline mt-3">
-                            <input class="form-check-input" type="radio" name="status" id="Disable" value="disable"
+                            <input class="form-check-input" type="radio" name="status" id="disable" value="Disable"
                                 <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
                                 <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                             <label class="form-check-label" for="inlineRadio1">Disable</label>

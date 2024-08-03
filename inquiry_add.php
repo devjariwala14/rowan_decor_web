@@ -28,6 +28,7 @@ if(isset($_REQUEST['btnsubmit']))
 {
 	$visitor = $_REQUEST["visitor"];
     $inquired_for = $_REQUEST["inq_for"];
+    $inquired_for_str = implode(',', $inquired_for); 
     $attended_by = $_REQUEST["attended_by"];
 	$architect = $_REQUEST["architect"];
 	$address = $_REQUEST["address"];
@@ -37,9 +38,9 @@ if(isset($_REQUEST['btnsubmit']))
 
 	try
 	{  
-		// echo"INSERT INTO `inquiry`(`visitor_id`=".$visitor.", `inquired_for`, `attended_by`, `architect_id`, `address`, `suggestions`, `start_date`,`status`)";
+		// echo "INSERT INTO `inquiry`(`visitor_id`=".$visitor.", `inquired_for`=".$inquired_for_str.", `attended_by`=".$attended_by.", `architect_id`=".$architect.", `address`=".$address.", `suggestions`=".$suggetion.", `start_date`=".$start_date.",`status`=".$status.")";
 		$stmt = $obj->con1->prepare("INSERT INTO `inquiry`(`visitor_id`, `inquired_for`, `attended_by`, `architect_id`, `address`, `suggestions`, `start_date`,`status`) VALUES (?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("ssssssss",$visitor,$inquired_for,$attended_by,$architect,$address,$suggetion,$start_date,$status);
+		$stmt->bind_param("isiissss",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$start_date,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -56,7 +57,7 @@ if(isset($_REQUEST['btnsubmit']))
 	{
 		setcookie("msg", "data",time()+3600,"/");
 		header("location:inquiry.php");
-	}
+	 }
 	else
 	{
 		setcookie("msg", "fail",time()+3600,"/");
@@ -69,6 +70,7 @@ if(isset($_REQUEST['btnupdate']))
 	$e_id=$_COOKIE['edit_id'];
 	$visitor = $_REQUEST["visitor"];
     $inquired_for = $_REQUEST["inq_for"];
+    $inquired_for_str = implode(',', $inquired_for);
     $attended_by = $_REQUEST["attended_by"];
 	$architect = $_REQUEST["architect"];
 	$address = $_REQUEST["address"];
@@ -81,7 +83,7 @@ if(isset($_REQUEST['btnupdate']))
 	{
         // echo"UPDATE architect SET `name`=$name, `contact`=$contact, `status`=$status where id=$e_id";
 		$stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `start_date`=?,`status`=? WHERE id =?");
-		$stmt->bind_param("ssssssssi",$visitor,$inquired_for,$attended_by,$architect,$address,$suggetion,$start_date,$status,$e_id);
+		$stmt->bind_param("isiissssi",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$start_date,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -105,6 +107,7 @@ if(isset($_REQUEST['btnupdate']))
 		 header("location:inquiry.php");
 	}
 }
+
 ?>
 <div class="row" id="p1">
     <div class="col-xl">
@@ -139,18 +142,53 @@ if(isset($_REQUEST['btnupdate']))
                         </select>
                         <input type="hidden" name="ttId" id="ttId">
                     </div>
+
                     <div class="col mb-3">
-                        <label class="form-label" for="basic-default-fullname">Inquired For</label>
-                        <input type="text" class="form-control" name="inq_for" id="inq_for"
-                            value="<?php echo (isset($mode)) ? $data['inquired_for'] : '' ?>"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+                        <label for="inq_for" class="form-label">Inquired For</label>
+                        <select required class="form-select js-example-basic-multiple"
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> multiple name="inq_for[]"
+                            id="inq_for">
+                            <option value="">Select Category</option> <!-- Optional placeholder -->
+                            <?php
+                                $stmt_list = $obj->con1->prepare("SELECT * FROM `category` WHERE `status`= 'Enable'");
+                                $stmt_list->execute();
+                                $result = $stmt_list->get_result();
+                                $stmt_list->close();
+                                $selected_categories = explode(',', $data['inquired_for']); // Handle multiple selections
+                                while($res = mysqli_fetch_array($result))
+                                {
+                            ?>
+                            <option value="<?php echo $res["id"]?>"
+                                <?php echo isset($mode) && in_array($res["id"], $selected_categories) ? 'selected' : '' ?>>
+                                <?php echo $res["name"]?></option>
+                            <?php
+                                }
+                            ?>
+                        </select>
                     </div>
+
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Attended By</label>
-                        <input type="text" class="form-control" name="attended_by" id="attended_by"
-                            value="<?php echo (isset($mode)) ? $data['attended_by'] : '' ?>"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
+                        <select class="form-control" name="attended_by" id="attended_by"
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <option value="">Select User</option>
+                            <?php
+                                // Retrieve users from the user table
+                                $stmt_users = $obj->con1->prepare("SELECT id, name FROM users ORDER BY name ASC");
+                                $stmt_users->execute();
+                                $result_users = $stmt_users->get_result();
+
+                                // Populate the dropdown with user names
+                                while ($user = $result_users->fetch_assoc()) {
+                                    $selected = (isset($mode) && $data['attended_by'] == $user['id']) ? 'selected' : '';
+                                    echo "<option value='".$user['id']."' $selected>".$user['name']."</option>";
+                                }
+
+                                    $stmt_users->close();
+                                    ?>
+                        </select>
                     </div>
+
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Architect</label>
                         <select name="architect" id="architect" class="form-control"
@@ -219,8 +257,7 @@ if(isset($_REQUEST['btnupdate']))
                         class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
-                    <button type="button" class="btn btn-secondary"
-                        onclick="<?php echo (isset($mode)) ? 'javascript:go_back()' : 'window.location.reload()' ?>">
+                    <button type="button" class="btn btn-secondary" onclick="javascript:go_back()">
                         Close</button>
 
                 </form>
@@ -229,7 +266,15 @@ if(isset($_REQUEST['btnupdate']))
     </div>
 
 </div>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
+$(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+
 function go_back() {
     eraseCookie("edit_id");
     eraseCookie("view_id");

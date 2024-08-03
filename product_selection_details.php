@@ -14,9 +14,9 @@ if (isset($_REQUEST["btndelete"])) {
     
         // Define the paths to the three image folders
         $imagePaths = [
-            "images/rowan_image/" . $Resp_subimg["rowan_img"],
-            "images/catalog_image/" . $Resp_subimg["catalog_img"], 
-            "images/customer_image/" . $Resp_subimg["customer_img"]  
+            "rowan_image/" . $Resp_subimg["rowan_img"],
+            "catalogue_image/" . $Resp_subimg["catalogue_img"], 
+            "customer_image/" . $Resp_subimg["customer_img"]  
         ];
     
         // Delete each image if it exists

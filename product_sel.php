@@ -148,7 +148,7 @@ if (isset($_COOKIE["excelmsg"])) {
 <div class="card mb-4">
     <div class="row ms-2 me-3">
         <div class="col-md-6" style="margin:1%">
-            <a class="btn btn-primary" href="product_sel_add.php" onclick="javascript:adddata()" style="margin-right:15px;"><i class="bx bx-plus"></i> Add</a>
+            <!-- <a class="btn btn-primary" href="product_sel_add.php" onclick="javascript:adddata()" style="margin-right:15px;"><i class="bx bx-plus"></i> Add</a> -->
 
         </div>
         <div class="table-responsive text-nowrap">
@@ -167,7 +167,7 @@ if (isset($_COOKIE["excelmsg"])) {
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php
-                    $stmt_list = $obj->con1->prepare("");
+                    $stmt_list = $obj->con1->prepare("SELECT p1.*, i1.start_date, v1.full_name, v1.mobile_no, v1.whatsapp_no FROM `product_selection` p1, `inquiry` i1, `visitor` v1 WHERE p1.inq_id=i1.id AND i1.visitor_id=v1.id");
                     $stmt_list->execute();
                     $result = $stmt_list->get_result();
                     
@@ -178,9 +178,9 @@ if (isset($_COOKIE["excelmsg"])) {
 
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td><?php echo $res["visitor_name"] ?></td>
-                            <td><?php echo $res["visitor_mobile_no"] ?></td>
-                            <td><?php echo $res["inquiry_start_date"] ?></td>
+                            <td><?php echo $res["full_name"] ?></td>
+                            <td><?php echo $res["mobile_no"] ?></td>
+                            <td><?php echo $res["start_date"] ?></td>
                             <td><?php echo $res["date_time"] ?></td>
                             <?php if ($res["status"] == 'Enable') { ?>
                                 <td style="color:green"><?php echo $res["status"] ?></td>
@@ -191,7 +191,7 @@ if (isset($_COOKIE["excelmsg"])) {
 
                             <td>
                             <a href="javascript:editdata('<?php echo $res["id"] ?>');"><i class="bx bx-edit-alt me-1"></i> </a>
-                            <a href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["visitor_name"]) ?>');"><i class="bx bx-trash me-1" style="color:red"></i> </a>
+                            <a href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["full_name"]) ?>');"><i class="bx bx-trash me-1" style="color:red"></i> </a>
                             <a href="javascript:viewdata('<?php echo $res["id"] ?>');"><i class="fa-regular fa-eye" style="color:green"></i></a>
                             </td>
                         </tr>
@@ -212,18 +212,7 @@ if (isset($_COOKIE["excelmsg"])) {
 <!-- / grid -->
 <!-- / Content -->
 <script type="text/javascript">
-    function adddata() {
-        eraseCookie("edit_id");
-        eraseCookie("view_id");
-        window.location = "product_sel_add.php";
-    }
-
-    function editdata(id) {
-        eraseCookie("view_id");
-        createCookie("edit_id", id, 1);
-        window.location = "product_sel_add.php";
-    }
-
+   
     function viewdata(id) {
         eraseCookie("edit_id");
         createCookie("view_id", id, 1);

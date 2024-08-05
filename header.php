@@ -13,7 +13,8 @@ if (!isset($_SESSION["userlogin"])) {
   }
 
 
-$adminmenu = array( "branch.php","branch_add.php","architect.php","architect_add.php","category.php","category_add.php","units.php","units_add.php","visitor.php","visitor_add.php","user.php","user_add.php","inquiry.php","inquiry_add.php","company.php","company_add.php","product.php","product_add.php","rooms.php","rooms_add.php","objects.php","objects_add.php");
+$adminmenu = array( "branch.php","branch_add.php","architect.php","architect_add.php","category.php","category_add.php","units.php","units_add.php","visitor.php","visitor_add.php","user.php","user_add.php","inquiry.php","inquiry_add.php","company.php","company_add.php","product.php","product_add.php","rooms.php","rooms_add.php","objects.php","objects_add.php","product_sel.php","product_sel_add.php", "product_selection_details.php","product_selection_details_add.php"
+);
 $location = array("state.php","state_add.php","city.php","city_add.php");
 $delivery = array("deliveryboy_reg.php", "delivery_settings.php", "collection_time.php");
 $coupon = array("coupon.php", "coupon_counter.php");
@@ -305,7 +306,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
     </li>
 
     <!-- Admin Controls -->
-    <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['branch.php', 'branch_add.php', 'architect.php', 'architect_add.php', 'category.php', 'category_add.php', 'units.php', 'units_add.php', 'visitor.php', 'visitor_add.php', 'user.php', 'user_add.php', 'inquiry.php', 'inquiry_add.php', 'company.php', 'company_add.php', 'product.php', 'product_add.php', 'rooms.php', 'rooms_add.php', 'objects.php', 'objects_add.php']) ? 'active open' : '' ?>">
+    <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['branch.php', 'branch_add.php', 'architect.php', 'architect_add.php', 'category.php', 'category_add.php', 'units.php', 'units_add.php', 'visitor.php', 'visitor_add.php', 'user.php', 'user_add.php', 'inquiry.php', 'inquiry_add.php', 'company.php', 'company_add.php', 'product.php', 'product_add.php', 'rooms.php', 'rooms_add.php', 'objects.php', 'objects_add.php','product_sel.php','product_sel_add.php', 'product_selection_details.php','product_selection_details_add.php']) ? 'active open' : '' ?>">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bxs-cog"></i>
             <div data-i18n="Form Elements">Admin Controls</div>
@@ -366,7 +367,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <div data-i18n="course">Objects</div>
                 </a>
             </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product_sel', 'product_selection_details.php']) ? 'active' : '' ?>">
+            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product_sel.php','product_sel_add.php', 'product_selection_details.php','product_selection_details_add.php']) ? 'active' : '' ?>">
                 <a href="product_sel.php" class="menu-link">
                     <div data-i18n="course">Product Selection</div>
                 </a>

@@ -33,14 +33,33 @@ if(isset($_REQUEST['btnsubmit']))
 	$architect = $_REQUEST["architect"];
 	$address = $_REQUEST["address"];
 	$suggetion = $_REQUEST["suggestions"];
+    $inquiry_img = $_FILES['inquiry_img']['name'];
+	$inquiry_img = str_replace(' ', '_', $inquiry_img);
+	$inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
 	$start_date = $_REQUEST["sdate"];
 	$status = $_REQUEST['status'];
 
+    if ($inquiry_img != "") {
+		if (file_exists("inquiry_image/" . $inquiry_img)) {
+			$i = 0;
+			$PicFileName = $inquiry_img;
+			$Arr1 = explode('.', $PicFileName);
+
+			$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+			while (file_exists("inquiry_image/" . $PicFileName)) {
+				$i++;
+				$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+			}
+		} else {
+			$PicFileName = $inquiry_img;
+		}
+	}
+
 	try
 	{  
-		// echo "INSERT INTO `inquiry`(`visitor_id`=".$visitor.", `inquired_for`=".$inquired_for_str.", `attended_by`=".$attended_by.", `architect_id`=".$architect.", `address`=".$address.", `suggestions`=".$suggetion.", `start_date`=".$start_date.",`status`=".$status.")";
-		$stmt = $obj->con1->prepare("INSERT INTO `inquiry`(`visitor_id`, `inquired_for`, `attended_by`, `architect_id`, `address`, `suggestions`, `start_date`,`status`) VALUES (?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("isiissss",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$start_date,$status);
+		// echo "INSERT INTO `inquiry`(`visitor_id`=".$visitor.", `inquired_for`=".$inquired_for_str.", `attended_by`=".$attended_by.", `architect_id`=".$architect.", `address`=".$address.", `suggestions`=".$suggetion.",`inquiry_image`=".$PicFileName.", `start_date`=".$start_date.",`status`=".$status.")";
+		$stmt = $obj->con1->prepare("INSERT INTO `inquiry`(`visitor_id`, `inquired_for`, `attended_by`, `architect_id`, `address`, `suggestions`, `inquiry_image`,`start_date`,`status`) VALUES (?,?,?,?,?,?,?,?,?)");
+		$stmt->bind_param("isiisssss",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$PicFileName,$start_date,$status);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -55,6 +74,7 @@ if(isset($_REQUEST['btnsubmit']))
 
 	if($Resp)
 	{
+        move_uploaded_file($inquiry_img_path, "inquiry_image/" . $PicFileName);
 		setcookie("msg", "data",time()+3600,"/");
 		header("location:inquiry.php");
 	 }
@@ -75,15 +95,38 @@ if(isset($_REQUEST['btnupdate']))
 	$architect = $_REQUEST["architect"];
 	$address = $_REQUEST["address"];
 	$suggetion = $_REQUEST["suggestions"];
+    $inquiry_img = $_FILES['inquiry_img']['name'];
+	$inquiry_img = str_replace(' ', '_', $inquiry_img);
+	$inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
 	$start_date = $_REQUEST["sdate"];
 	$status = $_REQUEST["status"];
 	
+   
 	
+    if ($inquiry_img != "") {
+		if (file_exists("inquiry_image/" . $inquiry_img)) {
+			$i = 0;
+			$PicFileName = $inquiry_img;
+			$Arr1 = explode('.', $PicFileName);
+
+			$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+			while (file_exists("inquiry_image/" . $PicFileName)) {
+				$i++;
+				$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+			}
+		} else {
+			$PicFileName = $inquiry_img;
+		}
+		unlink("inquiry_image/" . $old_img);
+		move_uploaded_file($inquiry_img_path, "inquiry_image/" . $PicFileName);
+	} else {
+		$PicFileName = $old_img;
+	}
 	try
 	{
         // echo"UPDATE architect SET `name`=$name, `contact`=$contact, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `start_date`=?,`status`=? WHERE id =?");
-		$stmt->bind_param("isiissssi",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$start_date,$status,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `inquiry_image`=?,`start_date`=?,`status`=? WHERE id =?");
+		$stmt->bind_param("isiisssssi",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$PicFileName,$start_date,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -97,7 +140,8 @@ if(isset($_REQUEST['btnupdate']))
 
 
 	if($Resp)
-	{
+	{   
+        setcookie("edit_id", "", time() - 3600, "/");
 		setcookie("msg", "update",time()+3600,"/");
 		header("location:inquiry.php");
 	}
@@ -118,7 +162,7 @@ if(isset($_REQUEST['btnupdate']))
 
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Visitor</label>
                         <select name="visitor" id="visitor" class="form-control"
@@ -212,18 +256,39 @@ if(isset($_REQUEST['btnupdate']))
                         </select>
                         <input type="hidden" name="ttId" id="ttId">
                     </div>
-                    <div>
-                        <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="2"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>
-                            required><?php echo (isset($mode)) ? $data['address'] : '' ?></textarea>
+                    <div class="row g-2">
+                        <div class="col mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="2"
+                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>
+                                required><?php echo (isset($mode)) ? $data['address'] : '' ?></textarea>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="suggestions" class="form-label">Suggestions</label>
+                            <textarea class="form-control" id="suggestions" name="suggestions" rows="2"
+                                <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>
+                                required><?php echo (isset($mode)) ? $data['suggestions'] : '' ?></textarea>
+                        </div>
                     </div>
-                    <div>
-                        <label for="suggestions" class="form-label">Suggestions</label>
-                        <textarea class="form-control" id="suggestions" name="suggestions" rows="2"
-                            <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>
-                            required><?php echo (isset($mode)) ? $data['suggestions'] : '' ?></textarea>
+                    <div class="mb-3">
+                        <label for="inquiry_img" class="form-label">Inquiry Image</label>
+                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img" 
+                               onchange="readURL(this, 'PreviewInquiryImage')" 
+                               <?php echo isset($mode) && $mode == 'view' ? 'disabled' : ''; ?> />
+
+                        <label class="font-bold text-primary" 
+                               style="display:<?php echo isset($data['inquiry_image']) || isset($mode) && $mode == 'view' ? 'block' : 'none'; ?>">
+                               Preview
+                        </label>
+                        <img src="<?php echo isset($data['inquiry_image']) ? 'inquiry_image/' . $data['inquiry_image'] : ''; ?>" 
+                             id="PreviewInquiryImage" height="300" width="400" 
+                             style="display:<?php echo isset($data['inquiry_image']) ? 'block' : 'none'; ?>" 
+                             class="object-cover shadow rounded mt-3 mb-3">
+                        <div id="imgdiv-inquiry" style="color:red"></div>
+                        <input type="hidden" name="old_img_inquiry" id="old_img_inquiry" 
+                               value="<?php echo (isset($mode) && $mode == 'edit') ? $data['inquiry_image'] : ''; ?>" />
                     </div>
+
                     <div class="row">
                         <div class="col mb-3">
                             <label for="date" class="col-md-2 col-form-label">Start Date</label>
@@ -280,6 +345,31 @@ function go_back() {
     eraseCookie("view_id");
     window.location = "inquiry.php";
 }
+function readURL(input, previewId) {
+    if (input.files && input.files[0]) {
+        var filename = input.files.item(0).name;
+        var extn = filename.split(".").pop().toLowerCase(); // Extract the file extension
+        var validExtensions = ["jpg", "jpeg", "png"]; // Allowed extensions
+
+        if (validExtensions.includes(extn)) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(previewId).src = e.target.result;
+                document.getElementById(previewId).style.display = "block";
+                document.getElementById('imgdiv-inquiry').innerHTML = ""; // Clear error message
+                document.getElementById('save').disabled = false; // Enable save button
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            document.getElementById('imgdiv-inquiry').innerHTML = "Please select an image file (JPG, JPEG, PNG).";
+            input.value = ""; // Clear the input
+            document.getElementById(previewId).style.display = "none"; // Hide the preview
+            document.getElementById('save').disabled = true; // Disable save button
+        }
+    }
+}
+
 </script>
 <?php
 include "footer.php";

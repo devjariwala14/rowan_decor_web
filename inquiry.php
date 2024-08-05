@@ -3,15 +3,23 @@ include "header.php";
 
 // Delete data
 if (isset($_POST["btndelete"])) {
+    $u_id=$_REQUEST['u_id'];
     try {
-        $stmt_del = $obj->con1->prepare("DELETE FROM inquiry WHERE id=?");
-        $stmt_del->bind_param('i', $_POST["u_id"]);
-        $Resp = $stmt_del->execute();
+        $stmt_subimg = $obj->con1->prepare("SELECT * FROM `inquiry` WHERE id=?");
+        $stmt_subimg->bind_param("i",$u_id);
+        $stmt_subimg->execute();
+        $Resp_subimg = $stmt_subimg->get_result()->fetch_assoc();
+        $stmt_subimg->close();
         
-        if (!$Resp) {
-            throw new Exception("Failed to delete the record!");
+        if (file_exists("inquiry_image/" . $Resp_subimg["image"])) {
+            unlink("inquiry_image/" . $Resp_subimg["image"]);
         }
-        
+        $stmt_del = $obj->con1->prepare("DELETE FROM `inquiry` WHERE id=?");
+        $stmt_del->bind_param("i", $u_id);
+        $Resp = $stmt_del->execute();
+        if (!$Resp) {
+            throw new Exception("Problem in deleting! " . strtok($obj->con1->error,  '('));
+        }
         $stmt_del->close();
     } catch (\Exception $e) {
         setcookie("sql_error", urlencode($e->getMessage()), time() + 3600, "/");
@@ -23,6 +31,7 @@ if (isset($_POST["btndelete"])) {
     header("location:inquiry.php");
 }
 ?>
+
 
 <h4 class="fw-bold py-3 mb-4">Inquiry Master</h4>
 
@@ -194,13 +203,13 @@ eraseCookie("excelmsg")
                         <?php } ?>
                         <td>
                             <a
-                                href="javascript:editdata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["visitor_id"]) ?>');"><i
+                                href="javascript:editdata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i
                                     class="bx bx-edit-alt me-1"></i> </a>
                             <a
-                                href="javascript:deletedata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["visitor_id"]) ?>');"><i
+                                href="javascript:deletedata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i
                                     class="bx bx-trash me-1" style="color:red"></i> </a>
                             <a
-                                href="javascript:viewdata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["visitor_id"]) ?>');"><i
+                                href="javascript:viewdata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i
                                     class="fa-regular fa-eye" style="color:green"></i></a>
                         </td>
                     </tr>
@@ -247,4 +256,3 @@ function deletedata(id) {
 <?php
 include "footer.php";
 ?>
-<!-- pushed again -->

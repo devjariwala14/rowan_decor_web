@@ -191,7 +191,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php 
-                        $stmt_list = $obj->con1->prepare("SELECT psd1.*, ps1.inq_id, p1.name, r1.room_name, o1.object_name FROM `product_selection_details` psd1 JOIN `product_selection` ps1 ON psd1.selection_id = ps1.id JOIN `product` p1 ON psd1.base_product_id = p1.id JOIN `rooms` r1 ON psd1.room_name = r1.id JOIN `objects` o1 ON psd1.object = o1.id LIMIT 0, 25;");
+                        $stmt_list = $obj->con1->prepare("SELECT psd1.*, p1.name, r1.room_name, o1.object_name FROM `product_selection_details` psd1 JOIN `product_selection` ps1 ON psd1.selection_id = ps1.id JOIN `product` p1 ON psd1.base_product_id = p1.id JOIN `rooms` r1 ON psd1.room_name = r1.id JOIN `objects` o1 ON psd1.object = o1.id LIMIT 0, 25;");
                         $stmt_list->execute();
                         $result = $stmt_list->get_result();
                         $stmt_list->close();
@@ -202,7 +202,7 @@ eraseCookie("excelmsg")
 
                     <tr>
                         <td><?php echo $i?></td>
-                        <td><?php echo $res["inq_id"]?></td>
+                        <td><?php echo $res["selection_id"]?></td>
                         <td><?php echo $res["name"]?></td>
                         <td><?php echo $res["customer_product_name"]?></td>
                         <td><?php echo $res["total_amount"]?></td>

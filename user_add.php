@@ -133,18 +133,18 @@ if(isset($_REQUEST['btnupdate']))
                         <select name="type" id="type" class="form-control"
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                             <option value="">Choose Type</option>
-                            <option value="admin"
-                                <?php echo isset($mode) && $data['type'] == "admin" ? "selected" : "" ?>>Admin
+                            <option value="Admin"
+                                <?php echo isset($mode) && $data['type'] == "Admin" ? "selected" : "" ?>>Admin
                             </option>
-                            <option value="user"
-                                <?php echo isset($mode) && $data['type'] == "user" ? "selected" : "" ?>>User
+                            <option value="User"
+                                <?php echo isset($mode) && $data['type'] == "User" ? "selected" : "" ?>>User
                             </option>
-                            <option value="sales person"
-                                <?php echo isset($mode) && $data['type'] == "sales person" ? "selected" : "" ?>>Sales
+                            <option value="Sales Person"
+                                <?php echo isset($mode) && $data['type'] == "Sales Person" ? "selected" : "" ?>>Sales
                                 Person
                             </option>
-                            <option value="labourers"
-                                <?php echo isset($mode) && $data['type'] == "labourers" ? "selected" : "" ?>>Labourers
+                            <option value="Labourers"
+                                <?php echo isset($mode) && $data['type'] == "Labourers" ? "selected" : "" ?>>Labourers
                             </option>
 
                         </select>

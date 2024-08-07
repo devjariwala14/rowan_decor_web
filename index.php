@@ -8,24 +8,23 @@ date_default_timezone_set("Asia/Kolkata");
 if(isset($_REQUEST["login"])){
 			session_start();
 			
-			$ui = $_REQUEST["userid"];
+			$un = $_REQUEST["userid"];
 			$pa = $_REQUEST["password"];
 			
      
-			$qr = $obj->con1->prepare("select id,password,username from admin where username=? and binary(password) =?");
-			$qr->bind_param("ss",$ui,$pa);
+			$qr = $obj->con1->prepare("select id,password,username,name from users where username=? and binary(password) =?");
+			$qr->bind_param("ss",$un,$pa);
 			$qr->execute();
 			$result = $qr->get_result();
 			$qr->close();
 			$row=mysqli_fetch_array($result);
 			
-			if($row["username"]==$ui)
+			if($row["username"]==$un)
 			{
         $_SESSION["userlogin"]="true";
 				$_SESSION["id"]=$row["id"];
-        // $_SESSION["userid"]=$ui;
+        $_SESSION["name"]=$row["name"];
         $_SESSION["username"]=$row["username"];
-        // $_SESSION["designation"]=$row["designation"];
 				header("location:home.php");
 			}
 			else

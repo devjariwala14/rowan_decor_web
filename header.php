@@ -11,7 +11,8 @@ session_start();
 if (!isset($_SESSION["userlogin"])) {
   header("location:index.php");
   }
-
+  
+  
 
 $adminmenu = array( "branch.php","branch_add.php","architect.php","architect_add.php","category.php","category_add.php","units.php","units_add.php","visitor.php","visitor_add.php","user.php","user_add.php","inquiry.php","inquiry_add.php","company.php","company_add.php","product.php","product_add.php","rooms.php","rooms_add.php","objects.php","objects_add.php","product_sel.php","product_sel_add.php", "product_selection_details.php","product_selection_details_add.php"
 );
@@ -470,7 +471,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
                                     <li>
                                         <a class="dropdown-item" href="editProfile.php">
                                             <i class="bx bx-user me-2"></i>
-                                            <span class="align-middle"><?php echo $_SESSION["username"] ?></span>
+                                            <span class="align-middle"><?php echo $_SESSION["name"] ?></span>
                                         </a>
                                     </li>
 

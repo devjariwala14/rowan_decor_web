@@ -31,13 +31,12 @@ if(isset($_REQUEST['btnsubmit']))
     $whatsapp = $_REQUEST['whatsapp'];
     $ref_name = $_REQUEST['ref_name'];
     $place = $_REQUEST['place'];
-    $vis_person = $_REQUEST['v_per'];
     $remark = $_REQUEST['remark'];
-	
+	$status = $_REQUEST['status'];
 	try
 	{
-		$stmt = $obj->con1->prepare("INSERT INTO `visitor`(`full_name`,`mobile_no`,`whatsapp_no`,`ref_name`,`place`,`visiting_person`,`remark`) VALUES (?,?,?,?,?,?,?)");
-		$stmt->bind_param("sssssss",$visitor_name, $mobile,$whatsapp ,$ref_name,$place, $vis_person, $remark );
+		$stmt = $obj->con1->prepare("INSERT INTO `visitor`(`full_name`,`mobile_no`,`whatsapp_no`,`ref_name`,`place`,`remark`,`status`) VALUES (?,?,?,?,?,?,?)");
+		$stmt->bind_param("sssssss",$visitor_name, $mobile,$whatsapp ,$ref_name,$place,$remark,$status );
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -70,15 +69,14 @@ if(isset($_REQUEST['btnupdate']))
     $whatsapp = $_REQUEST['whatsapp'];
     $ref_name = $_REQUEST['ref_name'];
     $place = $_REQUEST['place'];
-    $vis_person = $_REQUEST['v_per'];
     $remark = $_REQUEST['remark'];
-	
+	$status = $_REQUEST['status'];
 	
 	try
 	{
         // echo"UPDATE visitor SET `unit_name`=$unit_name, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE visitor SET`full_name`=?,`mobile_no`=?,`whatsapp_no`=?,`ref_name`=?,`place`=?,`visiting_person`=?,`remark`=? where id=?");
-		$stmt->bind_param("sssssssi",$visitor_name, $mobile, $whatsapp ,$ref_name,$place, $vis_person, $remark,$e_id);
+		$stmt = $obj->con1->prepare("UPDATE visitor SET`full_name`=?,`mobile_no`=?,`whatsapp_no`=?,`ref_name`=?,`place`=?,`remark`=? ,`status`=? where id=?");
+		$stmt->bind_param("sssssssi",$visitor_name, $mobile, $whatsapp ,$ref_name,$place, $remark,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{
@@ -123,12 +121,12 @@ if(isset($_REQUEST['btnupdate']))
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Mobile Number</label>
                             <input type="text" class="form-control" name="mobile" id="mobile" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
-                                value="<?php echo (isset($mode)) ? $data['mobile_no'] : '' ?>"
+                                value="<?php echo (isset($mode)) ? $data['mobile_no'] : '' ?>"  oninput="copyToWhatsApp()"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">WhatsApp Number</label>
-                            <input type="text" class="form-control" name="whatsapp" id="whatsapp" keypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
+                            <input type="text" class="form-control" name="whatsapp" id="whatsapp" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
                                 value="<?php echo (isset($mode)) ? $data['whatsapp_no'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
@@ -152,10 +150,10 @@ if(isset($_REQUEST['btnupdate']))
                                 
                         </select>
                     </div>
-                    <div class="col mb-3">
+                    <!-- <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Visiting Person</label>
                         <select name="v_per" id="v_per" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-                        <option value="">Choose Place</option>
+                        <option value="">Choose Person</option>
                                 <option value="customer"
                                     <?php echo isset($mode) && $data['visiting_person'] == "customer" ? "selected" : "" ?>>Customer
                                 </option>
@@ -164,13 +162,27 @@ if(isset($_REQUEST['btnupdate']))
                                 </option>
                                 
                         </select>
-                    </div>
+                    </div> -->
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Remark</label>
                         <textarea class="form-control" name="remark" id="remark" required
                             <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?>><?php echo (isset($mode)) ? $data['remark'] : '' ?></textarea>
                     </div>
-
+                    <div class="mb-3">
+                        <label class="form-label d-block" for="basic-default-fullname">Status</label>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="status" id="Enable" value="Enable"
+                                <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
+                            <label class="form-check-label" for="inlineRadio1">Enable</label>
+                        </div>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="status" id="Disable" value="Disable"
+                                <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <label class="form-check-label" for="inlineRadio1">Disable</label>
+                        </div>
+                    </div>
 
                     <button type="submit"
                         name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
@@ -193,6 +205,16 @@ function go_back() {
     eraseCookie("view_id");
     window.location = "visitor.php";
 }
+function copyToWhatsApp() {
+        // Get the mobile number field and WhatsApp number field
+        var mobileInput = document.getElementById('mobile');
+        var whatsappInput = document.getElementById('whatsapp');
+        
+        // Only copy if the WhatsApp field is empty or equals the mobile field
+        if (whatsappInput.value === '' || whatsappInput.value === mobileInput.value.slice(0, -1)) {
+            whatsappInput.value = mobileInput.value;
+        }
+    }
 </script>
 <?php
 include "footer.php";

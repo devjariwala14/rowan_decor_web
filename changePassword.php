@@ -26,7 +26,7 @@ if(isset($_REQUEST['btnsubmit']))
   if($Resp)
   {
 	  setcookie("msg", "update",time()+3600,"/");
-     header("location:changePassword.php");
+     header("location:home.php");
   }
   else
   {

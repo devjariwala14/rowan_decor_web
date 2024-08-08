@@ -96,7 +96,7 @@ if(isset($_REQUEST['btnupdate']))
 	<div class="col-xl">
 		<div class="card">
 			<div class="card-header d-flex justify-content-between align-items-center">
-				<h5 class="mb-0"> <?php echo (isset($mode)) ? (($mode == 'view') ? 'View' : 'Edit') : 'Add' ?> architect</h5>
+				<h5 class="mb-0"> <?php echo (isset($mode)) ? (($mode == 'view') ? 'View' : 'Edit') : 'Add' ?> State</h5>
 
 			</div>
 			<div class="card-body">

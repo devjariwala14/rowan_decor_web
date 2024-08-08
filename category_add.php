@@ -32,7 +32,7 @@ if (isset($_REQUEST['btnsubmit'])) {
 
 	try {
 		$stmt = $obj->con1->prepare("INSERT INTO `category`(`name`,`measurable`,`status`) VALUES (?,?,?)");
-		$stmt->bind_param("ss", $name, $measurable, $status);
+		$stmt->bind_param("sss", $name, $measurable, $status);
 		$Resp = $stmt->execute();
 		if (!$Resp) {
 			throw new Exception("Problem in adding! " . strtok($obj->con1->error, '('));
@@ -60,7 +60,7 @@ if (isset($_REQUEST['btnupdate'])) {
 	try {
 		// echo"UPDATE category SET `category`=$category, `abbriviation`=$abbriviation, `status`=$status where id=$e_id";
 		$stmt = $obj->con1->prepare("UPDATE category SET `name`=?,`measurable`=?, `status`=? where id=?");
-		$stmt->bind_param("ssi", $name, $measurable, $status, $e_id);
+		$stmt->bind_param("sssi", $name, $measurable, $status, $e_id);
 		$Resp = $stmt->execute();
 		if (!$Resp) {
 			throw new Exception("Problem in updating! " . strtok($obj->con1->error, '('));
@@ -99,26 +99,51 @@ if (isset($_REQUEST['btnupdate'])) {
 						</div>
 					</div>
 
-					<div class="row g-2">
-						<div class="col mb-3">
-							<label class="form-label" for="basic-default-fullname">Is Measurable</label>
-							<input type="text" class="form-control" name="measurable" id="measurable"
-								value="<?php echo (isset($mode)) ? $data['measurable'] : '' ?>" <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
-						</div>
-					</div>
+					
 
-					<div class="mb-3">
-						<label class="form-label d-block" for="basic-default-fullname">Status</label>
-						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="Enable" value="Enable" <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required checked>
-							<label class="form-check-label" for="inlineRadio1">Enable</label>
-						</div>
-						<div class="form-check form-check-inline mt-3">
-							<input class="form-check-input" type="radio" name="status" id="Disable" value="Disable"
-								<?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?> <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-							<label class="form-check-label" for="inlineRadio1">Disable</label>
-						</div>
-					</div>
+					<div class="row ">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label d-block" for="basic-default-fullname">Is Measurable</label>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="measurable" id="measurable"
+                                        value="Y"
+                                        <?php echo isset($mode) && $data['measurable'] == 'Y' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required
+                                        checked>
+                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="measurable" id="measurable"
+                                        value="N"
+                                        <?php echo isset($mode) && $data['measurable'] == 'N' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                                    <label class="form-check-label" for="inlineRadio1">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label d-block" for="basic-default-fullname">Status</label>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="status" id="Enable"
+                                        value="Enable"
+                                        <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required
+                                        checked>
+                                    <label class="form-check-label" for="inlineRadio1">Enable</label>
+                                </div>
+                                <div class="form-check form-check-inline mt-3">
+                                    <input class="form-check-input" type="radio" name="status" id="Disable"
+                                        value="Disable"
+                                        <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                        <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                                    <label class="form-check-label" for="inlineRadio1">Disable</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 					<button type="submit"
 						name="<?php echo isset($mode) && $mode == 'edit' ? 'btnupdate' : 'btnsubmit' ?>" id="save"
 						class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">

@@ -3,11 +3,11 @@ include "header.php";
 // delete data
 if (isset($_REQUEST["btndelete"])) {
     try {
-        $stmt_del = $obj->con1->prepare("delete from category where id='" . $_REQUEST["u_id"] . "'");
+        $stmt_del = $obj->con1->prepare("delete from `objects` where id='" . $_REQUEST["n_id"] . "'");
         $Resp = $stmt_del->execute();
         if (!$Resp) {
             if (strtok($obj->con1->error, ':') == "Cannot delete or update a parent row") {
-                throw new Exception("Branch is already in use!");
+                throw new Exception("This is already in use!");
                 }
             }
         $stmt_del->close();
@@ -18,13 +18,13 @@ if (isset($_REQUEST["btndelete"])) {
     if ($Resp) {
         setcookie("msg", "data_del", time() + 3600, "/");
         }
-    header("location:category.php");
+    header("location:objects.php");
     }
 
 
 ?>
 
-<h4 class="fw-bold py-3 mb-4">Category Master</h4>
+<h4 class="fw-bold py-3 mb-4">Objects Master</h4>
 
 <?php
 if (isset($_COOKIE["msg"])) {
@@ -116,7 +116,7 @@ if (isset($_COOKIE["excelmsg"])) {
                 <div class="row">
                     <div class="col mb-3">
                         <label for="nameBackdrop" class="form-label" id="label_del"></label>
-                        <input type="hidden" name="u_id" id="u_id">
+                        <input type="hidden" name="n_id" id="n_id">
                     </div>
                 </div>
             </div>
@@ -136,9 +136,8 @@ if (isset($_COOKIE["excelmsg"])) {
 <div class="card mb-4">
     <div class="row ms-2 me-3">
         <div class="col-md-6" style="margin:1%">
-            <a class="btn btn-primary" href="#" onclick="javascript:adddata()" s style="margin-right:15px;"><i
-                    class="bx bx-plus"></i> Add
-                Category</a>
+            <a class="btn btn-primary"href="#" onclick="javascript:adddata()" style="margin-right:15px;"><i class="bx bx-plus"></i> Add
+                Objects</a>
 
         </div>
         <div class="table-responsive text-nowrap">
@@ -146,49 +145,42 @@ if (isset($_COOKIE["excelmsg"])) {
 
                 <thead>
                     <tr>
-                        <th>Srno</th>
-                        <th>Category Name</th>
-                        <th>Measurable</th>
+                        <th>Sr.No</th>
+                        <th>Object Name</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php
-                    $stmt_list = $obj->con1->prepare("SELECT * FROM `category`");
+                    $stmt_list = $obj->con1->prepare("SELECT * FROM `objects` ORDER BY id DESC");
                     $stmt_list->execute();
                     $result = $stmt_list->get_result();
 
                     $stmt_list->close();
                     $i = 1;
-                    while ($category = mysqli_fetch_array($result)) {
+                    while ($city = mysqli_fetch_array($result)) {
                         ?>
 
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td><?php echo $category["name"] ?></td>
-                            <?php if ($category["measurable"] == 'Y') { ?>
-                                <td style="color:green"><?php echo $category["measurable"] ?></td>
-                            <?php } else if ($category["measurable"] == 'N') { ?>
-                                    <td style="color:red"><?php echo $category["measurable"] ?></td>
-                            <?php } ?>
-
-                            <?php if ($category["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $category["status"] ?></td>
-                            <?php } else if ($category["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $category["status"] ?></td>
+                            <td><?php echo $city["object_name"] ?></td>
+                          
+                            <?php if ($city["status"] == 'Enable') { ?>
+                                <td style="color:green"><?php echo $city["status"] ?></td>
+                            <?php } else if ($city["status"] == 'Disable') { ?>
+                                    <td style="color:red"><?php echo $city["status"] ?></td>
                             <?php } ?>
 
                             <td>
                                 <a
-                                    href="javascript:editdata('<?php echo $category["id"] ?>','<?php echo base64_encode($category["name"]) ?>','<?php echo $category["status"] ?>');"><i
+                                    href="javascript:editdata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["object_name"]) ?>','<?php echo $city["status"] ?>');"><i
                                         class="bx bx-edit-alt me-1"></i> </a>
                                 <a
-                                    href="javascript:deletedata('<?php echo $category["id"] ?>','<?php echo base64_encode($category["name"]) ?>');"><i
+                                    href="javascript:deletedata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["object_name"]) ?>');"><i
                                         class="bx bx-trash me-1" style="color:red"></i> </a>
                                 <a
-                                    href="javascript:viewdata('<?php echo $category["id"] ?>','<?php echo base64_encode($category["name"]) ?>','<?php echo $category["status"] ?>');"><i
-                                        class="fa-regular fa-eye" style="color:green"></i></a>
+                                    href="javascript:viewdata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["object_name"]) ?>','<?php echo $city["status"] ?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
                             </td>
                         </tr>
                         <?php
@@ -210,24 +202,24 @@ if (isset($_COOKIE["excelmsg"])) {
     function adddata() {
         eraseCookie("edit_id");
         eraseCookie("view_id");
-        window.location = "category_add.php";
+        window.location = "objects_add.php";
     }
 
     function editdata(id) {
         eraseCookie("view_id");
         createCookie("edit_id", id, 1);
-        window.location = "category_add.php";
+        window.location = "objects_add.php";
     }
 
     function viewdata(id) {
         eraseCookie("edit_id");
         createCookie("view_id", id, 1);
-        window.location = "category_add.php";
+        window.location = "objects_add.php";
     }
     function deletedata(id, name) {
         $('#backDropModal').modal('toggle');
-        $('#u_id').val(id);
-        $('#label_del').html('Are you sure you want to DELETE unit - ' + atob(name) + ' ?');
+        $('#n_id').val(id);
+        $('#label_del').html('Are you sure you want to DELETE object - ' + atob(name) + ' ?');
     }
 </script>
 <?php

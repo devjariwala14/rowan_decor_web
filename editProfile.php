@@ -3,7 +3,7 @@
 
 $id = $_SESSION['id'];
 
-$stmt_list = $obj->con1->prepare("select * from admin where id=?");
+$stmt_list = $obj->con1->prepare("select * from users where id=?");
 $stmt_list->bind_param("i",$id);
 $stmt_list->execute();
 $result = $stmt_list->get_result();
@@ -21,7 +21,7 @@ if(isset($_REQUEST['btnsubmit']))
 
   try
   {
-	$stmt = $obj->con1->prepare("update admin set name=?, email=? where id=?");
+	$stmt = $obj->con1->prepare("update users set name=?, email=? where id=?");
 	$stmt->bind_param("ssi",$name,$email,$id);
 	$Resp=$stmt->execute();
     if(!$Resp)
@@ -134,7 +134,7 @@ if(isset($_COOKIE["msg"]) )
 
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-fullname">Userid</label>
-                          <input type="text" class="form-control" name="userid" id="userid" value="<?php echo $admin_res['userid'] ?>" readonly />
+                          <input type="text" class="form-control" name="userid" id="userid" value="<?php echo $admin_res['username'] ?>" readonly />
                         </div>
 
                         <div class="mb-3">

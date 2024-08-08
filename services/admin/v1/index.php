@@ -32,6 +32,14 @@ $app->post('/login', function () use ($app) {
 
     $result = $db->login($user_id, $password);
     if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
         $data['message'] = "Logged in Successfully";
         $data['success'] = true;
     } else {
@@ -76,6 +84,53 @@ $app->post('/add_new_visitor', function () use ($app) {
 
     if ($result) {
         $data['message'] = "Visitor added succesfully";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "Some error occured";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+
+
+/*
+ * edit_visitor
+ * Parameters: {"visitor_id":"","full_name":"","mobile_no":"","whatsapp_no":"","ref_name":"","place":"(visit site/studio)","visiting_person":"(customer/architect)","remark":""}
+ * Method: POST
+ */
+$app->post('/edit_visitor', function () use ($app) {
+
+    verifyRequiredParams(array('data'));
+
+    $data_request = json_decode($app->request->post('data'));
+    $visitor_id = $data_request->visitor_id;
+    $full_name = $data_request->full_name;
+    $mobile_no = $data_request->mobile_no;
+    $whatsapp_no = $data_request->whatsapp_no;
+    $ref_name = $data_request->ref_name;
+    $place = $data_request->place;
+    $visiting_person = $data_request->visiting_person;
+    $remark = $data_request->remark;
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->edit_visitor(
+        $visitor_id,
+        $full_name,
+        $mobile_no,
+        $whatsapp_no,
+        $ref_name,
+        $place,
+        $visiting_person,
+        $remark
+    );
+
+    if ($result) {
+        $data['message'] = "Visitor edited succesfully";
         $data['success'] = true;
     } else {
         $data['message'] = "Some error occured";
@@ -237,6 +292,7 @@ $app->post('/add_product_selection', function () use ($app) {
     $measurement_details = $data_request->measurement_details;
     $notes = $data_request->catalogue_notes;
     $status = $data_request->status;
+    $product_selection_id= $data_request->product_selection_id;
 
 
     //rename file for catalogue image
@@ -308,9 +364,9 @@ $app->post('/add_product_selection', function () use ($app) {
     $data = array();
     $data['data'] = array();
 
-    $result = $db->add_product_selection($inq_id, $date_time, $base_product_id, $customer_product_name, $rd_description, $sell_amount, $unit, $total_amount, $unit_of_measure, $room_name, $object, $measurement_details, $notes, $status, $ImageFileName1, $ImageFileName2, $ImageFileName3);
+    $result = $db->add_product_selection($inq_id, $date_time, $base_product_id, $customer_product_name, $rd_description, $sell_amount, $unit, $total_amount, $unit_of_measure, $room_name, $object, $measurement_details, $notes, $status, $ImageFileName1, $ImageFileName2, $ImageFileName3,$product_selection_id);
 
-    if ($result) {
+    if ($result>0) {
 
         move_uploaded_file($catalogue_img_path, "../../../catalogue_image/" . $ImageFileName1);
         move_uploaded_file($rowan_img_path, "../../../rowan_image/" . $ImageFileName2);
@@ -318,6 +374,7 @@ $app->post('/add_product_selection', function () use ($app) {
 
         $data['message'] = "Product selection added succesfully";
         $data['success'] = true;
+        $data['selection_id']=$result;
     } else {
         $data['message'] = "Some error occured";
         $data['success'] = false;
@@ -327,11 +384,78 @@ $app->post('/add_product_selection', function () use ($app) {
 });
 
 /*
- * inquiry_list
+ * save_product_selection
  * Parameters: none
  * Method: POST
  */
+$app->post('/save_product_selection', function () use ($app) {
+
+    verifyRequiredParams(array('data'));
+    $data_request = json_decode($app->request->post('data'));
+    $selection_id = $data_request->selection_id;
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->save_product_selection($selection_id);
+
+  //  if ($result > 0) {
+       
+        $data['message'] = "Product selection saved successfully";
+        $data['success'] = true;
+    // } else {
+    //     $data['message'] = "Some error occured";
+    //     $data['success'] = false;
+    // }
+    echoResponse(200, $data);
+
+});
+
+
+/*
+ * inquiry_list
+ * Parameters: data : {"status":"on_going/pending/completed"}
+ * Method: POST
+ */
 $app->post('/inquiry_list', function () use ($app) {
+
+    verifyRequiredParams(array('data'));
+    $data_request = json_decode($app->request->post('data'));
+    $status = $data_request->status;
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->inquiry_list($status);
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+
+/*
+ * architect_list
+ * Parameters: none
+ * Method: POST
+ */
+$app->post('/architect_list', function () use ($app) {
 
     // verifyRequiredParams(array('data'));
 
@@ -339,7 +463,42 @@ $app->post('/inquiry_list', function () use ($app) {
     $data = array();
     $data["data"] = array();
 
-    $result = $db->inquiry_list();
+    $result = $db->architect_list();
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+
+/*
+ * category_list
+ * Parameters: none
+ * Method: POST
+ */
+$app->post('/category_list', function () use ($app) {
+
+    // verifyRequiredParams(array('data'));
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->category_list();
 
     if (mysqli_num_rows($result) > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -411,15 +570,41 @@ $app->post('/product_selection_data', function () use ($app) {
     $data = array();
     $data["data"] = array();
 
+
     $result = $db->product_selection_data($selection_id);
+    
 
     if (mysqli_num_rows($result) > 0) {
         while ($row = $result->fetch_assoc()) {
+            $result_room_pro=$db->room_product_data($row["room_name"],$selection_id);
             $temp = array();
+            $temp['details']=array();
             foreach ($row as $key => $value) {
                 $temp[$key] = $value;
+                while($room_data=$result_room_pro->fetch_assoc())
+                {
+                    $pro=new stdClass();
+                    foreach ($room_data as $key2 => $value2) {
+                        //$pro->$key2 = $value2;
+                        if ($key2 == "catalouge_image") {
+                            $pro->$key2 = "https://pragmanxt.com/rowan_decor/catalogue_image/" . $value2;
+                        } else if ($key2 == "customer_image") {
+                            $pro->$key2 = "https://pragmanxt.com/rowan_decor/customer_image/" . $value2;
+                        } else if ($key2 == "rowan_image") {
+                            $pro->$key2 = "https://pragmanxt.com/rowan_decor/rowan_image/" . $value2;
+                        } else {
+                            $pro->$key2 = $value2;
+                        }
+                    }
+                    
+                    array_push($temp['details'], $pro);
+
+
+                }
+                
             }
-            $temp = array_map('utf8_encode', $temp);
+           // print_r($temp);
+           // $temp = array_map('utf8_encode', $temp);
             array_push($data['data'], $temp);
         }
         $data['message'] = "";
@@ -446,6 +631,115 @@ $app->post('/product_selection_list', function () use ($app) {
     $data["data"] = array();
 
     $result = $db->product_selection_list();
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+
+/*
+ * room_name_list
+ * Parameters: none
+ * Method: POST
+ */
+$app->post('/room_name_list', function () use ($app) {
+
+    // verifyRequiredParams(array('data'));
+    verifyRequiredParams(array('data'));
+    $data_request = json_decode($app->request->post('data'));
+    $product_selection_id = $data_request->product_selection_id;
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->room_name_list($product_selection_id);
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+/*
+ * object_name_list
+ * Parameters: none
+ * Method: POST
+ */
+$app->post('/object_name_list', function () use ($app) {
+
+    // verifyRequiredParams(array('data'));
+    verifyRequiredParams(array('data'));
+    $data_request = json_decode($app->request->post('data'));
+    $product_selection_id = $data_request->product_selection_id;
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->object_name_list($product_selection_id);
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+/*
+ * units_list
+ * Parameters: none
+ * Method: POST
+ */
+$app->post('/units_list', function () use ($app) {
+
+    // verifyRequiredParams(array('data'));
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+
+    $result = $db->units_list();
 
     if (mysqli_num_rows($result) > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -560,8 +854,8 @@ $app->post('/edit_product_selection', function () use ($app) {
     $db = new DbOperation();
     $data = array();
     $data['data'] = array();
-    
-    $result = $db->edit_product_selection($product_selection_details_id, $base_product_id, $customer_product_name, $rd_description, $sell_amount, $unit, $total_amount, $unit_of_measue, $room_name, $object, $measurment_details, $catalogue_notes,$ImageFileName1,$ImageFileName2,$ImageFileName3);
+
+    $result = $db->edit_product_selection($product_selection_details_id, $base_product_id, $customer_product_name, $rd_description, $sell_amount, $unit, $total_amount, $unit_of_measue, $room_name, $object, $measurment_details, $catalogue_notes, $ImageFileName1, $ImageFileName2, $ImageFileName3);
 
     if ($result) {
 
@@ -602,14 +896,12 @@ $app->post('/delete_product_selection', function () use ($app) {
             $temp = array();
             foreach ($row as $key => $value) {
                 $temp[$key] = $value;
-                if($key == "catalouge_image"){
-                    unlink("../../../catalogue_image/".$value);
-                }
-                else if($key == "rowan_image"){
-                    unlink("../../../rowan_image/".$value);
-                }
-                else if($key == "customer_image"){
-                    unlink("../../../customer_image/".$value);
+                if ($key == "catalouge_image") {
+                    unlink("../../../catalogue_image/" . $value);
+                } else if ($key == "rowan_image") {
+                    unlink("../../../rowan_image/" . $value);
+                } else if ($key == "customer_image") {
+                    unlink("../../../customer_image/" . $value);
                 }
             }
             $temp = array_map('utf8_encode', $temp);
@@ -625,6 +917,78 @@ $app->post('/delete_product_selection', function () use ($app) {
 
 });
 
+/*
+ * site_visit_measurement
+ * Parameters: none
+ * Method: POST
+ */
+$app->post('/site_visit_measurement', function () use ($app) {
+
+    // verifyRequiredParams(array('data'));
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+ 
+    $result = $db->site_visit_measurement();
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+                $pro_count=$db->get_product_count($row["id"]);
+                $temp["total_products"]=$pro_count["measurable_products_count"];
+                $temp["pending_products"]=$pro_count["pending_measurement_count"];
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
+
+/*
+ * product_link_under
+ * Parameters: data : {"product_selection_id":""}
+ * Method: POST
+ */
+$app->post('/product_link_under', function () use ($app) {
+
+    verifyRequiredParams(array('data'));
+    $data_request = json_decode($app->request->post('data'));
+    $product_selection_id = $data_request->product_selection_id;
+
+    $db = new DbOperation();
+    $data = array();
+    $data["data"] = array();
+ 
+    $result = $db->product_link_under($product_selection_id);
+    // print_r($result); 
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $temp = array();
+            foreach ($row as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp = array_map('utf8_encode', $temp);
+            array_push($data['data'], $temp);
+        }
+        $data['message'] = "";
+        $data['success'] = true;
+    } else {
+        $data['message'] = "No result found";
+        $data['success'] = false;
+    }
+    echoResponse(200, $data);
+
+});
 
 
 

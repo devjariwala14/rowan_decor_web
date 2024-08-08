@@ -75,7 +75,7 @@ if(isset($_REQUEST['btnupdate']))
 	try
 	{
 		$stmt = $obj->con1->prepare("UPDATE `city` SET ctnm=?, state_id=?, status=? WHERE srno=?");
-		$stmt->bind_param("sissi", $ctnm,$state_id,$status,$action,$e_id);
+		$stmt->bind_param("sisi", $ctnm,$state_id,$status,$e_id);
 		$Resp=$stmt->execute();
 		if(!$Resp)
 		{

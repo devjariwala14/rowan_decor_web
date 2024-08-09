@@ -153,7 +153,7 @@ if (isset($_COOKIE["excelmsg"])) {
         </thead>
         <tbody class="table-border-bottom-0">
           <?php
-          $stmt_list = $obj->con1->prepare("SELECT * FROM `state`");
+          $stmt_list = $obj->con1->prepare("SELECT * FROM `state` ORDER BY id DESC");
           $stmt_list->execute();
           $result = $stmt_list->get_result();
 
@@ -165,10 +165,10 @@ if (isset($_COOKIE["excelmsg"])) {
             <tr>
               <td><?php echo $i ?></td>
               <td><?php echo $state["name"] ?></td>
-              <?php if ($state["status"] == 'Enable') { ?>
-                <td style="color:green"><?php echo $state["status"] ?></td>
-              <?php } else if ($state["status"] == 'Disable') { ?>
-                  <td style="color:red"><?php echo $state["status"] ?></td>
+              <?php if ($state["status"] == 'enable') { ?>
+                <td style="color:green"><?php echo "Enable"?></td>
+              <?php } else if ($state["status"] == 'disable') { ?>
+                  <td style="color:red"><?php echo "Disable"?></td>
               <?php } ?>
 
               <td>

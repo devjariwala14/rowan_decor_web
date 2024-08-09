@@ -155,7 +155,7 @@ if (isset($_COOKIE["excelmsg"])) {
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php
-                    $stmt_list = $obj->con1->prepare("SELECT * FROM `category`");
+                    $stmt_list = $obj->con1->prepare("SELECT * FROM `category` ORDER BY id DESC");
                     $stmt_list->execute();
                     $result = $stmt_list->get_result();
 
@@ -173,10 +173,10 @@ if (isset($_COOKIE["excelmsg"])) {
                                     <td style="color:red"><?php echo $category["measurable"] ?></td>
                             <?php } ?>
 
-                            <?php if ($category["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $category["status"] ?></td>
-                            <?php } else if ($category["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $category["status"] ?></td>
+                            <?php if ($category["status"] == 'enable') { ?>
+                                <td style="color:green"><?php echo "Enable"?></td>
+                            <?php } else if ($category["status"] == 'disable') { ?>
+                                    <td style="color:red"><?php echo "Disable" ?></td>
                             <?php } ?>
 
                             <td>

@@ -176,7 +176,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php 
-                        $stmt_list = $obj->con1->prepare("SELECT c1.*, ct1.ctnm as ctnm,s1.name as stnm  FROM `company` c1,`state` s1 , `city` ct1 WHERE c1.city_id=ct1.srno and c1.state_id=s1.id");
+                        $stmt_list = $obj->con1->prepare("SELECT c1.*, ct1.ctnm as ctnm,s1.name as stnm  FROM `company` c1,`state` s1 , `city` ct1 WHERE c1.city_id=ct1.srno and c1.state_id=s1.id ORDER BY c1.id DESC");
                         $stmt_list->execute();
                         $result = $stmt_list->get_result();
                         
@@ -192,10 +192,10 @@ eraseCookie("excelmsg")
                         <td><?php echo $res["stnm"]?></td>
                         <td><?php echo $res["ctnm"]?></td>
                         <td><?php echo $res["phone"]?></td>
-                        <?php if ($res["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $res["status"] ?></td>
-                            <?php } else if ($res["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $res["status"] ?></td>
+                        <?php if ($res["status"] == 'enable') { ?>
+                                <td style="color:green"><?php echo "Enable" ?></td>
+                            <?php } else if ($res["status"] == 'disable') { ?>
+                                    <td style="color:red"><?php echo "Disable" ?></td>
                             <?php } ?>   
                         
 

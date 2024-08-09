@@ -192,10 +192,10 @@ eraseCookie("excelmsg")
                         <td><?php echo $res["mobile_no"]?></td>
                         <td><?php echo $res["ref_name"]?></td>
                         <td><?php echo $res["place"]?></td>
-                        <?php if ($res["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $res["status"] ?></td>
-                            <?php } else if ($res["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $res["status"] ?></td>
+                        <?php if ($res["status"] == 'enable') { ?>
+                                <td style="color:green"><?php echo "Enable"?></td>
+                            <?php } else if ($res["status"] == 'disable') { ?>
+                                    <td style="color:red"><?php echo "Disable"?></td>
                             <?php } ?>  
                         <td>
                             <a href="javascript:editdata('<?php echo $res["id"]?>');"><i

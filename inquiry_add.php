@@ -85,72 +85,69 @@ if(isset($_REQUEST['btnsubmit']))
 	}
 }
 
-if(isset($_REQUEST['btnupdate']))
-{
-	$e_id=$_COOKIE['edit_id'];
-	$visitor = $_REQUEST["visitor"];
+if (isset($_REQUEST['btnupdate'])) {
+    $e_id = $_COOKIE['edit_id'];
+    $visitor = $_REQUEST["visitor"];
     $inquired_for = $_REQUEST["inq_for"];
     $inquired_for_str = implode(',', $inquired_for);
     $attended_by = $_REQUEST["attended_by"];
-	$architect = $_REQUEST["architect"];
-	$address = $_REQUEST["address"];
-	$suggetion = $_REQUEST["suggestions"];
+    $architect = $_REQUEST["architect"];
+    $address = $_REQUEST["address"];
+    $suggetion = $_REQUEST["suggestions"];
+    $start_date = $_REQUEST["sdate"];
+    $status = $_REQUEST["status"];
+    
     $inquiry_img = $_FILES['inquiry_img']['name'];
-	$inquiry_img = str_replace(' ', '_', $inquiry_img);
-	$inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
-	$start_date = $_REQUEST["sdate"];
-	$status = $_REQUEST["status"];
-	
-   
-	
+    $inquiry_img = str_replace(' ', '_', $inquiry_img);
+    $inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
+    $old_img = $_REQUEST['old_img_inquiry']; 
+
     if ($inquiry_img != "") {
-		if (file_exists("inquiry_image/" . $inquiry_img)) {
-			$i = 0;
-			$PicFileName = $inquiry_img;
-			$Arr1 = explode('.', $PicFileName);
+        if (file_exists("inquiry_image/" . $old_img)) {
+            unlink("inquiry_image/" . $old_img); // Unlink the old image
+        }
 
-			$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-			while (file_exists("inquiry_image/" . $PicFileName)) {
-				$i++;
-				$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-			}
-		} else {
-			$PicFileName = $inquiry_img;
-		}
-		unlink("inquiry_image/" . $old_img);
-		move_uploaded_file($inquiry_img_path, "inquiry_image/" . $PicFileName);
-	} else {
-		$PicFileName = $old_img;
-	}
-	try
-	{
+        if (file_exists("inquiry_image/" . $inquiry_img)) {
+            $i = 0;
+            $PicFileName = $inquiry_img;
+            $Arr1 = explode('.', $PicFileName);
+
+            $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+            while (file_exists("inquiry_image/" . $PicFileName)) {
+                $i++;
+                $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+            }
+        } else {
+            $PicFileName = $inquiry_img;
+        }
+        move_uploaded_file($inquiry_img_path, "inquiry_image/" . $PicFileName);
+    } else {
+        $PicFileName = $old_img;
+    }
+    try {
         // echo"UPDATE architect SET `name`=$name, `contact`=$contact, `status`=$status where id=$e_id";
-		$stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `inquiry_image`=?,`start_date`=?,`status`=? WHERE id =?");
-		$stmt->bind_param("isiisssssi",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$PicFileName,$start_date,$status,$e_id);
-		$Resp=$stmt->execute();
-		if(!$Resp)
-		{
-			throw new Exception("Problem in updating! ". strtok($obj->con1-> error,  '('));
-		}
-		$stmt->close();
-	} 
-	catch(\Exception  $e) {
-		setcookie("sql_error", urlencode($e->getMessage()),time()+3600,"/");
-	}
+        $stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `inquiry_image`=?,`start_date`=?,`status`=? WHERE id =?");
+        $stmt->bind_param("isiisssssi", $visitor, $inquired_for_str, $attended_by, $architect, $address, $suggetion, $PicFileName, $start_date, $status, $e_id);
+        $Resp = $stmt->execute();
+        if (!$Resp) {
+            throw new Exception("Problem in updating! " . strtok($obj->con1->error, '('));
+        }
+        $stmt->close();
+    } catch (\Exception  $e) {
+        setcookie("sql_error", urlencode($e->getMessage()), time() + 3600, "/");
+    }
 
-
-	if($Resp)
-	{   
+    if ($Resp) {
         setcookie("edit_id", "", time() - 3600, "/");
-		setcookie("msg", "update",time()+3600,"/");
-		header("location:inquiry.php");
-	}
-	else
-	{
-		setcookie("msg", "fail",time()+3600,"/");
-		 header("location:inquiry.php");
-	}
+        setcookie("msg", "update", time() + 3600, "/");
+        header("location:inquiry.php");
+    } else {
+        setcookie("msg", "fail", time() + 3600, "/");
+        header("location:inquiry.php");
+    }
 }
+
+
 
 ?>
 <div class="row" id="p1">
@@ -300,17 +297,17 @@ if(isset($_REQUEST['btnupdate']))
                             <div class="mb-3">
                                 <label class="form-label d-block" for="basic-default-fullname">Status</label>
                                 <div class="form-check form-check-inline mt-3">
-                                    <input class="form-check-input" type="radio" name="status" id="Enable"
-                                        value="Enable"
-                                        <?php echo isset($mode) && $data['status'] == 'Enable' ? 'checked' : '' ?>
+                                    <input class="form-check-input" type="radio" name="status" id="enable"
+                                        value="enable"
+                                        <?php echo isset($mode) && $data['status'] == 'enable' ? 'checked' : '' ?>
                                         <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required
                                         checked>
                                     <label class="form-check-label" for="inlineRadio1">Enable</label>
                                 </div>
                                 <div class="form-check form-check-inline mt-3">
-                                    <input class="form-check-input" type="radio" name="status" id="Disable"
-                                        value="Disable"
-                                        <?php echo isset($mode) && $data['status'] == 'Disable' ? 'checked' : '' ?>
+                                    <input class="form-check-input" type="radio" name="status" id="disable"
+                                        value="disable"
+                                        <?php echo isset($mode) && $data['status'] == 'disable' ? 'checked' : '' ?>
                                         <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                                     <label class="form-check-label" for="inlineRadio1">Disable</label>
                                 </div>

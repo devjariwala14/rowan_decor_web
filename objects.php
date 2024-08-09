@@ -166,10 +166,10 @@ if (isset($_COOKIE["excelmsg"])) {
                             <td><?php echo $i ?></td>
                             <td><?php echo $city["object_name"] ?></td>
                           
-                            <?php if ($city["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $city["status"] ?></td>
-                            <?php } else if ($city["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $city["status"] ?></td>
+                            <?php if ($city["status"] == 'enable') { ?>
+                                <td style="color:green"><?php echo "Enable"?></td>
+                            <?php } else if ($city["status"] == 'disable') { ?>
+                                    <td style="color:red"><?php echo "Disable" ?></td>
                             <?php } ?>
 
                             <td>

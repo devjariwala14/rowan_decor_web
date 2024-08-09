@@ -154,7 +154,7 @@ if (isset($_COOKIE["excelmsg"])) {
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php
-                    $stmt_list = $obj->con1->prepare("SELECT * FROM `branch`");
+                    $stmt_list = $obj->con1->prepare("SELECT * FROM `branch` ORDER BY id DESC");
                     $stmt_list->execute();
                     $result = $stmt_list->get_result();
 
@@ -167,10 +167,10 @@ if (isset($_COOKIE["excelmsg"])) {
                             <td><?php echo $i ?></td>
                             <td><?php echo $city["branch_name"] ?></td>
                             <td><?php echo $city["head_office"] ?></td>
-                            <?php if ($city["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $city["status"] ?></td>
-                            <?php } else if ($city["status"] == 'Disable') { ?>
-                                    <td style="color:red"><?php echo $city["status"] ?></td>
+                            <?php if ($city["status"] == 'enable') { ?>
+                                <td style="color:green"><?php echo "Enable" ?></td>
+                            <?php } else if ($city["status"] == 'disable') { ?>
+                                    <td style="color:red"><?php echo "Disable" ?></td>
                             <?php } ?>
 
                             <td>

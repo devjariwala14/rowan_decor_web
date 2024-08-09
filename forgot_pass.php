@@ -9,7 +9,7 @@ if(isset($_REQUEST['btn_submit']))
 {
   	$email = $_REQUEST['email'];
 
-    $stmt = $obj->con1->prepare("select * from admin where email=?");
+    $stmt = $obj->con1->prepare("select * from users where email=?");
     $stmt->bind_param("s",$email);
     $stmt->execute();
     $res = $stmt->get_result();

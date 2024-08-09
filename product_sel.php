@@ -33,79 +33,79 @@ if (isset($_COOKIE["msg"])) {
     if ($_COOKIE['msg'] == "data") {
 
 ?>
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <i class='bx bxs-check-circle'></i>Data added succesfully
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            </button>
-        </div>
-        <script type="text/javascript">
-            eraseCookie("msg")
-        </script>
-    <?php
+<div class="alert alert-success alert-dismissible" role="alert">
+    <i class='bx bxs-check-circle'></i>Data added succesfully
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
+<script type="text/javascript">
+eraseCookie("msg")
+</script>
+<?php
     }
     if ($_COOKIE['msg'] == "update") {
 
     ?>
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <i class='bx bxs-check-circle'></i>Data updated succesfully
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            </button>
-        </div>
-        <script type="text/javascript">
-            eraseCookie("msg")
-        </script>
-    <?php
+<div class="alert alert-success alert-dismissible" role="alert">
+    <i class='bx bxs-check-circle'></i>Data updated succesfully
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
+<script type="text/javascript">
+eraseCookie("msg")
+</script>
+<?php
     }
     if ($_COOKIE['msg'] == "data_del") {
 
     ?>
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <i class='bx bxs-cross-circle'></i>Data deleted succesfully
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            </button>
-        </div>
-        <script type="text/javascript">
-            eraseCookie("msg")
-        </script>
-    <?php
+<div class="alert alert-success alert-dismissible" role="alert">
+    <i class='bx bxs-cross-circle'></i>Data deleted succesfully
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
+<script type="text/javascript">
+eraseCookie("msg")
+</script>
+<?php
     }
     if ($_COOKIE['msg'] == "fail") {
     ?>
 
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <i class='bx bx-x-circle'></i>An error occured! Try again.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            </button>
-        </div>
-        <script type="text/javascript">
-            eraseCookie("msg")
-        </script>
-    <?php
+<div class="alert alert-danger alert-dismissible" role="alert">
+    <i class='bx bx-x-circle'></i>An error occured! Try again.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
+<script type="text/javascript">
+eraseCookie("msg")
+</script>
+<?php
     }
 }
 if (isset($_COOKIE["sql_error"])) {
     ?>
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <?php echo urldecode($_COOKIE['sql_error']) ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-        </button>
-    </div>
- <script type="text/javascript">
-        eraseCookie("sql_error")
-    </script>
+<div class="alert alert-danger alert-dismissible" role="alert">
+    <?php echo urldecode($_COOKIE['sql_error']) ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
+<script type="text/javascript">
+eraseCookie("sql_error")
+</script>
 <?php
 }
 if (isset($_COOKIE["excelmsg"])) {
 ?>
-    <div class="alert alert-primary alert-dismissible" role="alert">
-        <?php echo $_COOKIE['excelmsg'] ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-        </button>
-    </div>
+<div class="alert alert-primary alert-dismissible" role="alert">
+    <?php echo $_COOKIE['excelmsg'] ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
 
-    <script type="text/javascript">
-        eraseCookie("excelmsg")
-    </script>
+<script type="text/javascript">
+eraseCookie("excelmsg")
+</script>
 
 <?php
 }
@@ -176,25 +176,29 @@ if (isset($_COOKIE["excelmsg"])) {
                     
                     ?>
 
-                        <tr>
-                            <td><?php echo $i ?></td>
-                            <td><?php echo $res["full_name"] ?></td>
-                            <td><?php echo $res["mobile_no"] ?></td>
-                            <td><?php echo $res["start_date"] ?></td>
-                            <td><?php echo $res["date_time"] ?></td>
-                            <?php if ($res["status"] == 'Enable') { ?>
-                                <td style="color:green"><?php echo $res["status"] ?></td>
-                            <?php } else if ($res["status"] == 'Disable') { ?>
-                                <td style="color:red"><?php echo $res["status"] ?></td>
-                            <?php } ?>
-
-
-                            <td>
-                            <a href="javascript:editdata('<?php echo $res["id"] ?>');"><i class="bx bx-edit-alt me-1"></i> </a>
-                            <a href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["full_name"]) ?>');"><i class="bx bx-trash me-1" style="color:red"></i> </a>
-                            <a href="javascript:viewdata('<?php echo $res["id"] ?>');"><i class="fa-regular fa-eye" style="color:green"></i></a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td><?php echo $i ?></td>
+                        <td><?php echo $res["full_name"] ?></td>
+                        <td><?php echo $res["mobile_no"] ?></td>
+                        <td><?php echo $res["start_date"] ?></td>
+                        <td><?php echo $res["date_time"] ?></td>
+                        <?php if ($res["status"] == 'on_going') { ?>
+                        <td style="color:green"><?php echo "On Going" ?></td>
+                        <?php } else if ($res["status"] == 'pending') { ?>
+                        <td style="color:orange"><?php echo "Pending" ?></td>
+                        <?php } else if ($res["status"] == 'completed') { ?>
+                        <td style="color:blue"><?php echo "Completed" ?></td>
+                        <?php } ?>
+                        <td>
+                            <a href="javascript:editdata('<?php echo $res["id"] ?>');"><i
+                                    class="bx bx-edit-alt me-1"></i> </a>
+                            <a
+                                href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["full_name"]) ?>');"><i
+                                    class="bx bx-trash me-1" style="color:red"></i> </a>
+                            <a href="javascript:viewdata('<?php echo $res["id"] ?>');"><i class="fa-regular fa-eye"
+                                    style="color:green"></i></a>
+                        </td>
+                    </tr>
                     <?php
                         $i++;
                     }
@@ -212,18 +216,17 @@ if (isset($_COOKIE["excelmsg"])) {
 <!-- / grid -->
 <!-- / Content -->
 <script type="text/javascript">
-   
-    function viewdata(id) {
-        eraseCookie("edit_id");
-        createCookie("view_id", id, 1);
-        window.location = "product_selection_details.php";
-    }
+function viewdata(id) {
+    eraseCookie("edit_id");
+    createCookie("view_id", id, 1);
+    window.location = "product_selection_details.php";
+}
 
-    function deletedata(id, name) {
-        $('#backDropModal').modal('toggle');
-        $('#c_id').val(id);
-        $('#label_del').html('Are you sure you want to DELETE product - ' + atob(name) + ' ?');
-    }
+function deletedata(id, name) {
+    $('#backDropModal').modal('toggle');
+    $('#c_id').val(id);
+    $('#label_del').html('Are you sure you want to DELETE product - ' + atob(name) + ' ?');
+}
 </script>
 <?php
 include "footer.php";

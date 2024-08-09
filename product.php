@@ -177,7 +177,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php 
-                        $stmt_list = $obj->con1->prepare("SELECT p1.*, c1.name as cname,co1.company_name,u1.unit_name FROM product p1 JOIN category c1 ON p1.category_id = c1.id JOIN company co1 ON p1.company_id = co1.id JOIN units u1 ON p1.unit_id=u1.id");
+                        $stmt_list = $obj->con1->prepare("SELECT p1.*, c1.name as cname,co1.company_name,u1.unit_name FROM product p1 JOIN category c1 ON p1.category_id = c1.id JOIN company co1 ON p1.company_id = co1.id JOIN units u1 ON p1.unit_id=u1.id ORDER BY p1.id DESC");
                         $stmt_list->execute();
                         $result = $stmt_list->get_result();
                         $stmt_list->close();
@@ -193,10 +193,10 @@ eraseCookie("excelmsg")
                         <td><?php echo $res["company_name"]?></td>
                         <td><?php echo $res["unit_name"]?></td>
                         <td><?php echo $res["price"]?></td>
-                        <?php if($res["status"]=='Enable'){	?>
-                        <td style="color:green"><?php echo $res["status"]?></td>
-                        <?php } else if($res["status"]=='Disable'){	?>
-                        <td style="color:red"><?php echo $res["status"]?></td>
+                        <?php if($res["status"]=='enable'){	?>
+                        <td style="color:green"><?php echo "Enable"?></td>
+                        <?php } else if($res["status"]=='disable'){	?>
+                        <td style="color:red"><?php echo "Disable"?></td>
                         <?php } ?>
                         <td>
                             <a href="javascript:editdata('<?php echo $res["id"]?>');"><i

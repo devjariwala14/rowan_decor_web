@@ -150,7 +150,7 @@ if(isset($_COOKIE["msg"]) )
                         
                         <button type="submit" name="btnsubmit" id="btnsubmit" class="btn btn-primary">Save</button>
                     
-                        <button type="reset" name="btncancel" id="btncancel" class="btn btn-secondary" onclick="window.location.reload()">Cancel</button>
+                        <button type="reset" name="btncancel" id="btncancel" class="btn btn-secondary" onclick="javascript:go_back()">Cancel</button>
 
                       </form>
                     </div>
@@ -160,6 +160,9 @@ if(isset($_COOKIE["msg"]) )
               </div>
             <!-- / Content -->
 <script type="text/javascript">
+  function go_back() {
+    window.location = "home.php";
+}
 </script>
 <?php 
   include("footer.php");

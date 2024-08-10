@@ -40,13 +40,13 @@ if(isset($_REQUEST['btnsubmit']))
 	$status = $_REQUEST['status'];
 
     if ($inquiry_img != "") {
-		if (file_exists("inquiry_image/" . $inquiry_img)) {
+		if (file_exists("property_image/" . $inquiry_img)) {
 			$i = 0;
 			$PicFileName = $inquiry_img;
 			$Arr1 = explode('.', $PicFileName);
 
 			$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-			while (file_exists("inquiry_image/" . $PicFileName)) {
+			while (file_exists("property_image/" . $PicFileName)) {
 				$i++;
 				$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
 			}
@@ -74,7 +74,7 @@ if(isset($_REQUEST['btnsubmit']))
 
 	if($Resp)
 	{
-        move_uploaded_file($inquiry_img_path, "inquiry_image/" . $PicFileName);
+        move_uploaded_file($inquiry_img_path, "property_image/" . $PicFileName);
 		setcookie("msg", "data",time()+3600,"/");
 		header("location:inquiry.php");
 	 }
@@ -103,24 +103,24 @@ if (isset($_REQUEST['btnupdate'])) {
     $old_img = $_REQUEST['old_img_inquiry']; 
 
     if ($inquiry_img != "") {
-        if (file_exists("inquiry_image/" . $old_img)) {
-            unlink("inquiry_image/" . $old_img); // Unlink the old image
+        if (file_exists("property_image/" . $old_img)) {
+            unlink("property_image/" . $old_img); // Unlink the old image
         }
 
-        if (file_exists("inquiry_image/" . $inquiry_img)) {
+        if (file_exists("property_image/" . $inquiry_img)) {
             $i = 0;
             $PicFileName = $inquiry_img;
             $Arr1 = explode('.', $PicFileName);
 
             $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-            while (file_exists("inquiry_image/" . $PicFileName)) {
+            while (file_exists("property_image/" . $PicFileName)) {
                 $i++;
                 $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
             }
         } else {
             $PicFileName = $inquiry_img;
         }
-        move_uploaded_file($inquiry_img_path, "inquiry_image/" . $PicFileName);
+        move_uploaded_file($inquiry_img_path, "property_image/" . $PicFileName);
     } else {
         $PicFileName = $old_img;
     }
@@ -166,7 +166,7 @@ if (isset($_REQUEST['btnupdate'])) {
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                             <option value="">Select Visitor</option>
                             <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `visitor` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `visitor` WHERE `status`= 'enable'");
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();
@@ -191,7 +191,7 @@ if (isset($_REQUEST['btnupdate'])) {
                             id="inq_for">
                             <option value="">Select Category</option> <!-- Optional placeholder -->
                             <?php
-                                $stmt_list = $obj->con1->prepare("SELECT * FROM `category` WHERE `status`= 'Enable'");
+                                $stmt_list = $obj->con1->prepare("SELECT * FROM `category` WHERE `status`= 'enable'");
                                 $stmt_list->execute();
                                 $result = $stmt_list->get_result();
                                 $stmt_list->close();
@@ -236,7 +236,7 @@ if (isset($_REQUEST['btnupdate'])) {
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                             <option value="">Select Architect</option>
                             <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `architect` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `architect` WHERE `status`= 'enable'");
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();
@@ -277,7 +277,7 @@ if (isset($_REQUEST['btnupdate'])) {
                                style="display:<?php echo isset($data['inquiry_image']) || isset($mode) && $mode == 'view' ? 'block' : 'none'; ?>">
                                Preview
                         </label>
-                        <img src="<?php echo isset($data['inquiry_image']) ? 'inquiry_image/' . $data['inquiry_image'] : ''; ?>" 
+                        <img src="<?php echo isset($data['inquiry_image']) ? 'property_image/' . $data['inquiry_image'] : ''; ?>" 
                              id="PreviewInquiryImage" height="300" width="400" 
                              style="display:<?php echo isset($data['inquiry_image']) ? 'block' : 'none'; ?>" 
                              class="object-cover shadow rounded mt-3 mb-3">

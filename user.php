@@ -30,7 +30,7 @@ if(isset($_REQUEST["btndelete"]))
 
 ?>
 
-<h4 class="fw-bold py-3 mb-4">User Master</h4>
+<h4 class="fw-bold py-3 mb-4">Staff Master</h4>
 
 <?php 
 if(isset($_COOKIE["msg"]) )
@@ -157,7 +157,7 @@ eraseCookie("excelmsg")
     <div class="row ms-2 me-3">
         <div class="col-md-6" style="margin:1%">
             <a class="btn btn-primary" href="#" onclick="javascript:adddata()" style="margin-right:15px;"><i class="bx bx-plus"></i> Add
-                User</a>
+                Staff</a>
 
         </div>
         <div class="table-responsive text-nowrap">

@@ -142,7 +142,7 @@ if(isset($_REQUEST['btnupdate']))
                                 <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                                 <option value="">Select State</option>
                                 <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `state` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `state` WHERE `status`= 'enable'");
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();
@@ -165,7 +165,7 @@ if(isset($_REQUEST['btnupdate']))
                                 <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
 
                                 <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `city` WHERE `status`= 'Enable' and `state_id` = ?");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `city` WHERE `status`= 'enable' and `state_id` = ?");
 										$stmt_list->bind_param("i", $data["state_id"]);
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();

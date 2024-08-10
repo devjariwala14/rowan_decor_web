@@ -121,157 +121,157 @@ $page_name = basename($_SERVER['PHP_SELF']);
         document.getElementById("dashboard_frm").submit();
     }
 
-   /* $(function() {
-        setInterval("get_notification()", 10000);
+    /* $(function() {
+         setInterval("get_notification()", 10000);
 
-    });
-
-
-    function get_notification() {
-
-        $.ajax({
-            async: true,
-            url: 'ajaxdata.php?action=get_notification',
-            type: 'POST',
-            data: "",
-
-            success: function(data) {
-                // console.log(data);
-
-                var resp = data.split("@@@@");
-                $('#notification_list').html('');
-                $('#notification_list').append(resp[0]);
-
-                $('#noti_count').html('');
-
-                //if(resp[1]>0) {
-
-                $("#noti_count").addClass("badge-notifications");
-                $('#noti_count').append(resp[1]);
-                $('#notif_header').show();
-                if (resp[2] == 1) {
-                    playSound();
-                }
+     });
 
 
-                }
-                //this else was commented
-                else
-                {     
-                    $('#noti_count').removeClass('badge-notifications');
+     function get_notification() {
 
-                     $('#noti_count').append('');
-                     $('#notification_list').hide();
-                     $('#notif_header').hide();
-                     
-                }
-            }
+         $.ajax({
+             async: true,
+             url: 'ajaxdata.php?action=get_notification',
+             type: 'POST',
+             data: "",
 
-        });
-    }
+             success: function(data) {
+                 // console.log(data);
 
-    function removeNotification(id, typ) {
+                 var resp = data.split("@@@@");
+                 $('#notification_list').html('');
+                 $('#notification_list').append(resp[0]);
 
+                 $('#noti_count').html('');
 
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "ajaxdata.php?action=removenotification",
-            data: "id=" + id + "&type=" + typ,
-            async: true,
-            cache: false,
-            timeout: 50000,
+                 //if(resp[1]>0) {
 
-            success: function(data) {
-
-                if (typ == "customer_reg") {
-                    createCookie("cust_id", data, 1);
-                    window.open('cust_report_detail.php', '_blank');
-                } else if (typ == "delivery_reg") {
-                    createCookie("deli_boy_id", data, 1);
-                    window.open('deliveryboy_report_detail.php', '_blank');
-                } else if (typ == "post_accepted") {
-                    //window.location = "post.php";
-                    createCookie("post_id", data, 1);
-                    window.open('customer_report_detail.php', '_blank');
-                } else if (typ == "post_dispatched") {
-                    //window.location = "post.php";
-                    createCookie("post_id", data, 1);
-                    window.open('customer_report_detail.php', '_blank');
-                } else if (typ == "post_rejected") {
-                    //window.location = "post.php";
-                    createCookie("post_id", data, 1);
-                    window.open('customer_report_detail.php', '_blank');
-                } else {
-                    //window.location = "post.php";
-                    createCookie("post_id", data, 1);
-                    window.open('customer_report_detail.php', '_blank');
-                }
+                 $("#noti_count").addClass("badge-notifications");
+                 $('#noti_count').append(resp[1]);
+                 $('#notif_header').show();
+                 if (resp[2] == 1) {
+                     playSound();
+                 }
 
 
-            }
-        });
-    }
+                 }
+                 //this else was commented
+                 else
+                 {     
+                     $('#noti_count').removeClass('badge-notifications');
 
-    function playSound() {
+                      $('#noti_count').append('');
+                      $('#notification_list').hide();
+                      $('#notif_header').hide();
+                      
+                 }
+             }
 
-        $.ajax({
-            async: true,
-            url: 'ajaxdata.php?action=get_Playnotification',
-            type: 'POST',
-            data: "",
+         });
+     }
 
-            success: function(data) {
-                // console.log(data);
+     function removeNotification(id, typ) {
 
-                var resp = data.split("@@@@");
 
-                if (resp[0] > 0) {
+         $.ajax({
+             async: true,
+             type: "GET",
+             url: "ajaxdata.php?action=removenotification",
+             data: "id=" + id + "&type=" + typ,
+             async: true,
+             cache: false,
+             timeout: 50000,
 
-                    var mp3Source = '<source src="notif_sound.wav" type="audio/mpeg">';
-                    document.getElementById("sound").innerHTML = '<audio autoplay="autoplay">' + mp3Source +
-                        '</audio>';
-                    removeplaysound(resp[1]);
-                }
-            }
+             success: function(data) {
 
-        });
+                 if (typ == "customer_reg") {
+                     createCookie("cust_id", data, 1);
+                     window.open('cust_report_detail.php', '_blank');
+                 } else if (typ == "delivery_reg") {
+                     createCookie("deli_boy_id", data, 1);
+                     window.open('deliveryboy_report_detail.php', '_blank');
+                 } else if (typ == "post_accepted") {
+                     //window.location = "post.php";
+                     createCookie("post_id", data, 1);
+                     window.open('customer_report_detail.php', '_blank');
+                 } else if (typ == "post_dispatched") {
+                     //window.location = "post.php";
+                     createCookie("post_id", data, 1);
+                     window.open('customer_report_detail.php', '_blank');
+                 } else if (typ == "post_rejected") {
+                     //window.location = "post.php";
+                     createCookie("post_id", data, 1);
+                     window.open('customer_report_detail.php', '_blank');
+                 } else {
+                     //window.location = "post.php";
+                     createCookie("post_id", data, 1);
+                     window.open('customer_report_detail.php', '_blank');
+                 }
 
-    }
 
-    function removeplaysound(ids) {
+             }
+         });
+     }
 
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "ajaxdata.php?action=removeplaysound",
-            data: "id=" + ids,
-            async: true,
-            cache: false,
-            timeout: 50000,
+     function playSound() {
 
-        });
+         $.ajax({
+             async: true,
+             url: 'ajaxdata.php?action=get_Playnotification',
+             type: 'POST',
+             data: "",
 
-    }
+             success: function(data) {
+                 // console.log(data);
 
-    function mark_read_all() {
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "ajaxdata.php?action=mark_read_all",
-            data: "",
-            async: true,
-            cache: false,
-            timeout: 50000,
-            success: function(data) {
-                $('#notif_header').hide();
-                $('#notification_list').html('');
-                $('#noti_count').html('');
-            }
+                 var resp = data.split("@@@@");
 
-        });
-    }
-    */
+                 if (resp[0] > 0) {
+
+                     var mp3Source = '<source src="notif_sound.wav" type="audio/mpeg">';
+                     document.getElementById("sound").innerHTML = '<audio autoplay="autoplay">' + mp3Source +
+                         '</audio>';
+                     removeplaysound(resp[1]);
+                 }
+             }
+
+         });
+
+     }
+
+     function removeplaysound(ids) {
+
+         $.ajax({
+             async: true,
+             type: "GET",
+             url: "ajaxdata.php?action=removeplaysound",
+             data: "id=" + ids,
+             async: true,
+             cache: false,
+             timeout: 50000,
+
+         });
+
+     }
+
+     function mark_read_all() {
+         $.ajax({
+             async: true,
+             type: "GET",
+             url: "ajaxdata.php?action=mark_read_all",
+             data: "",
+             async: true,
+             cache: false,
+             timeout: 50000,
+             success: function(data) {
+                 $('#notif_header').hide();
+                 $('#notification_list').html('');
+                 $('#noti_count').html('');
+             }
+
+         });
+     }
+     */
     </script>
 
 </head>
@@ -298,104 +298,131 @@ $page_name = basename($_SERVER['PHP_SELF']);
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-    <!-- Dashboard -->
-    <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == 'home.php' ? 'active' : '' ?>">
-        <a href="home.php" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-            <div data-i18n="Analytics">Dashboard</div>
-        </a>
-    </li>
+                    <!-- Dashboard -->
+                    <li class="menu-item <?php echo basename($_SERVER["PHP_SELF"]) == 'home.php' ? 'active' : '' ?>">
+                        <a href="home.php" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
 
-    <!-- Admin Controls -->
-    <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['branch.php', 'branch_add.php', 'architect.php', 'architect_add.php', 'category.php', 'category_add.php', 'units.php', 'units_add.php', 'visitor.php', 'visitor_add.php', 'user.php', 'user_add.php', 'inquiry.php', 'inquiry_add.php', 'company.php', 'company_add.php', 'product.php', 'product_add.php', 'rooms.php', 'rooms_add.php', 'objects.php', 'objects_add.php','product_sel.php','product_sel_add.php', 'product_selection_details.php','product_selection_details_add.php']) ? 'active open' : '' ?>">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bxs-cog"></i>
-            <div data-i18n="Form Elements">Admin Controls</div>
-        </a>
-        <ul class="menu-sub">
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['branch.php', 'branch_add.php']) ? 'active' : '' ?>">
-                <a href="branch.php" class="menu-link">
-                    <div data-i18n="course">Branch</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['architect.php', 'architect_add.php']) ? 'active' : '' ?>">
-                <a href="architect.php" class="menu-link">
-                    <div data-i18n="course">Architect</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['category.php', 'category_add.php']) ? 'active' : '' ?>">
-                <a href="category.php" class="menu-link">
-                    <div data-i18n="course">Category</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['units.php', 'units_add.php']) ? 'active' : '' ?>">
-                <a href="units.php" class="menu-link">
-                    <div data-i18n="course">Units</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['visitor.php', 'visitor_add.php']) ? 'active' : '' ?>">
-                <a href="visitor.php" class="menu-link">
-                    <div data-i18n="course">Visitor</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['user.php', 'user_add.php']) ? 'active' : '' ?>">
-                <a href="user.php" class="menu-link">
-                    <div data-i18n="course">User</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['inquiry.php', 'inquiry_add.php']) ? 'active' : '' ?>">
-                <a href="inquiry.php" class="menu-link">
-                    <div data-i18n="course">Inquiry</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['company.php', 'company_add.php']) ? 'active' : '' ?>">
-                <a href="company.php" class="menu-link">
-                    <div data-i18n="course">Company</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product.php', 'product_add.php']) ? 'active' : '' ?>">
-                <a href="product.php" class="menu-link">
-                    <div data-i18n="course">Product</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['rooms.php', 'rooms_add.php']) ? 'active' : '' ?>">
-                <a href="rooms.php" class="menu-link">
-                    <div data-i18n="course">Rooms</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['objects.php', 'objects_add.php']) ? 'active' : '' ?>">
-                <a href="objects.php" class="menu-link">
-                    <div data-i18n="course">Objects</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product_sel.php','product_sel_add.php', 'product_selection_details.php','product_selection_details_add.php']) ? 'active' : '' ?>">
-                <a href="product_sel.php" class="menu-link">
-                    <div data-i18n="course">Product Selection</div>
-                </a>
-            </li>
-        </ul>
-    </li>
+                    <!-- Admin Controls -->
+                    <li
+                        class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['branch.php', 'branch_add.php', 'architect.php', 'architect_add.php', 'category.php', 'category_add.php', 'units.php', 'units_add.php', 'user.php', 'user_add.php', 'company.php', 'company_add.php', 'product.php', 'product_add.php', 'rooms.php', 'rooms_add.php', 'objects.php', 'objects_add.php']) ? 'active open' : '' ?>">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Form Elements">Admin Masters</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['architect.php', 'architect_add.php']) ? 'active' : '' ?>">
+                                <a href="architect.php" class="menu-link">
+                                    <div data-i18n="course">Architect</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['branch.php', 'branch_add.php']) ? 'active' : '' ?>">
+                                <a href="branch.php" class="menu-link">
+                                    <div data-i18n="course">Branch</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['company.php', 'company_add.php']) ? 'active' : '' ?>">
+                                <a href="company.php" class="menu-link">
+                                    <div data-i18n="course">Company</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['category.php', 'category_add.php']) ? 'active' : '' ?>">
+                                <a href="category.php" class="menu-link">
+                                    <div data-i18n="course">Category</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['units.php', 'units_add.php']) ? 'active' : '' ?>">
+                                <a href="units.php" class="menu-link">
+                                    <div data-i18n="course">Units</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product.php', 'product_add.php']) ? 'active' : '' ?>">
+                                <a href="product.php" class="menu-link">
+                                    <div data-i18n="course">Product</div>
+                                </a>
+                            </li>   
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['rooms.php', 'rooms_add.php']) ? 'active' : '' ?>">
+                                <a href="rooms.php" class="menu-link">
+                                    <div data-i18n="course">Rooms</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['objects.php', 'objects_add.php']) ? 'active' : '' ?>">
+                                <a href="objects.php" class="menu-link">
+                                    <div data-i18n="course">Objects</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['user.php', 'user_add.php']) ? 'active' : '' ?>">
+                                <a href="user.php" class="menu-link">
+                                    <div data-i18n="course">Staff</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Operations -->
+                    <li
+                        class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['visitor.php', 'visitor_add.php','product_sel.php','product_sel_add.php', 'product_selection_details.php','product_selection_details_add.php','inquiry.php', 'inquiry_add.php']) ? 'active open' : '' ?>">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-cog"></i>
+                            <div data-i18n="Form Elements">Operations</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['visitor.php', 'visitor_add.php']) ? 'active' : '' ?>">
+                                <a href="visitor.php" class="menu-link">
+                                    <div data-i18n="course">Visitor</div>
+                                </a>
+                            </li>
 
-    <!-- Location Controls -->
-    <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['state.php', 'state_add.php', 'city.php', 'city_add.php']) ? 'active open' : '' ?>">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class='menu-icon bx bx-current-location'></i>
-            <div data-i18n="Form Elements">Location Controls</div>
-        </a>
-        <ul class="menu-sub">
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['state.php', 'state_add.php']) ? 'active' : '' ?>">
-                <a href="state.php" class="menu-link">
-                    <div data-i18n="course">State</div>
-                </a>
-            </li>
-            <li class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['city.php', 'city_add.php']) ? 'active' : '' ?>">
-                <a href="city.php" class="menu-link">
-                    <div data-i18n="course">City</div>
-                </a>
-            </li>
-        </ul>
-    </li>
-</ul>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['inquiry.php', 'inquiry_add.php']) ? 'active' : '' ?>">
+                                <a href="inquiry.php" class="menu-link">
+                                    <div data-i18n="course">Inquiry</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['product_sel.php','product_sel_add.php', 'product_selection_details.php','product_selection_details_add.php']) ? 'active' : '' ?>">
+                                <a href="product_sel.php" class="menu-link">
+                                    <div data-i18n="course">Product Selection</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Location Controls -->
+                    <li
+                        class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['state.php', 'state_add.php', 'city.php', 'city_add.php']) ? 'active open' : '' ?>">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class='menu-icon bx bx-current-location'></i>
+                            <div data-i18n="Form Elements">Location Controls</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['state.php', 'state_add.php']) ? 'active' : '' ?>">
+                                <a href="state.php" class="menu-link">
+                                    <div data-i18n="course">State</div>
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item <?php echo in_array(basename($_SERVER["PHP_SELF"]), ['city.php', 'city_add.php']) ? 'active' : '' ?>">
+                                <a href="city.php" class="menu-link">
+                                    <div data-i18n="course">City</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
 
             </aside>
             <!-- / Menu -->

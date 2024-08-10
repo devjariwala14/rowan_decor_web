@@ -251,7 +251,7 @@ if (isset($_REQUEST['btnupdate'])) {
                                 <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                                 <option value="">Select Product</option>
                                 <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `Product` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `Product` WHERE `status`= 'enable'");
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();
@@ -322,7 +322,7 @@ if (isset($_REQUEST['btnupdate'])) {
                                 <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                                 <option value="">Select Room</option>
                                 <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `rooms` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `rooms` WHERE `status`= 'enable'");
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();
@@ -345,7 +345,7 @@ if (isset($_REQUEST['btnupdate'])) {
                                 <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                                 <option value="">Select Object</option>
                                 <?php
-                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `objects` WHERE `status`= 'Enable'");
+                                        $stmt_list = $obj->con1->prepare("SELECT * FROM `objects` WHERE `status`= 'enable'");
                                         $stmt_list->execute();
                                         $result = $stmt_list->get_result();
                                         $stmt_list->close();

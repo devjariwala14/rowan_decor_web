@@ -11,8 +11,8 @@ if (isset($_POST["btndelete"])) {
         $Resp_subimg = $stmt_subimg->get_result()->fetch_assoc();
         $stmt_subimg->close();
         
-        if (file_exists("inquiry_image/" . $Resp_subimg["inquiry_image"])) {
-            unlink("inquiry_image/" . $Resp_subimg["inquiry_image"]);
+        if (file_exists("property_image/" . $Resp_subimg["inquiry_image"])) {
+            unlink("property_image/" . $Resp_subimg["inquiry_image"]);
         }
         $stmt_del = $obj->con1->prepare("DELETE FROM `inquiry` WHERE id=?");
         $stmt_del->bind_param("i", $u_id);

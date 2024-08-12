@@ -159,7 +159,7 @@ eraseCookie("excelmsg")
                         <th>Srno</th>
                         <th>Customer Name</th>
                         <th>Customer Contact</th>
-                        <th>Start Date</th>
+                        <th>Inquiry Start Date</th>
                         <th>Date Time</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -167,7 +167,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php
-                    $stmt_list = $obj->con1->prepare("SELECT p1.*, i1.start_date, v1.full_name, v1.mobile_no, v1.whatsapp_no FROM `product_selection` p1, `inquiry` i1, `visitor` v1 WHERE p1.inq_id=i1.id AND i1.visitor_id=v1.id");
+                    $stmt_list = $obj->con1->prepare("SELECT p1.*, i1.start_date, v1.full_name, v1.mobile_no, v1.whatsapp_no FROM `product_selection` p1, `inquiry` i1, `visitor` v1 WHERE p1.inq_id=i1.id AND i1.visitor_id=v1.id ORDER BY p1.id DESC");
                     $stmt_list->execute();
                     $result = $stmt_list->get_result();
                     
@@ -180,8 +180,8 @@ eraseCookie("excelmsg")
                         <td><?php echo $i ?></td>
                         <td><?php echo $res["full_name"] ?></td>
                         <td><?php echo $res["mobile_no"] ?></td>
-                        <td><?php echo $res["start_date"] ?></td>
-                        <td><?php echo $res["date_time"] ?></td>
+                        <td><?php echo date('d - m - Y', strtotime($res["start_date"])); ?></td>
+                        <td><?php echo date('d - m - Y h:i A', strtotime($res["date_time"])); ?></td>
                         <?php if ($res["status"] == 'on_going') { ?>
                         <td style="color:green"><?php echo "On Going" ?></td>
                         <?php } else if ($res["status"] == 'pending') { ?>

@@ -160,28 +160,28 @@ if (isset($_COOKIE["excelmsg"])) {
 
                     $stmt_list->close();
                     $i = 1;
-                    while ($city = mysqli_fetch_array($result)) {
+                    while ($row = mysqli_fetch_array($result)) {
                         ?>
 
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td><?php echo $city["branch_name"] ?></td>
-                            <td><?php echo $city["head_office"] ?></td>
-                            <?php if ($city["status"] == 'enable') { ?>
+                            <td><?php echo $row["branch_name"] ?></td>
+                            <td><?php echo $row["head_office"] ?></td>
+                            <?php if ($row["status"] == 'enable') { ?>
                                 <td style="color:green"><?php echo "Enable" ?></td>
-                            <?php } else if ($city["status"] == 'disable') { ?>
+                            <?php } else if ($row["status"] == 'disable') { ?>
                                     <td style="color:red"><?php echo "Disable" ?></td>
                             <?php } ?>
 
                             <td>
                                 <a
-                                    href="javascript:editdata('<?php echo $city["id"] ?>','<?php echo $city["head_office"] ?>','<?php echo base64_encode($city["branch_name"]) ?>','<?php echo $city["status"] ?>');"><i
+                                    href="javascript:editdata('<?php echo $row["id"] ?>','<?php echo $row["head_office"] ?>','<?php echo base64_encode($row["branch_name"]) ?>','<?php echo $row["status"] ?>');"><i
                                         class="bx bx-edit-alt me-1"></i> </a>
                                 <a
-                                    href="javascript:deletedata('<?php echo $city["id"] ?>','<?php echo base64_encode($city["branch_name"]) ?>');"><i
+                                    href="javascript:deletedata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["branch_name"]) ?>');"><i
                                         class="bx bx-trash me-1" style="color:red"></i> </a>
                                 <a
-                                    href="javascript:viewdata('<?php echo $city["id"] ?>','<?php echo $city["head_office"] ?>','<?php echo base64_encode($city["branch_name"]) ?>','<?php echo $city["status"] ?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
+                                    href="javascript:viewdata('<?php echo $row["id"] ?>','<?php echo $row["head_office"] ?>','<?php echo base64_encode($row["branch_name"]) ?>','<?php echo $row["status"] ?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
                             </td>
                         </tr>
                         <?php

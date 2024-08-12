@@ -175,6 +175,7 @@ eraseCookie("excelmsg")
                         <th>Inquired For</th>
                         <th>Attended By</th>
                         <th>Architect</th>
+                        <th>Start Date</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -196,6 +197,7 @@ eraseCookie("excelmsg")
                         <td><?php echo $row["category_names"] ?></td>
                         <td><?php echo $row["attended_by_name"] ?></td>
                         <td><?php echo $row["architect_name"] ?></td>
+                        <td><?php echo date('d - m - Y', strtotime($row["start_date"])); ?></td>
                         <?php if ($row["status"] == 'enable') { ?>
                         <td style="color:green"><?php echo "Enable" ?></td>
                         <?php } else if ($row["status"] == 'disable') { ?>

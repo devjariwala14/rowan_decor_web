@@ -36,7 +36,7 @@ if(isset($_REQUEST['btnsubmit']))
     $inquiry_img = $_FILES['inquiry_img']['name'];
 	$inquiry_img = str_replace(' ', '_', $inquiry_img);
 	$inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
-	$start_date = $_REQUEST["sdate"];
+	$start_date = date('Y-m-d', strtotime($_REQUEST['start_date']));
 	$status = $_REQUEST['status'];
 
     if ($inquiry_img != "") {
@@ -94,7 +94,8 @@ if (isset($_REQUEST['btnupdate'])) {
     $architect = $_REQUEST["architect"];
     $address = $_REQUEST["address"];
     $suggetion = $_REQUEST["suggestions"];
-    $start_date = $_REQUEST["sdate"];
+    $start_date = date('Y-m-d', strtotime($_REQUEST['start_date']));
+
     $status = $_REQUEST["status"];
     
     $inquiry_img = $_FILES['inquiry_img']['name'];
@@ -106,24 +107,26 @@ if (isset($_REQUEST['btnupdate'])) {
         if (file_exists("property_image/" . $old_img)) {
             unlink("property_image/" . $old_img); // Unlink the old image
         }
-
-        if (file_exists("property_image/" . $inquiry_img)) {
+    
+        $PicFileName = $inquiry_img;
+    
+        if (file_exists("property_image/" . $PicFileName)) {
             $i = 0;
-            $PicFileName = $inquiry_img;
             $Arr1 = explode('.', $PicFileName);
-
             $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
             while (file_exists("property_image/" . $PicFileName)) {
                 $i++;
                 $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
             }
-        } else {
-            $PicFileName = $inquiry_img;
         }
-        move_uploaded_file($inquiry_img_path, "property_image/" . $PicFileName);
+    
+        if (!move_uploaded_file($inquiry_img_path, "property_image/" . $PicFileName)) {
+            echo "Error in uploading image.";
+        }
     } else {
         $PicFileName = $old_img;
     }
+    
     try {
         // echo"UPDATE architect SET `name`=$name, `contact`=$contact, `status`=$status where id=$e_id";
         $stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `inquiry_image`=?,`start_date`=?,`status`=? WHERE id =?");
@@ -187,8 +190,8 @@ if (isset($_REQUEST['btnupdate'])) {
                     <div class="col mb-3">
                         <label for="inq_for" class="form-label">Inquired For</label>
                         <select required class="form-select js-example-basic-multiple"
-                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> multiple name="inq_for[]"
-                            id="inq_for">
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> name="inq_for[]"
+                            id="inq_for" multiple>
                             <option value="">Select Category</option> <!-- Optional placeholder -->
                             <?php
                                 $stmt_list = $obj->con1->prepare("SELECT * FROM `category` WHERE `status`= 'enable'");
@@ -210,25 +213,16 @@ if (isset($_REQUEST['btnupdate'])) {
 
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Attended By</label>
-                        <select class="form-control" name="attended_by" id="attended_by"
-                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-                            <option value="">Select User</option>
-                            <?php
-                                // Retrieve users from the user table
-                                $stmt_users = $obj->con1->prepare("SELECT id, name FROM users ORDER BY name ASC");
-                                $stmt_users->execute();
-                                $result_users = $stmt_users->get_result();
-
-                                // Populate the dropdown with user names
-                                while ($user = $result_users->fetch_assoc()) {
-                                    $selected = (isset($mode) && $data['attended_by'] == $user['id']) ? 'selected' : '';
-                                    echo "<option value='".$user['id']."' $selected>".$user['name']."</option>";
-                                }
-
-                                    $stmt_users->close();
-                                    ?>
-                        </select>
+                        <?php
+                            // Accessing the current user's ID and name from the session
+                            $current_user_id = $_SESSION['id']; 
+                            $current_user_name = $_SESSION['name'];
+                            ?>
+                        <input type="hidden" name="attended_by" id="attended_by"
+                            value="<?php echo $current_user_id; ?>">
+                        <input type="text" class="form-control" value="<?php echo $current_user_name; ?>" readonly>
                     </div>
+
 
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Architect</label>
@@ -269,27 +263,27 @@ if (isset($_REQUEST['btnupdate'])) {
                     </div>
                     <div class="mb-3">
                         <label for="inquiry_img" class="form-label">Inquiry Image</label>
-                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img" 
-                               onchange="readURL(this, 'PreviewInquiryImage')" 
-                               <?php echo isset($mode) && $mode == 'view' ? 'disabled' : ''; ?> />
 
-                        <label class="font-bold text-primary" 
-                               style="display:<?php echo isset($data['inquiry_image']) || isset($mode) && $mode == 'view' ? 'block' : 'none'; ?>">
-                               Preview
-                        </label>
-                        <img src="<?php echo isset($data['inquiry_image']) ? 'property_image/' . $data['inquiry_image'] : ''; ?>" 
-                             id="PreviewInquiryImage" height="300" width="400" 
-                             style="display:<?php echo isset($data['inquiry_image']) ? 'block' : 'none'; ?>" 
-                             class="object-cover shadow rounded mt-3 mb-3">
+                        <?php if (!isset($mode) || $mode !== 'view'): // Show the input field only in Add and Edit modes ?>
+                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img"
+                            onchange="readURL(this, 'PreviewInquiryImage')" />
+                        <?php endif; ?>
+
+                        <img src="<?php echo isset($data['inquiry_image']) ? 'property_image/' . $data['inquiry_image'] : ''; ?>"
+                            id="PreviewInquiryImage" height="300" width="400"
+                            style="display:<?php echo isset($data['inquiry_image']) ? 'block' : 'none'; ?>"
+                            class="object-cover shadow rounded mt-3 mb-3">
+
                         <div id="imgdiv-inquiry" style="color:red"></div>
-                        <input type="hidden" name="old_img_inquiry" id="old_img_inquiry" 
-                               value="<?php echo (isset($mode) && $mode == 'edit') ? $data['inquiry_image'] : ''; ?>" />
+
+                        <input type="hidden" name="old_img_inquiry" id="old_img_inquiry"
+                            value="<?php echo (isset($mode) && $mode == 'edit') ? $data['inquiry_image'] : ''; ?>" />
                     </div>
 
                     <div class="row">
                         <div class="col mb-3">
                             <label for="date" class="col-md-2 col-form-label">Start Date</label>
-                            <input class="form-control" type="date" name="sdate" id="sdate"
+                            <input class="form-control" type="date" name="start_date" id="start_date"
                                 value="<?php echo (isset($mode)) ? $data['start_date'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
@@ -342,6 +336,7 @@ function go_back() {
     eraseCookie("view_id");
     window.location = "inquiry.php";
 }
+
 function readURL(input, previewId) {
     if (input.files && input.files[0]) {
         var filename = input.files.item(0).name;
@@ -366,7 +361,6 @@ function readURL(input, previewId) {
         }
     }
 }
-
 </script>
 <?php
 include "footer.php";

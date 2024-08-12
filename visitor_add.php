@@ -120,13 +120,16 @@ if(isset($_REQUEST['btnupdate']))
                     <div class="row g-2">
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">Mobile Number</label>
-                            <input type="text" class="form-control" name="mobile" id="mobile" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
-                                value="<?php echo (isset($mode)) ? $data['mobile_no'] : '' ?>"  oninput="copyToWhatsApp()"
+                            <input type="text" class="form-control" name="mobile" id="mobile"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
+                                value="<?php echo (isset($mode)) ? $data['mobile_no'] : '' ?>"
+                                oninput="copyToWhatsApp()"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
                         <div class="col mb-3">
                             <label class="form-label" for="basic-default-fullname">WhatsApp Number</label>
-                            <input type="text" class="form-control" name="whatsapp" id="whatsapp" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
+                            <input type="text" class="form-control" name="whatsapp" id="whatsapp"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
                                 value="<?php echo (isset($mode)) ? $data['whatsapp_no'] : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
@@ -139,17 +142,18 @@ if(isset($_REQUEST['btnupdate']))
                     </div>
                     <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Place</label>
-                        <select name="place" id="place" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
-                        <option value="">Choose Place</option>
-                                <option value="site"
-                                    <?php echo isset($mode) && $data['place'] == "site" ? "selected" : "" ?>>Visit Site
-                                </option>
-                                <option value="studio"
-                                    <?php echo isset($mode) && $data['place'] == "studio" ? "selected" : "" ?>>Visit Studio
-                                </option>
-                                
+                        <select name="place" id="place" class="form-control"
+                            <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
+                            <option value="">Choose Place</option>
+                            <option value="Visit Site"
+                                <?php echo (isset($data['place']) && $data['place'] == "Visit Site") ? "selected" : "" ?>>
+                                Visit Site</option>
+                            <option value="Visit Studio"
+                                <?php echo (isset($data['place']) && $data['place'] == "Visit Studio") ? "selected" : "" ?>>
+                                Visit Studio</option>
                         </select>
                     </div>
+
                     <!-- <div class="col mb-3">
                         <label class="form-label" for="basic-default-fullname">Visiting Person</label>
                         <select name="v_per" id="v_per" class="form-control" <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
@@ -189,8 +193,7 @@ if(isset($_REQUEST['btnupdate']))
                         class="btn btn-primary <?php echo isset($mode) && $mode == 'view' ? 'd-none' : '' ?>">
                         <?php echo isset($mode) && $mode == 'edit' ? 'Update' : 'Save' ?>
                     </button>
-                    <button type="button" class="btn btn-secondary"
-                        onclick="javascript:go_back()">
+                    <button type="button" class="btn btn-secondary" onclick="javascript:go_back()">
                         Close</button>
 
                 </form>
@@ -205,16 +208,17 @@ function go_back() {
     eraseCookie("view_id");
     window.location = "visitor.php";
 }
+
 function copyToWhatsApp() {
-        // Get the mobile number field and WhatsApp number field
-        var mobileInput = document.getElementById('mobile');
-        var whatsappInput = document.getElementById('whatsapp');
-        
-        // Only copy if the WhatsApp field is empty or equals the mobile field
-        if (whatsappInput.value === '' || whatsappInput.value === mobileInput.value.slice(0, -1)) {
-            whatsappInput.value = mobileInput.value;
-        }
+    // Get the mobile number field and WhatsApp number field
+    var mobileInput = document.getElementById('mobile');
+    var whatsappInput = document.getElementById('whatsapp');
+
+    // Only copy if the WhatsApp field is empty or equals the mobile field
+    if (whatsappInput.value === '' || whatsappInput.value === mobileInput.value.slice(0, -1)) {
+        whatsappInput.value = mobileInput.value;
     }
+}
 </script>
 <?php
 include "footer.php";

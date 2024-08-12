@@ -181,17 +181,18 @@ eraseCookie("excelmsg")
                 <thead>
                     <tr>
                         <th>Sr.no</th>
-                        <th>Product Selection</th>
-                        <th>Product</th>
-                        <th>Customer Product</th>
-                        <th>Total Ammount</th>
-                        <th>Status</th>
+                        <th>Rowan Product image</th>
+                        <th>Product Name</th>
+                        <th>Customer Product Name</th>
+                        <th>Units</th>
+                        <th>Sub Total</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php 
-                        $stmt_list = $obj->con1->prepare("SELECT psd1.*, p1.name, r1.room_name, o1.object_name FROM `product_selection_details` psd1 JOIN `product_selection` ps1 ON psd1.selection_id = ps1.id JOIN `product` p1 ON psd1.base_product_id = p1.id JOIN `rooms` r1 ON psd1.room_name = r1.id JOIN `objects` o1 ON psd1.object = o1.id LIMIT 0, 25;");
+                        $stmt_list = $obj->con1->prepare("select pd.rowan_image ,pd.id, pr.name , pd.customer_product_name , pd.unit , pd.total_amount from product_selection ps , product_selection_details pd, product pr where ps.id=pd.selection_id and pr.id = pd.base_product_id and ps.id=?");
+                        $stmt_list->bind_param("i",$_COOKIE["view_id"]);
                         $stmt_list->execute();
                         $result = $stmt_list->get_result();
                         $stmt_list->close();
@@ -202,20 +203,16 @@ eraseCookie("excelmsg")
 
                     <tr>
                         <td><?php echo $i?></td>
-                        <td><?php echo $res["selection_id"]?></td>
+                        <td><img src="rowan_image/<?= $res["rowan_image"] ?>" height="100" width="100"></td>
                         <td><?php echo $res["name"]?></td>
                         <td><?php echo $res["customer_product_name"]?></td>
+                        <td><?php echo $res["unit"]?></td>
                         <td><?php echo $res["total_amount"]?></td>
-                        <?php if($res["status"]=='enable'){	?>
-                        <td style="color:green"><?php echo "Enable"?></td>
-                        <?php } else if($res["status"]=='disable'){	?>
-                        <td style="color:red"><?php echo "Disable"?></td>
-                        <?php } ?>
                         <td>
                             <a href="javascript:editdata('<?php echo $res["id"]?>');"><i
                                     class="bx bx-edit-alt me-1"></i> </a>
                                     <a
-                                href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["selection_id"]) ?>');"><i
+                                href="javascript:deletedata('<?php echo $res["id"] ?>','<?php echo base64_encode($res["id"]) ?>');"><i
                                     class="bx bx-trash me-1" style="color:red"></i> </a>
                             <a href="javascript:viewdata('<?php echo $res["id"]?>');"><i class="fa-regular fa-eye"style="color:green"></i></a>
                         </td>

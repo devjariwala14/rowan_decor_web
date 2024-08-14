@@ -330,8 +330,8 @@ if (isset($_REQUEST['btnupdate'])) {
                                         while($rooms=mysqli_fetch_array($result))
                                         {
                                     ?>
-                                <option value="<?php echo $rooms["id"]?>"
-                                    <?php echo isset($mode) && $data['room_name'] == $rooms["id"] ? 'selected' : '' ?>>
+                                <option value="<?php echo $rooms["room_name"]?>"
+                                    <?php echo isset($mode) && $data['room_name'] == $rooms["room_name"] ? 'selected' : '' ?>>
                                     <?php echo $rooms["room_name"]?></option>
                                 <?php
 								}
@@ -353,8 +353,8 @@ if (isset($_REQUEST['btnupdate'])) {
                                         while($object=mysqli_fetch_array($result))
                                         {
                                     ?>
-                                <option value="<?php echo $object["id"]?>"
-                                    <?php echo isset($mode) && $data['object'] == $object["id"] ? 'selected' : '' ?>>
+                                <option value="<?php echo $object["object_name"]?>"
+                                    <?php echo isset($mode) && $data['object'] == $object["object_name"] ? 'selected' : '' ?>>
                                     <?php echo $object["object_name"]?></option>
                                 <?php
 								}

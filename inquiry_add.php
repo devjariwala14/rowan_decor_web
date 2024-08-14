@@ -1,90 +1,72 @@
 <?php
 include "header.php";
 
-
 if (isset($_COOKIE['edit_id'])) {
-	$mode = 'edit';
-	$editId = $_COOKIE['edit_id'];
-	$stmt = $obj->con1->prepare("SELECT * FROM `inquiry` WHERE id=?");
-	$stmt->bind_param('i', $editId);
-	$stmt->execute();
-	$data = $stmt->get_result()->fetch_assoc();
-	$stmt->close();
+    $mode = 'edit';
+    $editId = $_COOKIE['edit_id'];
+    $stmt = $obj->con1->prepare("SELECT i.*, pi.image FROM `inquiry` i LEFT JOIN `property_image` pi ON i.id = pi.inq_id WHERE i.id=?");
+    $stmt->bind_param('i', $editId);
+    $stmt->execute();
+    $data = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
 }
 
 if (isset($_COOKIE['view_id'])) {
-	$mode = 'view';
-	$viewId = $_COOKIE['view_id'];
-	$stmt = $obj->con1->prepare("SELECT * FROM `inquiry` WHERE id=?");
-	$stmt->bind_param('i', $viewId);
-	$stmt->execute();
-	$data = $stmt->get_result()->fetch_assoc();
-	$stmt->close();
+    $mode = 'view';
+    $viewId = $_COOKIE['view_id'];
+    $stmt = $obj->con1->prepare("SELECT i.*, pi.image FROM `inquiry` i LEFT JOIN `property_image` pi ON i.id = pi.inq_id WHERE i.id=?");
+    $stmt->bind_param('i', $viewId);
+    $stmt->execute();
+    $data = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
 }
-
 
 // insert data
-if(isset($_REQUEST['btnsubmit']))
-{
-	$visitor = $_REQUEST["visitor"];
+if (isset($_REQUEST['btnsubmit'])) {
+    $visitor = $_REQUEST["visitor"];
     $inquired_for = $_REQUEST["inq_for"];
-    $inquired_for_str = implode(',', $inquired_for); 
+    $inquired_for_str = implode(',', $inquired_for);
     $attended_by = $_REQUEST["attended_by"];
-	$architect = $_REQUEST["architect"];
-	$address = $_REQUEST["address"];
-	$suggetion = $_REQUEST["suggestions"];
+    $architect = $_REQUEST["architect"];
+    $address = $_REQUEST["address"];
+    $suggetion = $_REQUEST["suggestions"];
+    $start_date = date('Y-m-d', strtotime($_REQUEST['start_date']));
+    $status = $_REQUEST["status"];
+
     $inquiry_img = $_FILES['inquiry_img']['name'];
-	$inquiry_img = str_replace(' ', '_', $inquiry_img);
-	$inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
-	$start_date = date('Y-m-d', strtotime($_REQUEST['start_date']));
-	$status = $_REQUEST['status'];
+    $inquiry_img = str_replace(' ', '_', $inquiry_img);
+    $inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
 
-    if ($inquiry_img != "") {
-		if (file_exists("property_image/" . $inquiry_img)) {
-			$i = 0;
-			$PicFileName = $inquiry_img;
-			$Arr1 = explode('.', $PicFileName);
+    try {
+        $stmt = $obj->con1->prepare("INSERT INTO `inquiry`(`visitor_id`, `inquired_for`, `attended_by`, `architect_id`, `address`, `suggestions`, `start_date`, `status`) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("isiissss", $visitor, $inquired_for_str, $attended_by, $architect, $address, $suggetion, $start_date, $status);
+        $Resp = $stmt->execute();
+        
+        if (!$Resp) {
+            throw new Exception("Problem in adding inquiry! " . strtok($obj->con1->error, '('));
+        }
 
-			$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-			while (file_exists("property_image/" . $PicFileName)) {
-				$i++;
-				$PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-			}
-		} else {
-			$PicFileName = $inquiry_img;
-		}
-	}
+        $inquiry_id = $stmt->insert_id; // Get the ID of the newly inserted inquiry
+        $stmt->close();
 
-	try
-	{  
-		// echo "INSERT INTO `inquiry`(`visitor_id`=".$visitor.", `inquired_for`=".$inquired_for_str.", `attended_by`=".$attended_by.", `architect_id`=".$architect.", `address`=".$address.", `suggestions`=".$suggetion.",`inquiry_image`=".$PicFileName.", `start_date`=".$start_date.",`status`=".$status.")";
-		$stmt = $obj->con1->prepare("INSERT INTO `inquiry`(`visitor_id`, `inquired_for`, `attended_by`, `architect_id`, `address`, `suggestions`, `inquiry_image`,`start_date`,`status`) VALUES (?,?,?,?,?,?,?,?,?)");
-		$stmt->bind_param("isiisssss",$visitor,$inquired_for_str,$attended_by,$architect,$address,$suggetion,$PicFileName,$start_date,$status);
-		$Resp=$stmt->execute();
-		if(!$Resp)
-		{
-			throw new Exception("Problem in adding! ". strtok($obj->con1-> error,  '('));
-		}
-		$stmt->close();
-	} 
-	catch(\Exception  $e) {
-		setcookie("sql_error", urlencode($e->getMessage()),time()+3600,"/");
-	}
+        // Insert image
+        if ($inquiry_img != "") {
+            $PicFileName = handleImageUpload($inquiry_img, $inquiry_img_path);
 
+            $stmt = $obj->con1->prepare("INSERT INTO `property_image`(`inq_id`, `image`) VALUES (?,?)");
+            $stmt->bind_param("is", $inquiry_id, $PicFileName);
+            $stmt->execute();
+            $stmt->close();
+        }
 
-	if($Resp)
-	{
-        move_uploaded_file($inquiry_img_path, "property_image/" . $PicFileName);
-		setcookie("msg", "data",time()+3600,"/");
-		header("location:inquiry.php");
-	 }
-	else
-	{
-		setcookie("msg", "fail",time()+3600,"/");
-		header("location:inquiry.php");
-	}
+        setcookie("msg", "data", time() + 3600, "/");
+        header("location:inquiry.php");
+    } catch (\Exception $e) {
+        setcookie("sql_error", urlencode($e->getMessage()), time() + 3600, "/");
+    }
 }
 
+// update data
 if (isset($_REQUEST['btnupdate'])) {
     $e_id = $_COOKIE['edit_id'];
     $visitor = $_REQUEST["visitor"];
@@ -95,64 +77,79 @@ if (isset($_REQUEST['btnupdate'])) {
     $address = $_REQUEST["address"];
     $suggetion = $_REQUEST["suggestions"];
     $start_date = date('Y-m-d', strtotime($_REQUEST['start_date']));
-
     $status = $_REQUEST["status"];
-    
+
     $inquiry_img = $_FILES['inquiry_img']['name'];
     $inquiry_img = str_replace(' ', '_', $inquiry_img);
     $inquiry_img_path = $_FILES['inquiry_img']['tmp_name'];
-    $old_img = $_REQUEST['old_img_inquiry']; 
+    $old_img = $_REQUEST['old_img_inquiry'];
 
-    if ($inquiry_img != "") {
-        if (file_exists("property_image/" . $old_img)) {
-            unlink("property_image/" . $old_img); // Unlink the old image
-        }
-    
-        $PicFileName = $inquiry_img;
-    
-        if (file_exists("property_image/" . $PicFileName)) {
-            $i = 0;
-            $Arr1 = explode('.', $PicFileName);
-            $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-            while (file_exists("property_image/" . $PicFileName)) {
-                $i++;
-                $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
-            }
-        }
-    
-        if (!move_uploaded_file($inquiry_img_path, "property_image/" . $PicFileName)) {
-            echo "Error in uploading image.";
-        }
-    } else {
-        $PicFileName = $old_img;
-    }
-    
     try {
-        // echo"UPDATE architect SET `name`=$name, `contact`=$contact, `status`=$status where id=$e_id";
-        $stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `inquiry_image`=?,`start_date`=?,`status`=? WHERE id =?");
-        $stmt->bind_param("isiisssssi", $visitor, $inquired_for_str, $attended_by, $architect, $address, $suggetion, $PicFileName, $start_date, $status, $e_id);
+        $stmt = $obj->con1->prepare("UPDATE `inquiry` SET `visitor_id`=?, `inquired_for`=?, `attended_by`=?, `architect_id`=?, `address`=?, `suggestions`=?, `start_date`=?, `status`=? WHERE id=?");
+        $stmt->bind_param("isiissssi", $visitor, $inquired_for_str, $attended_by, $architect, $address, $suggetion, $start_date, $status, $e_id);
         $Resp = $stmt->execute();
+
         if (!$Resp) {
-            throw new Exception("Problem in updating! " . strtok($obj->con1->error, '('));
+            throw new Exception("Problem in updating inquiry! " . strtok($obj->con1->error, '('));
         }
         $stmt->close();
-    } catch (\Exception  $e) {
-        setcookie("sql_error", urlencode($e->getMessage()), time() + 3600, "/");
-    }
 
-    if ($Resp) {
+        if ($inquiry_img != "") {
+            $PicFileName = handleImageUpload($inquiry_img, $inquiry_img_path, $old_img);
+
+            // Check if image already exists for the inquiry
+            $stmt = $obj->con1->prepare("SELECT COUNT(*) as cnt FROM `property_image` WHERE `inq_id` = ?");
+            $stmt->bind_param("i", $e_id);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+
+            if ($result['cnt'] > 0) {
+                // Update existing image
+                $stmt = $obj->con1->prepare("UPDATE `property_image` SET `image`=? WHERE `inq_id`=?");
+                $stmt->bind_param("si", $PicFileName, $e_id);
+                $stmt->execute();
+                $stmt->close();
+            } else {
+                // Insert new image
+                $stmt = $obj->con1->prepare("INSERT INTO `property_image`(`inq_id`, `image`) VALUES (?,?)");
+                $stmt->bind_param("is", $e_id, $PicFileName);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+
         setcookie("edit_id", "", time() - 3600, "/");
         setcookie("msg", "update", time() + 3600, "/");
         header("location:inquiry.php");
-    } else {
-        setcookie("msg", "fail", time() + 3600, "/");
-        header("location:inquiry.php");
+    } catch (\Exception $e) {
+        setcookie("sql_error", urlencode($e->getMessage()), time() + 3600, "/");
     }
 }
 
-
+function handleImageUpload($image_name, $image_tmp, $old_image = null)
+{
+    if ($image_name != "") {
+        $PicFileName = $image_name;
+        $i = 0;
+        $Arr1 = explode('.', $PicFileName);
+        while (file_exists("property_image/" . $PicFileName)) {
+            $PicFileName = $Arr1[0] . $i . "." . $Arr1[1];
+            $i++;
+        }
+        if (!move_uploaded_file($image_tmp, "property_image/" . $PicFileName)) {
+            throw new Exception("Error in uploading image.");
+        }
+        if ($old_image && file_exists("property_image/" . $old_image)) {
+            unlink("property_image/" . $old_image); // Delete old image
+        }
+        return $PicFileName;
+    }
+    return $old_image;
+}
 
 ?>
+
 <div class="row" id="p1">
     <div class="col-xl">
         <div class="card">
@@ -265,28 +262,30 @@ if (isset($_REQUEST['btnupdate'])) {
                         <label for="inquiry_img" class="form-label">Inquiry Image</label>
 
                         <?php if (!isset($mode) || $mode !== 'view'): // Show the input field only in Add and Edit modes ?>
-                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img"
-                            onchange="readURL(this, 'PreviewInquiryImage')" />
+                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img" onchange="readURL(this, 'PreviewInquiryImage')" />
                         <?php endif; ?>
 
-                        <img src="<?php echo isset($data['inquiry_image']) ? 'property_image/' . $data['inquiry_image'] : ''; ?>"
+                        <!-- Display image when in edit or view mode -->
+                        <img src="<?php echo isset($data['image']) ? 'property_image/' . $data['image'] : ''; ?>"
                             id="PreviewInquiryImage" height="300" width="400"
-                            style="display:<?php echo isset($data['inquiry_image']) ? 'block' : 'none'; ?>"
+                            style="display:<?php echo isset($data['image']) ? 'block' : 'none'; ?>"
                             class="object-cover shadow rounded mt-3 mb-3">
 
                         <div id="imgdiv-inquiry" style="color:red"></div>
 
                         <input type="hidden" name="old_img_inquiry" id="old_img_inquiry"
-                            value="<?php echo (isset($mode) && $mode == 'edit') ? $data['inquiry_image'] : ''; ?>" />
+                            value="<?php echo (isset($mode) && $mode == 'edit') ? $data['image'] : ''; ?>" />
                     </div>
 
                     <div class="row">
                         <div class="col mb-3">
                             <label for="date" class="col-md-2 col-form-label">Start Date</label>
                             <input class="form-control" type="date" name="start_date" id="start_date"
-                                value="<?php echo (isset($mode)) ? $data['start_date'] : '' ?>"
+                                value="<?php echo (isset($mode)) ? date('Y-m-d', strtotime($data['start_date'])) : '' ?>"
                                 <?php echo isset($mode) && $mode == 'view' ? 'readonly' : '' ?> required />
                         </div>
+
+
                         <div class="col-6 mb-3 mt-2">
                             <div class="mb-3">
                                 <label class="form-label d-block" for="basic-default-fullname">Status</label>
@@ -361,6 +360,14 @@ function readURL(input, previewId) {
         }
     }
 }
+document.getElementById('start_date').addEventListener('input', function() {
+    let inputDate = new Date(this.value);
+    if (!isNaN(inputDate)) {
+        // Format to yyyy-mm-dd
+        let formattedDate = inputDate.toISOString().split('T')[0];
+        this.value = formattedDate;
+    }
+});
 </script>
 <?php
 include "footer.php";

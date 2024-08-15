@@ -148,6 +148,26 @@ function handleImageUpload($image_name, $image_tmp, $old_image = null)
     return $old_image;
 }
 
+if (isset($_REQUEST["btndelete"])) {
+    $u_id=$_REQUEST['u_id'];
+  
+    try {
+        $stmt_del = $obj->con1->prepare("DELETE FROM `property_image` WHERE id=?");
+        $stmt_del->bind_param("i",  $u_id);
+        $Resp = $stmt_del->execute();
+        if (!$Resp) {
+            throw new Exception("Problem in deleting! " . strtok($obj->con1->error,  '('));
+        }
+        $stmt_del->close();
+    } catch (\Exception $e) {
+        setcookie("sql_error", urlencode($e->getMessage()), time() + 3600, "/");
+    }
+  
+    if ($Resp) {
+        setcookie("msg", "data_del", time() + 3600, "/");
+    }
+    header("location:inquiry_add.php");
+  }
 ?>
 
 <div class="row" id="p1">
@@ -262,7 +282,8 @@ function handleImageUpload($image_name, $image_tmp, $old_image = null)
                         <label for="inquiry_img" class="form-label">Inquiry Image</label>
 
                         <?php if (!isset($mode) || $mode !== 'view'): // Show the input field only in Add and Edit modes ?>
-                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img" onchange="readURL(this, 'PreviewInquiryImage')" />
+                        <input class="form-control" type="file" id="inquiry_img" name="inquiry_img"
+                            onchange="readURL(this, 'PreviewInquiryImage')" />
                         <?php endif; ?>
 
                         <!-- Display image when in edit or view mode -->
@@ -322,6 +343,105 @@ function handleImageUpload($image_name, $image_tmp, $old_image = null)
 
 </div>
 
+<!-- Delete Modal -->
+<div class="modal fade" id="backDropModal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog">
+        <!-- Ensure the form uses POST and submits to the current page -->
+        <form class="modal-content" method="post">
+            <div class="modal-header">
+                <h5 class="modal-title" id="backDropModalTitle">Delete Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="visitor_idBackdrop" class="form-label" id="label_del"></label>
+                        <!-- Hidden input to hold the ID -->
+                        <input type="hidden" name="u_id" id="u_id">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <!-- Submit button for the form -->
+                <button type="submit" name="btndelete" class="btn btn-primary">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card mb-4 mt-5" <?php echo (isset($mode))?'':'hidden' ?>>
+    <div class="row ms-2 me-3 ">
+        <div class="col-md-6" style="margin:1%">
+            <a class="btn btn-primary" href="#" onclick="javascript:addsubimages()" style="margin-right:15px;" <?php echo ($mode=='edit')?'':'hidden' ?>><i
+                    class="bx bx-plus"></i> Add</a>
+
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover" id="table_id">
+
+                <thead>
+                    <tr>
+                        <th scope="col">Sr.No</th>
+                        <th scope="col">File</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    <?php
+                    $stmt_list = $obj->con1->prepare("SELECT * FROM `property_image` WHERE inq_id=? ORDER BY id DESC");
+                    $inq_id = $data['id'];
+                    $stmt_list->bind_param("i",$inq_id);
+                    $stmt_list->execute();
+                    $result = $stmt_list->get_result();
+                    $stmt_list->close();
+                    $i = 1;
+                    while ($row = mysqli_fetch_array($result)) {
+                        ?>
+
+                    <tr>
+                        <td><?php echo $i ?></td>
+                        <?php
+                        $img_array= array("jpg", "jpeg", "png", "bmp");
+                        $vd_array=array("mp4", "webm", "ogg","mkv");
+                        $extn = strtolower(pathinfo($row["image"], PATHINFO_EXTENSION));
+                        if (in_array($extn,$img_array)) {
+                    ?>
+                                <td><img src="property_image/<?php echo $row["image"]; ?>" width="200" height="200"
+                                        style="display:<?php (in_array($extn, $img_array))?'block':'none' ?>"
+                                        class="object-cover shadow rounded"></td>
+                                <?php
+                        } if (in_array($extn,$vd_array )) {
+                    ?>
+                                <td><video src="property_image/<?php echo $row["image"]; ?>" height="200"
+                                        width="200" style="display:<?php (in_array($extn, $vd_array))?'block':'none' ?>"
+                                        class="object-cover shadow rounded" controls></video></td>
+                                <?php } ?>
+                        <td>
+                            <a
+                                href="javascript:editsubimages('<?php echo $row["id"] ?>');"><i
+                                    class="bx bx-edit-alt me-1"></i> </a>
+                            <a
+                                href="javascript:deletesubimages('<?php echo $row["id"] ?>');"><i
+                                    class="bx bx-trash me-1" style="color:red"></i> </a>
+                            <a
+                                href="javascript:viewsubimages('<?php echo $row["id"] ?>');"><i
+                                    class="fa-regular fa-eye" style="color:green"></i></a>
+                        </td>
+                    </tr>
+                    <?php
+                        $i++;
+                        }
+                    ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--/ Basic Bootstrap Table -->
+
+
+
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -336,27 +456,101 @@ function go_back() {
     window.location = "inquiry.php";
 }
 
-function readURL(input, previewId) {
+function editsubimages(id) {
+    eraseCookie("view_subimg_id");
+    createCookie("edit_subimg_id", id, 1);
+    window.location = "inquiry_sub_image.php";
+}
+
+function viewsubimages(id) {
+    eraseCookie("edit_subimg_id");
+    createCookie("view_subimg_id", id, 1);
+    window.location = "inquiry_sub_image.php";
+}
+
+function deletesubimages(id) {
+    $('#backDropModal').modal('toggle');
+    $('#u_id').val(id); // Set the hidden field with the ID to delete
+    $('#label_del').html('Are you sure you want to DELETE?');
+}
+
+function addsubimages(id) {
+    window.location = "inquiry_sub_image.php";
+}
+
+function readURL(input, preview) {
     if (input.files && input.files[0]) {
         var filename = input.files.item(0).name;
-        var extn = filename.split(".").pop().toLowerCase(); // Extract the file extension
-        var validExtensions = ["jpg", "jpeg", "png"]; // Allowed extensions
 
-        if (validExtensions.includes(extn)) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById(previewId).src = e.target.result;
-                document.getElementById(previewId).style.display = "block";
-                document.getElementById('imgdiv-inquiry').innerHTML = ""; // Clear error message
-                document.getElementById('save').disabled = false; // Enable save button
-            };
+        var reader = new FileReader();
+        var extn = filename.split(".");
+
+        if (extn[1].toLowerCase() == "jpg" || extn[1].toLowerCase() == "jpeg" || extn[1].toLowerCase() == "png" || extn[
+                1].toLowerCase() == "bmp" || extn[1].toLowerCase() == "mp4" || extn[1].toLowerCase() == "webm" || extn[
+                1].toLowerCase() == "ogg") {
+            if (extn[1].toLowerCase() == "jpg" || extn[1].toLowerCase() == "jpeg" || extn[1].toLowerCase() == "png" ||
+                extn[1].toLowerCase() == "bmp") {
+                reader.onload = function(e) {
+                    $('#' + preview).html('<img src="' + e.target.result +
+                        '" name="PreviewImage" id="PreviewImage" width="400" height="400" class="object-cover shadow rounded" style="display:inline-block; margin:2%;">'
+                    );
+                };
+            } else if (extn[1].toLowerCase() == "mp4" || extn[1].toLowerCase() == "webm" || extn[1].toLowerCase() ==
+                "ogg") {
+                reader.onload = function(e) {
+                    $('#' + preview).html('<video src="' + e.target.result +
+                        '" name="PreviewVideo" id="PreviewVideo" width="400" height="400" style="display:inline-block" class="object-cover shadow rounded" controls></video>'
+                    );
+                }
+            }
 
             reader.readAsDataURL(input.files[0]);
+            $('#imgdiv').html("");
+            document.getElementById('save').disabled = false;
         } else {
-            document.getElementById('imgdiv-inquiry').innerHTML = "Please select an image file (JPG, JPEG, PNG).";
-            input.value = ""; // Clear the input
-            document.getElementById(previewId).style.display = "none"; // Hide the preview
-            document.getElementById('save').disabled = true; // Disable save button
+            $('#imgdiv').html("Please Select Image Or Video Only");
+            document.getElementById('save').disabled = true;
+        }
+    }
+}
+
+function readURL_multiple(input) {
+    $('#preview_image_div').html("");
+    var filesAmount = input.files.length;
+    for (i = 0; i <= filesAmount; i++) {
+        if (input.files && input.files[i]) {
+
+            var filename = input.files.item(i).name;
+            var reader = new FileReader();
+            var extn = filename.split(".");
+            if (extn[1].toLowerCase() == "jpg" || extn[1].toLowerCase() == "jpeg" || extn[1].toLowerCase() == "png" ||
+                extn[1].toLowerCase() == "bmp" || extn[1].toLowerCase() == "mp4" || extn[1].toLowerCase() == "webm" ||
+                extn[1].toLowerCase() == "ogg") {
+                if (extn[1].toLowerCase() == "jpg" || extn[1].toLowerCase() == "jpeg" || extn[1].toLowerCase() ==
+                    "png" || extn[1].toLowerCase() == "bmp") {
+                    reader.onload = function(e) {
+                        $('#preview_image_div').append('<img src="' + e.target.result + '" name="PreviewImage' + i +
+                            '" id="PreviewImage' + i +
+                            '" width="400" height="400" class="object-cover shadow rounded" style="display:inline-block; margin:2%;">'
+                        );
+                    };
+                } else if (extn[1].toLowerCase() == "mp4" || extn[1].toLowerCase() == "webm" || extn[1].toLowerCase() ==
+                    "ogg") {
+                    reader.onload = function(e) {
+                        $('#preview_image_div').append('<video src="' + e.target.result + '" name="PreviewVideo' +
+                            i + '" id="PreviewVideo' + i +
+                            '" width="400" height="400" style="display:inline-block" class="object-cover shadow rounded" controls></video>'
+                        );
+                    }
+                }
+
+                reader.readAsDataURL(input.files[i]);
+                $('#imgdiv_multiple').html("");
+                document.getElementById('save').disabled = false;
+            } else {
+                $('#imgdiv_multiple').html("Please Select Image Or Video Only");
+                document.getElementById('save').disabled = true;
+            }
         }
     }
 }

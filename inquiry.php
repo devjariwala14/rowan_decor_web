@@ -204,6 +204,8 @@ eraseCookie("excelmsg")
                         <td style="color:red"><?php echo "Disable" ?></td>
                         <?php } ?>
                         <td>
+                        <a
+                                href="javascript:addsubimages('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i class='bx bxs-add-to-queue me-1' style="color:blue"></i> </a>
                             <a
                                 href="javascript:editdata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i
                                     class="bx bx-edit-alt me-1"></i> </a>
@@ -253,6 +255,13 @@ function deletedata(id) {
     $('#backDropModal').modal('toggle');
     $('#u_id').val(id); // Set the hidden field with the ID to delete
     $('#label_del').html('Are you sure you want to DELETE?');
+}
+function addsubimages(id) {
+    eraseCookie("view_id");
+    eraseCookie("edit_subimg_id");
+    eraseCookie("view_subimg_id");
+    createCookie("edit_id", id, 1);
+    window.location = "inquiry_sub_image.php";
 }
 </script>
 <?php

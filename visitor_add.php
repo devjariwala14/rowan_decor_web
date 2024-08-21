@@ -145,11 +145,12 @@ if(isset($_REQUEST['btnupdate']))
                         <select name="place" id="place" class="form-control"
                             <?php echo isset($mode) && $mode == 'view' ? 'disabled' : '' ?> required>
                             <option value="">Choose Place</option>
-                            <option value="Visit Site"
-                                <?php echo (isset($data['place']) && $data['place'] == "Visit Site") ? "selected" : "" ?>>
+                            <option value="visit site"
+                                <?php echo (isset($data['place']) && $data['place'] == "visit site") ? "selected" : "" ?>>
                                 Visit Site</option>
-                            <option value="Visit Studio"
-                                <?php echo (isset($data['place']) && $data['place'] == "Visit Studio") ? "selected" : "" ?>>
+                            <option value="studio"
+                                <?php echo (isset($data['place']) && $data['place'] == "
+                                ") ? "selected" : "" ?>>
                                 Visit Studio</option>
                         </select>
                     </div>

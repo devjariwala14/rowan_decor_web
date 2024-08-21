@@ -215,16 +215,20 @@ if (isset($_REQUEST["btndelete"])) {
                                 $stmt_list->execute();
                                 $result = $stmt_list->get_result();
                                 $stmt_list->close();
-                                $selected_categories = explode(',', $data['inquired_for']); // Handle multiple selections
+                                
+                                // Handle multiple selections and remove brackets if present
+                                $inquired_for = str_replace(['[', ']'], '', $data['inquired_for']); // Remove square brackets
+                                $selected_categories = explode(',', $inquired_for); // Converts "2,3" or "2,3" from "[2,3]" to array [2, 3]
+                                
                                 while($res = mysqli_fetch_array($result))
                                 {
-                            ?>
-                            <option value="<?php echo $res["id"]?>"
-                                <?php echo isset($mode) && in_array($res["id"], $selected_categories) ? 'selected' : '' ?>>
-                                <?php echo $res["name"]?></option>
-                            <?php
-                                }
-                            ?>
+                                ?>
+                                    <option value="<?php echo $res["id"]?>"
+                                        <?php echo isset($mode) && in_array($res["id"], $selected_categories) ? 'selected' : '' ?>>
+                                        <?php echo $res["name"]?></option>
+                                 <?php
+                                    }
+                                ?>
                         </select>
                     </div>
 
@@ -372,8 +376,8 @@ if (isset($_REQUEST["btndelete"])) {
 <div class="card mb-4 mt-5" <?php echo (isset($mode))?'':'hidden' ?>>
     <div class="row ms-2 me-3 ">
         <div class="col-md-6" style="margin:1%">
-            <a class="btn btn-primary" href="#" onclick="javascript:addsubimages()" style="margin-right:15px;" <?php echo ($mode=='edit')?'':'hidden' ?>><i
-                    class="bx bx-plus"></i> Add</a>
+            <a class="btn btn-primary" href="#" onclick="javascript:addsubimages()" style="margin-right:15px;"
+                <?php echo ($mode=='edit')?'':'hidden' ?>><i class="bx bx-plus"></i> Add</a>
 
         </div>
         <div class="table-responsive text-nowrap">
@@ -406,26 +410,23 @@ if (isset($_REQUEST["btndelete"])) {
                         $extn = strtolower(pathinfo($row["image"], PATHINFO_EXTENSION));
                         if (in_array($extn,$img_array)) {
                     ?>
-                                <td><img src="property_image/<?php echo $row["image"]; ?>" width="200" height="200"
-                                        style="display:<?php (in_array($extn, $img_array))?'block':'none' ?>"
-                                        class="object-cover shadow rounded"></td>
-                                <?php
+                        <td><img src="property_image/<?php echo $row["image"]; ?>" width="200" height="200"
+                                style="display:<?php (in_array($extn, $img_array))?'block':'none' ?>"
+                                class="object-cover shadow rounded"></td>
+                        <?php
                         } if (in_array($extn,$vd_array )) {
                     ?>
-                                <td><video src="property_image/<?php echo $row["image"]; ?>" height="200"
-                                        width="200" style="display:<?php (in_array($extn, $vd_array))?'block':'none' ?>"
-                                        class="object-cover shadow rounded" controls></video></td>
-                                <?php } ?>
+                        <td><video src="property_image/<?php echo $row["image"]; ?>" height="200" width="200"
+                                style="display:<?php (in_array($extn, $vd_array))?'block':'none' ?>"
+                                class="object-cover shadow rounded" controls></video></td>
+                        <?php } ?>
                         <td>
-                            <a
-                                href="javascript:editsubimages('<?php echo $row["id"] ?>');"><i
+                            <a href="javascript:editsubimages('<?php echo $row["id"] ?>');"><i
                                     class="bx bx-edit-alt me-1"></i> </a>
-                            <a
-                                href="javascript:deletesubimages('<?php echo $row["id"] ?>');"><i
+                            <a href="javascript:deletesubimages('<?php echo $row["id"] ?>');"><i
                                     class="bx bx-trash me-1" style="color:red"></i> </a>
-                            <a
-                                href="javascript:viewsubimages('<?php echo $row["id"] ?>');"><i
-                                    class="fa-regular fa-eye" style="color:green"></i></a>
+                            <a href="javascript:viewsubimages('<?php echo $row["id"] ?>');"><i class="fa-regular fa-eye"
+                                    style="color:green"></i></a>
                         </td>
                     </tr>
                     <?php

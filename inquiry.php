@@ -182,7 +182,7 @@ eraseCookie("excelmsg")
                 </thead>
                 <tbody class="table-border-bottom-0">
                     <?php
-                    $stmt_list = $obj->con1->prepare("SELECT i.*, GROUP_CONCAT(c.name ORDER BY FIND_IN_SET(c.id, i.inquired_for)) AS category_names, v1.full_name,a1.name AS architect_name,u1.name AS attended_by_name,GROUP_CONCAT(p.image ORDER BY p.id) AS property_images FROM inquiry i JOIN category c ON FIND_IN_SET(c.id, REPLACE(REPLACE(i.inquired_for, '[', ''), ']', '')) JOIN visitor v1 ON i.visitor_id = v1.id JOIN architect a1 ON i.architect_id = a1.id LEFT JOIN users u1 ON i.attended_by = u1.id LEFT JOIN property_image p ON i.id = p.inq_id GROUP BY i.id ORDER BY i.id DESC;");
+                    $stmt_list = $obj->con1->prepare("SELECT i.*, GROUP_CONCAT(DISTINCT c.name ORDER BY FIND_IN_SET(c.id, REPLACE(REPLACE(i.inquired_for, '[', ''), ']', ''))) AS category_names, v1.full_name,a1.name AS architect_name,u1.name AS attended_by_name,GROUP_CONCAT(DISTINCT p.image ORDER BY p.id) AS property_images FROM inquiry i JOIN category c ON FIND_IN_SET(c.id, REPLACE(REPLACE(i.inquired_for, '[', ''), ']', '')) > 0 JOIN visitor v1 ON i.visitor_id = v1.id JOIN architect a1 ON i.architect_id = a1.id LEFT JOIN users u1 ON i.attended_by = u1.id LEFT JOIN property_image p ON i.id = p.inq_id GROUP BY i.id ORDER BY i.id DESC;");
                     $stmt_list->execute();
                     $result = $stmt_list->get_result();
 
@@ -204,8 +204,9 @@ eraseCookie("excelmsg")
                         <td style="color:red"><?php echo "Disable" ?></td>
                         <?php } ?>
                         <td>
-                        <a
-                                href="javascript:addsubimages('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i class='bx bxs-add-to-queue me-1' style="color:blue"></i> </a>
+                            <a
+                                href="javascript:addsubimages('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i
+                                    class='bx bxs-add-to-queue me-1' style="color:blue"></i> </a>
                             <a
                                 href="javascript:editdata('<?php echo $row["id"] ?>','<?php echo base64_encode($row["full_name"]) ?>');"><i
                                     class="bx bx-edit-alt me-1"></i> </a>
@@ -256,6 +257,7 @@ function deletedata(id) {
     $('#u_id').val(id); // Set the hidden field with the ID to delete
     $('#label_del').html('Are you sure you want to DELETE?');
 }
+
 function addsubimages(id) {
     eraseCookie("view_id");
     eraseCookie("edit_subimg_id");

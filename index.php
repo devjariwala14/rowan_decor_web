@@ -8,30 +8,29 @@ date_default_timezone_set("Asia/Kolkata");
 if(isset($_REQUEST["login"])){
 			session_start();
 			
-			$ui = $_REQUEST["userid"];
+			$un = $_REQUEST["userid"];
 			$pa = $_REQUEST["password"];
 			
      
-			$qr = $obj->con1->prepare("select id,password,username from admin where username=? and binary(password) =?");
-			$qr->bind_param("ss",$ui,$pa);
+			$qr = $obj->con1->prepare("select id,password,username,name from users where username=? and binary(password) =?");
+			$qr->bind_param("ss",$un,$pa);
 			$qr->execute();
 			$result = $qr->get_result();
 			$qr->close();
 			$row=mysqli_fetch_array($result);
 			
-			if($row["username"]==$ui)
+			if($row["username"]==$un)
 			{
         $_SESSION["userlogin"]="true";
 				$_SESSION["id"]=$row["id"];
-        // $_SESSION["userid"]=$ui;
-        $_SESSION["username"]=$row["name"];
-        // $_SESSION["designation"]=$row["designation"];
+        $_SESSION["name"]=$row["name"];
+        $_SESSION["username"]=$row["username"];
 				header("location:home.php");
 			}
 			else
 			{
         setcookie("login", "wrong_pass",time()+3600,"/");
-				header("location:index.php?msg=Incorect UserId/Password");	
+				header("location:index.php");	
 			}
 			
 	
@@ -154,7 +153,7 @@ if(isset($_REQUEST["login"])){
               <div class="app-brand justify-content-center">
                 <a href="index.html" class="app-brand-link gap-2">
                   <span class="app-brand-logo demo">
-                   <img src="assets/img/kapot_100.png">
+                   <img src="assets/img/logo.png">
                   </span>
                  <!--  <span class="app-brand-text demo text-body fw-bolder">MyKapot</span> -->
                 </a>

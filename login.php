@@ -29,19 +29,19 @@ $con = mysqli_connect("localhost","root","","pragmanx_english_express") ;
 		if(isset($_REQUEST["login"])){
 			session_start();
 			
-			$ui = $_REQUEST["utxt"];
+			$un = $_REQUEST["utxt"];
 			$pa = $_REQUEST["ptxt"];
 			
-			$qr = $con->prepare("select userid,password from admin where userid=? and BINARY password=?");
-			$qr->bind_param("ss",$ui,$pa);
+			$qr = $con->prepare("select username,password from users where username=? and BINARY password=?");
+			$qr->bind_param("ss",$un,$pa);
 			$qr->execute();
 			$result = $qr->get_result();
 			$qr->close();
 			$row=mysqli_fetch_array($result);
 			
-			if($row["uid"]==$ui)
+			if($row["uid"]==$un)
 			{
-				$_SESSION["utype"]=$ui;
+				$_SESSION["utype"]=$un;
 				header("location:home.php");
 			}
 			else

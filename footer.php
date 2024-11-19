@@ -36,7 +36,7 @@
     <script type="text/javascript">
       $(document).ready( function () {
         $('#table_id').DataTable();
-        get_notification();
+        // get_notification();
        
         
     } );
@@ -54,8 +54,8 @@
     <script src="assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
 <!-- Vendors JS -->
-  <script src="assets/vendor/libs/quill/katex.js"></script>
-  <script src="assets/vendor/libs/quill/quill.js"></script>
+  <!-- <script src="assets/vendor/libs/quill/katex.js"></script>
+  <script src="assets/vendor/libs/quill/quill.js"></script> -->
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
 
@@ -69,6 +69,6 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     
     <!-- Page JS -->
-  <script src="assets/js/forms-editors.js"></script>
+  <!-- <script src="assets/js/forms-editors.js"></script> -->
   </body>
 </html>

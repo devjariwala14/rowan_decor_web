@@ -7,53 +7,53 @@ $date=isset($_COOKIE["dash_date"])?$_COOKIE['dash_date']:date('Y-m-d');
 setcookie("selected_date", $date,time()+3600,"/");
 
 // total customers
-$stmt_list1 = $obj->con1->prepare("select * from customer_reg where `status`='enable'");
-$stmt_list1->execute();
-$total_cust = $stmt_list1->get_result()->num_rows;	
-$stmt_list1->close();
+// $stmt_list1 = $obj->con1->prepare("select * from customer_reg where `status`='enable'");
+// $stmt_list1->execute();
+// $total_cust = $stmt_list1->get_result()->num_rows;	
+// $stmt_list1->close();
 
-// today's new customers
-$stmt_list2 = $obj->con1->prepare("select * from customer_reg where `status`='enable' and dt like '%".$date."%'");
-$stmt_list2->execute();
-$todays_cust = $stmt_list2->get_result()->num_rows;	
-$stmt_list2->close();
+// // today's new customers
+// $stmt_list2 = $obj->con1->prepare("select * from customer_reg where `status`='enable' and dt like '%".$date."%'");
+// $stmt_list2->execute();
+// $todays_cust = $stmt_list2->get_result()->num_rows;	
+// $stmt_list2->close();
 
-// today's dispatch
-$stmt_list3 = $obj->con1->prepare("select * from post where dispatch_date='".$date."'");
-$stmt_list3->execute();
-$todays_dispatch = $stmt_list3->get_result()->num_rows;	
-$stmt_list3->close();
+// // today's dispatch
+// $stmt_list3 = $obj->con1->prepare("select * from post where dispatch_date='".$date."'");
+// $stmt_list3->execute();
+// $todays_dispatch = $stmt_list3->get_result()->num_rows;	
+// $stmt_list3->close();
 
-// total delivery boy
-$stmt_list4 = $obj->con1->prepare("select * from delivery_boy where status='enable'");
-$stmt_list4->execute();
-$total_deli_boy = $stmt_list4->get_result()->num_rows;	
-$stmt_list4->close();
+// // total delivery boy
+// $stmt_list4 = $obj->con1->prepare("select * from delivery_boy where status='enable'");
+// $stmt_list4->execute();
+// $total_deli_boy = $stmt_list4->get_result()->num_rows;	
+// $stmt_list4->close();
 
-// today's new delivery boy
-$stmt_list5 = $obj->con1->prepare("select * from delivery_boy where status='enable' and dt like '%".$date."%'");
-$stmt_list5->execute();
-$todays_deli_boy = $stmt_list5->get_result()->num_rows;
-$stmt_list5->close();
+// // today's new delivery boy
+// $stmt_list5 = $obj->con1->prepare("select * from delivery_boy where status='enable' and dt like '%".$date."%'");
+// $stmt_list5->execute();
+// $todays_deli_boy = $stmt_list5->get_result()->num_rows;
+// $stmt_list5->close();
 
-// upcoming post
+// // upcoming post
 
-$stmt_list6 = $obj->con1->prepare("select * from post where cast(dispatch_date as date)>'".$date."'");
-$stmt_list6->execute();
-$upcoming_post = $stmt_list6->get_result()->num_rows;	
-$stmt_list6->close();
+// $stmt_list6 = $obj->con1->prepare("select * from post where cast(dispatch_date as date)>'".$date."'");
+// $stmt_list6->execute();
+// $upcoming_post = $stmt_list6->get_result()->num_rows;	
+// $stmt_list6->close();
 
-// today's post
-$stmt_list7 = $obj->con1->prepare("select * from post where order_date like '%".$date."%'");
-$stmt_list7->execute();
-$todays_post = $stmt_list7->get_result()->num_rows;	
-$stmt_list7->close();
+// // today's post
+// $stmt_list7 = $obj->con1->prepare("select * from post where order_date like '%".$date."%'");
+// $stmt_list7->execute();
+// $todays_post = $stmt_list7->get_result()->num_rows;	
+// $stmt_list7->close();
 
-// today's transit
-$stmt_list8 = $obj->con1->prepare("select * from post where post_status='transit' and collection_date='".$date."'");
-$stmt_list8->execute();
-$todays_transit = $stmt_list8->get_result()->num_rows; 
-$stmt_list8->close();
+// // today's transit
+// $stmt_list8 = $obj->con1->prepare("select * from post where post_status='transit' and collection_date='".$date."'");
+// $stmt_list8->execute();
+// $todays_transit = $stmt_list8->get_result()->num_rows; 
+// $stmt_list8->close();
 ?>
 <div class="row">
 	<div class="col-lg-12 mb-4 order-0">
@@ -88,12 +88,12 @@ $stmt_list8->close();
  
 
 
-<div class="row">
+<!-- <div class="row">
   <div class="navbar-nav-right d-flex align-items-center mb-3" id="navbar-collapse">
     <div class="navbar-nav align-items-center">
       <div class="nav-item d-flex align-items-center">
       <!--  <i class="bx bx-calendar fs-4 lh-0"></i>  -->
-        <form method="post" id="dashboard_frm">
+        <!-- <form method="post" id="dashboard_frm">
         <input type="date" class="form-control border-0 shadow-none" name="dash_date" id="dash_date" onchange="get_dashboard_data(this.value)" value="<?php echo isset($_COOKIE['dash_date'])?$_COOKIE['dash_date']:date('Y-m-d')?>">
         <input type="submit" name="dash_submit" class="d-none">
       </form>
@@ -275,9 +275,9 @@ $stmt_list8->close();
               
             </div>
           </div>
-        </div>
+        </div> -->
         
-        <div class="col-lg-3 col-md-12 col-6 mb-4">
+        <!-- <div class="col-lg-3 col-md-12 col-6 mb-4">
           <div class="card">
             <div class="card-body">
               <div class="card-title d-flex align-items-start justify-content-between">
@@ -375,7 +375,7 @@ $stmt_list8->close();
 
       </div>
     </div>
-</div>    
+</div>     --> 
 
 
 <script type="text/javascript">
